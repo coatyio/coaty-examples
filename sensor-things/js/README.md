@@ -46,7 +46,7 @@ higher) is globally installed on your target machine. Download and installation
 details can be found [here](http://nodejs.org/).
 
 Then, checkout the SensorThings example sources from
-[https://github.com/coatyio/coaty-js/tree/master/examples/sensor-things](https://github.com/coatyio/coaty-js/tree/master/examples/sensor-things).
+[here](https://github.com/coatyio/coaty-examples/tree/master/sensor-things/js).
 
 ### Install and build the sensor
 
@@ -141,7 +141,7 @@ configuration, you will have change the parameters in each component configurati
 file.
 
 More details about generated `agent.info.ts` and its usage can be found in the
-[Hello World example documentation](https://github.com/coatyio/coaty-js/tree/master/examples/hello-world/README.md#project-structure).
+[Hello World example documentation](https://github.com/coatyio/coaty-examples/tree/master/hello-world/js/README.md#project-structure).
 
 ## Components
 
@@ -154,7 +154,7 @@ Once a sensor is selected, the dashboard observes incoming observations on the c
 the sensor. The network of sensors is discovered using these observations.
 
 The dashboard web app is build with Angular and Angular CLI. For details, see the
-[README](https://github.com/coatyio/coaty-js/tree/master/examples/sensor-things/dashboard/README.md)
+[README](https://github.com/coatyio/coaty-examples/tree/master/sensor-things/js/dashboard/README.md)
 in its project folder.
 
 ### Sensor
