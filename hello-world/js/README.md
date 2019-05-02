@@ -78,9 +78,8 @@ The Hello World example exposes the following framework features:
 
 ## Installation
 
-This example comes bundled with the Coaty framework but it can be
-build and run independently. The example has its own npm package definition
-and a simple build environment based on npm scripts.
+This example has its own npm package definition and a simple build environment
+based on npm scripts.
 
 You can either install all prerequisites of the example locally on your
 target machine as described next or use a dockerized version of the example
@@ -140,7 +139,7 @@ task requests.
 ## Run with Docker
 
 The dockerized example provides a way to run the example applications isolated
-in a docker container, packaged with all its dependencies and libraries. Please refer
+in a Docker container, packaged with all its dependencies and libraries. Please refer
 to [Docker website](https://docs.docker.com/) on how to install the Docker engine
 on your machine.
 
@@ -154,7 +153,7 @@ executing `npm run docker-service`, `npm run docker-client`, or
 
 ## Project Structure
 
-The file structure for the Hello World project looks like the following:
+The folder structure for the Hello World project looks like the following:
 
 ```
 |-- dist/                           - executable code generated on build
