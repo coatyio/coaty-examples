@@ -1,0 +1,21 @@
+.code-toolbar {
+    font-size: 17px;
+    height: 60px;
+    padding-right: 0;
+    margin-top: -8px;
+    margin-left: -16px;
+    margin-right: -16px;
+    width: calc(100% + 32px)
+}
+
+.code-toolbar-button {
+    margin: 0 16px;
+}
+
+.code-key {
+    color: #673ab7;
+}
+
+.code-value {
+    color: rgba(0,0,0,.87);
+}

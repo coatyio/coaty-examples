@@ -1,0 +1,247 @@
+<mat-card #controlCard class="app-card">
+    <mat-card-header>
+        <a mat-card-avatar class="control-card-header-avatar"></a>
+        <mat-card-title class="app-text-with-ellipsis">
+            Light Control
+        </mat-card-title>
+        <mat-card-subtitle class="app-text-with-ellipsis">
+            #{{controlContainer?.getCommunicationManager().identity.objectId}}
+        </mat-card-subtitle>
+        <mat-icon class="control-card-title-icon" *ngIf="brokerConnectionInfo$ | async as info"
+            [matTooltip]="info.isOnline ? 'Connected to ' + info.brokerHost : 'Not connected to ' + info.brokerHost">
+            {{info.isOnline ? "wifi" : "wifi_off"}}
+        </mat-icon>
+    </mat-card-header>
+    <img mat-card-image class="app-map-card-image-centered app-keyvisual-layout"
+        src="/assets/images/light-control-image.jpg" alt="Photo with a light bulb">
+    <ng-template #initializing>
+        <mat-card-content>Initializing...</mat-card-content>
+    </ng-template>
+    <mat-card-content *ngIf="controlContainer; else initializing">
+        <h1 class="control-time-overlay">{{currentClock$ | async | date:"HH:mm:ss"}}</h1>
+        <h4 class="app-heading-no-top-margin">SELECT CONTEXT FILTER</h4>
+        <mat-form-field class="control-form-field">
+            <mat-label>Buildings</mat-label>
+            <mat-select [(ngModel)]="selectedBuildings" multiple [disabled]="!!selectedLightId">
+                <app-mat-option-select-all></app-mat-option-select-all>
+                <mat-option *ngFor="let building of availableBuildings" [value]="building">
+                    {{building}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="control-form-field">
+            <mat-label>Floors</mat-label>
+            <mat-select [(ngModel)]="selectedFloors" multiple [disabled]="!!selectedLightId">
+                <app-mat-option-select-all></app-mat-option-select-all>
+                <mat-option *ngFor="let floor of availableFloors" [value]="floor">
+                    {{floor}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="control-form-field">
+            <mat-label>Rooms</mat-label>
+            <mat-select [(ngModel)]="selectedRooms" multiple [disabled]="!!selectedLightId">
+                <app-mat-option-select-all></app-mat-option-select-all>
+                <mat-option *ngFor="let room of availableRooms" [value]="room">
+                    {{room}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="control-context-qrcode-field">
+            <mat-label class="control-context-qrcode-label">Light</mat-label>
+            <qrcode class="control-context-qrcode" (dragover)="onQrCodeDragOver($event)"
+                (drop)="onQrCodeDrop($event)" [style.opacity]="selectedLightId ? 1 : 0.3"
+                [matTooltip]="selectedLightId ? '' : 'Drop QR Code of a light here to switch this light only'"
+                [qrdata]="selectedLightId || ' '" [usesvg]="true" [level]="'M'">
+            </qrcode>
+            <a *ngIf="selectedLightId" (click)="this.selectedLightId = undefined"
+                class="control-context-qrcode-button" matTooltip="Remove light from context filter"
+                aria-label="icon button to remove QR Code from context filter">
+                <mat-icon color="primary">
+                    highlight_off
+                </mat-icon>
+            </a>
+        </div>
+        <h4>SELECT OPERATION PARAMETERS</h4>
+        <div class="control-operation-params">
+            <div class="control-operation-param control-operation-param-no-grow">
+                <div class="control-operation-param-label">
+                    <mat-icon class="app-mat-icon-flipped" aria-label="light bulb icon">
+                        wb_incandescent
+                    </mat-icon>
+                    On/Off
+                </div>
+                <mat-slide-toggle [color]="'accent'" [labelPosition]="'before'"
+                    (change)="onOnOffToggle($event)" [(ngModel)]="onOff" aria-label="on/off switch">
+                </mat-slide-toggle>
+            </div>
+            <div class="control-operation-param">
+                <div class="control-operation-param-label">
+                    <mat-icon aria-label="light bulb icon">
+                        wb_sunny
+                    </mat-icon>
+                    Luminosity
+                </div>
+                <mat-slider [min]="0" [max]="100" [tickInterval]="10" [step]="1" [thumbLabel]="true"
+                    (change)="onLuminosityChange($event)" [(ngModel)]="luminosityPercent">
+                </mat-slider>
+            </div>
+            <div class="control-operation-param control-operation-param-color">
+                <div class="control-operation-param-label">
+                    <mat-icon aria-label="light bulb icon">
+                        color_lens
+                    </mat-icon>
+                    Color
+                </div>
+                <mat-slider class="control-color-slider" [min]="0" [max]="primaryColorPositionMax"
+                    [step]="1" [thumbLabel]="true" [displayWith]="primaryColorThumbDisplayer"
+                    (input)="onPrimaryColorDrag($event)" (change)="onPrimaryColorChange($event)"
+                    [(ngModel)]="primaryColorPosition">
+                </mat-slider>
+                <mat-button-toggle-group [(ngModel)]="selectedCustomColor"
+                    (change)="onCustomColorChange($event)">
+                    <mat-button-toggle *ngFor="let color of customColors" [value]="color"
+                        [matTooltip]="color.name"
+                        [style.background-color]="colorRgbaToCssRgba(color.rgba)"
+                        [style.border-color]="selectedCustomColor === color ? '#ffd740' : 'rgba(0, 0, 0, 0.12)'">
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <div class="control-operation-param">
+                <div class="control-operation-param-label">
+                    <mat-icon aria-label="timer icon">
+                        timer
+                    </mat-icon>
+                    Switch time
+                </div>
+                <mat-button-toggle-group class="control-operation-param-time-switch-group"
+                    [(ngModel)]="switchTime" (change)="onSwitchTimeChange($event)"
+                    aria-label="Switch time">
+                    <mat-button-toggle [value]="0">Immediate</mat-button-toggle>
+                    <mat-button-toggle [value]="10000">10sec</mat-button-toggle>
+                    <mat-button-toggle [value]="20000">20sec</mat-button-toggle>
+                    <mat-button-toggle [value]="30000">30sec</mat-button-toggle>
+                    <mat-button-toggle [value]="60000">60sec</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+        <div class="control-operation-request">
+            <button mat-flat-button color="primary" (click)="switchLights()">Switch lights
+            </button>
+            <mat-checkbox [(ngModel)]="autoSwitch">
+                Auto switch on parameter changes
+            </mat-checkbox>
+            <div class="app-space-filler"></div>
+            <button mat-mini-fab color="primary" (click)="openCodeViewer()"
+                matTooltip="View CallEvent data">
+                <mat-icon aria-label="View code of currently selected filter and parameters">code
+                </mat-icon>
+            </button>
+        </div>
+        <mat-expansion-panel *ngIf="eventLog$ | async as log">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Event Log
+                </mat-panel-title>
+                <mat-panel-description>
+                    Call ({{log.length}}) &sdot; Return ({{getReturnEventsCount(log)}})
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list class="control-event-log-list">
+                <mat-list-item class="control-event-log-list-item"
+                    *ngFor="let entry of log; trackBy: trackByEventLogEntries; let even=even;"
+                    [class.control-event-log-list-item-alternate]="even">
+                    <mat-icon matListIcon class="control-event-log-call-icon">
+                        arrow_back</mat-icon>
+                    <div matLine class="control-event-log-heading">
+                        CallEvent @ {{entry.callEventTime | date:'HH:mm:ss.SSS'}}
+                        <code class="control-event-log-code">
+                            <span>on: {{entry.callEvent.eventData.getParameterByName('on')}}, 
+                            </span>
+                            <span>luminosity: 
+                                {{entry.callEvent.eventData.getParameterByName('luminosity')}}, 
+                            </span>
+                            <span>color: 
+                                {{entry.callEvent.eventData.getParameterByName('color')}}, 
+                            </span>
+                            <span>switchTime: 
+                                {{entry.callEvent.eventData.getParameterByName('switchTime')}}
+                            </span>
+                        </code>
+                        <a class="control-code-icon"
+                            (click)="viewCallEventData(entry.callEvent.eventData)"
+                            matTooltip="View CallEvent data"
+                            aria-label="icon button for viewing CallEvent data in bottom sheet">
+                            <mat-icon color="primary">
+                                code
+                            </mat-icon>
+                        </a>
+                    </div>
+                    <mat-list-item matLine class="control-event-log-return-list-item"
+                        *ngFor="let returnInfo of entry.returnEvents">
+                        <mat-icon matListIcon
+                            [color]="returnInfo.event.eventData.isError ? 'warn' : ''">
+                            arrow_forward</mat-icon>
+                        <h4 class="control-event-log-heading"
+                            [class.control-event-log-warn]="returnInfo.event.eventData.isError">
+                            ReturnEvent @ {{returnInfo.eventTime | date:'HH:mm:ss.SSS'}}
+                        </h4>
+                        <code class="control-event-log-code control-event-log-warn"
+                            *ngIf="returnInfo.event.eventData.isError">
+                            <span>light #{{returnInfo.event.eventData.executionInfo.lightId}} </span>
+                            <span>error message: 
+                                {{returnInfo.event.eventData.error.message | json}}
+                                , </span>
+                            <span>error code: {{returnInfo.event.eventData.error.code}}</span>
+                            </code>
+                        <code class="control-event-log-code"
+                            *ngIf="!returnInfo.event.eventData.isError">
+                            <span>light #{{returnInfo.event.eventData.executionInfo.lightId}} </span>
+                            <span>result: {{returnInfo.event.eventData.result | json}}, </span>
+                            <span>triggerTime: {{returnInfo.event.eventData.executionInfo.triggerTime| date:'HH:mm:ss.SSS'}}</span>
+                        </code>
+                    </mat-list-item>
+                </mat-list-item>
+            </mat-list>
+            <mat-action-row>
+                <button mat-button color="primary" [disabled]="!controlContainer"
+                    (click)="clearEventLog()">CLEAR</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions *ngIf="controlContainer">
+        <button mat-button color="primary" matTooltip="Open new light in popup"
+            aria-label="Button that opens a new light in a popup window"
+            (click)="openLightApp()">NEW LIGHT
+        </button>
+        <a mat-button color="primary" matTooltip="Open new light in new tab"
+            aria-label="Button that opens a new light in a new tab" routerLink="/light"
+            target="_blank">NEW LIGHT IN TAB
+        </a>
+        <a mat-button color="primary" matTooltip="Open new light control in new tab"
+            aria-label="Button that opens a new light control in a new tab" routerLink="/control"
+            target="_blank">NEW LIGHT CONTROL
+        </a>
+    </mat-card-actions>
+    <mat-divider></mat-divider>
+    <mat-card-footer>
+        <div *ngIf="eventLog$ | async as log; else nolog">Last switch operation:
+            {{log[0]?.callEventTime | date:'HH:mm:ss.SSS'}}</div>
+        <ng-template #nolog>
+            <div>Last switch operation:</div>
+        </ng-template>
+        <div class="app-card-footer-link-group"
+            *ngIf="controlContainer?.getRuntime().options.agentInfo as agentInfo">
+            <a mat-button
+                [matTooltip]="agentInfo?.packageInfo.name + '@' + agentInfo?.packageInfo.version + ' on GitHub'"
+                href="https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js"
+                target="_blank">
+                <img src="/assets/images/github-icon.svg" alt="github-logo">
+            </a>
+            <a mat-button href="https://coaty.io" target="_blank">
+                <img src="/assets/images/coaty-logo-accent.svg" alt="coaty-logo">
+            </a>
+        </div>
+    </mat-card-footer>
+</mat-card>

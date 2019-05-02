@@ -1,0 +1,162 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Material Overrides */
+
+.mat-app-background {
+    background-color: white;
+}
+
+.mat-card-header-text {
+    overflow: hidden;
+    padding-right: 16px;
+}
+
+.mat-card-actions {
+    margin-bottom: 0px !important;
+}
+
+.mat-card-content {
+    padding-right: 32px;
+}
+
+.mat-slider {
+    width: 100%;
+}
+
+.mat-card-footer {
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(0,0,0,.54);
+    font-size: 12px;
+
+    > * {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+// [Hack] Workaround to show the thumb label of a mat-slider all the time.
+// (see https://github.com/angular/material2/issues/4803)
+.mat-slider-thumb-label {
+    transform: rotate(45deg) !important;
+    border-radius: 50% 50% 0 !important;
+}
+    
+.mat-slider-thumb {
+    transform: scale(0) !important;
+}
+    
+.mat-slider-thumb-label-text {
+    opacity: 1 !important;
+}
+// [HACK]
+
+/** App specific media queries */
+
+@media #{screen and (min-width: 768px)} {
+    .app-keyvisual-layout {
+        height: 150px;
+    }
+}
+
+/* App specific styles */
+
+// Text overflow
+// Ensure parent element is contrained in width (e.g. fixed, or overflow: hidden)
+.app-text-with-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.app-space-filler {
+    flex: 1 1 auto;
+}
+
+.app-heading-no-top-margin {
+    margin-top: 0;
+}
+
+.app-card {
+    width: 100%;
+}
+
+.app-card-footer-link-group > .mat-button {
+    min-width: 0;
+    padding: 0 3px;
+
+    img {
+        height: 20px;
+    }
+}
+
+.app-mat-icon-flipped {
+    transform: rotate(180deg);
+}
+
+.app-mat-icon-super-smaller {
+    font-size: smaller !important;
+    line-height: 0 !important;
+    vertical-align: super !important;
+}
+
+.app-map-card-image-centered {
+    width: 100% !important;
+}
+
+/* Scrollbars - webkit and IE */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color:#697882;
+    border: none;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ebf0f5;
+}
+
+::-webkit-scrollbar-track-piece {
+    display: none;
+}
+
+::-webkit-scrollbar-corner {
+    display: none;
+}
+
+::-webkit-resizer {
+    display: none;
+}
+
+/* IE */
+body {
+    scrollbar-face-color: #697882;
+    scrollbar-arrow-color: #697882;
+    scrollbar-track-color: #ebf0f5;
+    scrollbar-shadow-color: #697882;
+    scrollbar-highlight-color: #697882;
+    scrollbar-3dlight-color: #697882;
+    scrollbar-darkshadow-color: #697882;
+}

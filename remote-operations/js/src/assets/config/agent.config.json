@@ -1,0 +1,64 @@
+{
+    "communication": {
+        "brokerUrl": "mqtt://localhost:9883"
+    },
+    "common": {
+        "lightControlOperation": "coaty.examples.remoteops.switchLight",
+        "lightContextRanges": {
+            "building": {
+                "min": 10,
+                "max": 95,
+                "tickInterval": 10
+            },
+            "floor": {
+                "min": 1,
+                "max": 9,
+                "tickInterval": 1
+            },
+            "room": {
+                "min": 1,
+                "max": 99,
+                "tickInterval": 10
+            }
+        }
+    },
+    "controllers": {
+        "LightController": {
+            "building": 33,
+            "floor": 4,
+            "room": 62,
+            "lightOn": false,
+            "lightLuminosity": 1,
+            "lightColor": [ 255, 140, 0, 1]
+        },
+        "ControlController": {
+            "initialContextFilterBuildings": [33],
+            "initialContextFilterFloors": [4],
+            "initialContextFilterRooms": [62],
+            "initialOpParamOnOff": true,
+            "initialOpParamLuminosity": 1,
+            "initialOpParamPrimaryColor": [255, 140, 0, 1],
+            "initialSwitchTime": 0,
+            "customColors": [
+                { 
+                    "name": "white",
+                    "rgba": [255, 255, 255, 1]
+                },
+                { 
+                    "name": "Invalid color! Switching a light with this color returns an error.", 
+                    "rgba": [0, 0, 0, 1]
+                },
+                {  
+                    "name": "Coaty Orange",
+                    "rgba": [255, 140, 0, 1]
+                },
+                {  
+                    "name": "Tangerine Sky",
+                    "rgba": [64, 169, 255, 1]
+                }
+            ],
+            "lightWindowWidth": 400,
+            "lightWindowHeight": 642
+        }
+    }
+}

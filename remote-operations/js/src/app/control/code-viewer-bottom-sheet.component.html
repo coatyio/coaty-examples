@@ -1,0 +1,25 @@
+<mat-toolbar class="code-toolbar">
+    <span class="code-header">
+        <code>CallEvent.withData(this.identity, </code>
+        <code class="code-key">operation</code>
+        <code>, </code>
+        <code class="code-key">parameters</code>
+        <code>, </code>
+        <code class="code-key">contextFilter</code>
+        <code>)</code>
+    </span>
+    <span class="app-space-filler"></span>
+    <button mat-icon-button class="code-toolbar-button" (click)="close($event)" matTooltip="Close">
+        <mat-icon aria-hidden="false" aria-label="Close">close
+        </mat-icon>
+    </button>
+</mat-toolbar>
+
+<pre class="code-key">operation</pre>
+<pre class="code-value">{{data.operation}}</pre>
+
+<pre class="code-key">parameters</pre>
+<pre class="code-value">{{data.operationParameters}}</pre>
+
+<pre class="code-key">contextFilter</pre>
+<pre class="code-value">{{data.contextFilter}}</pre>

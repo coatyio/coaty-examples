@@ -1,0 +1,77 @@
+<mat-card class="app-card light-card-dark" id="contentHeightResolver">
+    <mat-card-header>
+        <a mat-card-avatar class="light-card-header-avatar"></a>
+        <mat-card-title class="app-text-with-ellipsis">{{appContext.context$ | async}}
+        </mat-card-title>
+        <mat-card-subtitle class="light-card-subtitle-dark">Building {{lightContext?.building}}
+            &sdot;
+            Floor {{lightContext?.floor}}
+            &sdot;
+            Room {{lightContext?.room}}
+        </mat-card-subtitle>
+        <mat-icon class="light-card-title-icon" *ngIf="brokerConnectionInfo$ | async as info"
+            [matTooltip]="info.isOnline ? 'Connected to ' + info.brokerHost : 'Not connected to ' + info.brokerHost">
+            {{info.isOnline ? "wifi" : "wifi_off"}}
+        </mat-icon>
+    </mat-card-header>
+    <img mat-card-image *ngIf="lightColor$ | async as color; else initializing"
+        class="app-map-card-image-centered light-card-image-mask"
+        src="/assets/images/light-bulb-mask.png"
+        [style.background-color]="light.isDefect ? 'transparent' : color"
+        alt="Photo of a light bulb">
+    <ng-template #initializing>
+        <mat-card-content>Initializing...</mat-card-content>
+    </ng-template>
+    <mat-card-content class="light-card-content" *ngIf="lightContainer">
+        <div class="light-operation-param">
+            <mat-slide-toggle [color]="'warn'" [(ngModel)]="light.isDefect"
+                aria-label="light defect switch">
+                Defect
+            </mat-slide-toggle>
+        </div>
+        <qrcode draggable="true" (dragstart)="onQrCodeDrag($event, qrCodeTooltip)" #qrCodeTooltip="matTooltip"
+            matTooltip="Drag QR Code onto context filter to switch this light"
+            matTooltipPosition="above" [title]="''" class="light-map-card-image-qrcode"
+            [qrdata]="light?.objectId" [usesvg]="true" [level]="'M'">
+        </qrcode>
+        <h4 class="app-heading-no-top-margin">CONTEXT</h4>
+        <div class="light-card-context">
+            <div class="light-card-slider-label">Building</div>
+            <mat-slider [min]="lightContextRanges.building.min"
+                [max]="lightContextRanges.building.max"
+                [tickInterval]="lightContextRanges.building.tickInterval" [step]="1"
+                [thumbLabel]="true" [(ngModel)]="lightContext.building">
+            </mat-slider>
+        </div>
+        <div class="light-card-context">
+            <div class="light-card-slider-label">Floor</div>
+            <mat-slider [min]="lightContextRanges.floor.min" [max]="lightContextRanges.floor.max"
+                [tickInterval]="lightContextRanges.floor.tickInterval" [step]="1"
+                [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="lightContext.floor">
+            </mat-slider>
+        </div>
+        <div class="light-card-context">
+            <div class="light-card-slider-label">Room</div>
+            <mat-slider [min]="lightContextRanges.room.min" [max]="lightContextRanges.room.max"
+                [tickInterval]="lightContextRanges.room.tickInterval" [step]="1" [thumbLabel]="true"
+                [tickInterval]="10" [(ngModel)]="lightContext.room">
+            </mat-slider>
+        </div>
+    </mat-card-content>
+    <mat-divider class="light-card-divider-dark"></mat-divider>
+    <mat-card-footer *ngIf="lightContainer?.getRuntime().options.agentInfo as agentInfo"
+        class="light-card-subtitle-dark">
+        <div>Last switched: {{lastSwitched$ | async | dateNow | date:'HH:mm:ss.SSS'}}</div>
+        <div class="app-card-footer-link-group">
+            <a mat-button
+                [matTooltip]="agentInfo?.packageInfo.name + '@' + agentInfo?.packageInfo.version + ' on GitHub'"
+                href="https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js"
+                target="_blank">
+                <img src="/assets/images/github-icon.svg" alt="github-logo">
+            </a>
+            <a mat-button href="https://coaty.io" target="_blank">
+                <img src="/assets/images/coaty-logo-accent.svg" alt="coaty-logo">
+            </a>
+        </div>
+    </mat-card-footer>
+</mat-card>
