@@ -5,7 +5,7 @@
             Light Control
         </mat-card-title>
         <mat-card-subtitle class="app-text-with-ellipsis">
-            #{{controlContainer?.getCommunicationManager().identity.objectId}}
+            #{{controlContainer?.communicationManager.identity.objectId}}
         </mat-card-subtitle>
         <mat-icon class="control-card-title-icon" *ngIf="brokerConnectionInfo$ | async as info"
             [matTooltip]="info.isOnline ? 'Connected to ' + info.brokerHost : 'Not connected to ' + info.brokerHost">
@@ -52,7 +52,7 @@
             <qrcode class="control-context-qrcode" (dragover)="onQrCodeDragOver($event)"
                 (drop)="onQrCodeDrop($event)" [style.opacity]="selectedLightId ? 1 : 0.3"
                 [matTooltip]="selectedLightId ? '' : 'Drop QR Code of a light here to switch this light only'"
-                [qrdata]="selectedLightId || ' '" [usesvg]="true" [level]="'M'">
+                [qrdata]="selectedLightId || 'coaty.io'" [usesvg]="true" [level]="'M'">
             </qrcode>
             <a *ngIf="selectedLightId" (click)="this.selectedLightId = undefined"
                 class="control-context-qrcode-button" matTooltip="Remove light from context filter"
@@ -118,6 +118,7 @@
                     [(ngModel)]="switchTime" (change)="onSwitchTimeChange($event)"
                     aria-label="Switch time">
                     <mat-button-toggle [value]="0">Immediate</mat-button-toggle>
+                    <mat-button-toggle [value]="5000">5sec</mat-button-toggle>
                     <mat-button-toggle [value]="10000">10sec</mat-button-toggle>
                     <mat-button-toggle [value]="20000">20sec</mat-button-toggle>
                     <mat-button-toggle [value]="30000">30sec</mat-button-toggle>
@@ -232,7 +233,7 @@
             <div>Last switch operation:</div>
         </ng-template>
         <div class="app-card-footer-link-group"
-            *ngIf="controlContainer?.getRuntime().options.agentInfo as agentInfo">
+            *ngIf="controlContainer?.runtime.options.agentInfo as agentInfo">
             <a mat-button
                 [matTooltip]="agentInfo?.packageInfo.name + '@' + agentInfo?.packageInfo.version + ' on GitHub'"
                 href="https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js"
