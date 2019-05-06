@@ -13,10 +13,10 @@ import { AgentInfo } from "coaty/runtime";
 export const agentInfo: AgentInfo = {
     packageInfo: {
         name: "remote-operations",
-        version: "1.0.0",
+        version: "1.1.0",
     },
     buildInfo: {
-        buildDate: "2019-05-02T10:54:10+02:00",
+        buildDate: "2019-05-06T13:22:08+02:00",
         buildMode: "development",
     },
     configInfo: {

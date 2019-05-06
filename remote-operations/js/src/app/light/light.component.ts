@@ -84,7 +84,7 @@ export class LightComponent implements OnDestroy {
                 this.lightContainer = container;
 
                 const lightController: LightController = container.getController("LightController");
-                this.lightContextRanges = container.getRuntime().options.lightContextRanges;
+                this.lightContextRanges = container.runtime.options.lightContextRanges;
                 this.light = lightController.light;
                 this.lightContext = lightController.lightContext;
                 this.lightColor$ = lightController.lightColorChange$;
@@ -101,12 +101,12 @@ export class LightComponent implements OnDestroy {
     }
 
     private initBrokerConnectionInfo(options: any) {
-        this.brokerConnectionInfo$ = this.lightContainer.getCommunicationManager().observeCommunicationState()
+        this.brokerConnectionInfo$ = this.lightContainer.communicationManager.observeCommunicationState()
             .pipe(map(state => {
                 return {
                     state: state,
                     isOnline: state === CommunicationState.Online,
-                    brokerHost: this.lightContainer.getCommunicationManager().options.brokerUrl
+                    brokerHost: this.lightContainer.communicationManager.options.brokerUrl
                 };
             }));
     }

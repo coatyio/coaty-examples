@@ -325,14 +325,14 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
                 const controlController: ControlController = container.getController("ControlController");
 
                 this.initBrokerConnectionInfo(controlController.options);
-                this.initContextFilterBindings(container.getRuntime().options.lightContextRanges, controlController.options);
+                this.initContextFilterBindings(container.runtime.options.lightContextRanges, controlController.options);
                 this.initOperationParams(controlController.options);
                 this.eventLog$ = controlController.eventLog$;
                 this.changeRef.detectChanges();
 
                 // Provide the app context with the container's communication
                 // manager ID to be displayed in the title of the HTML document.
-                this.appContext.setContext(`Light Control #${container.getCommunicationManager().identity.objectId}`);
+                this.appContext.setContext(`Light Control #${container.communicationManager.identity.objectId}`);
             })
             .catch(error => {
                 throw new Error(`Agent container for ControlComponent couldn't be resolved: ${error}`);
@@ -342,12 +342,12 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
     /* Broker Connection Info */
 
     private initBrokerConnectionInfo(options: any) {
-        this.brokerConnectionInfo$ = this.controlContainer.getCommunicationManager().observeCommunicationState()
+        this.brokerConnectionInfo$ = this.controlContainer.communicationManager.observeCommunicationState()
             .pipe(map(state => {
                 return {
                     state: state,
                     isOnline: state === CommunicationState.Online,
-                    brokerHost: this.controlContainer.getCommunicationManager().options.brokerUrl
+                    brokerHost: this.controlContainer.communicationManager.options.brokerUrl
                 };
             }));
     }
@@ -546,7 +546,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
         };
 
         return {
-            operation: formatter(this.controlContainer.getRuntime().options.lightControlOperation),
+            operation: formatter(this.controlContainer.runtime.options.lightControlOperation),
             operationParameters: formatter({
                 on,
                 luminosity,
