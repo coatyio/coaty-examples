@@ -82,13 +82,11 @@ prompt([
     NodeUtils.logCommunicationState(container);
 
     // Finally start the communication manager.
-    container.getCommunicationManager().start();
+    container.communicationManager.start();
 
     function associateClientUser(cont: Container) {
-        "use strict";
-
-        cont.getRuntime().options.associatedUser = {
-            objectId: cont.getRuntime().newUuid(),
+        cont.runtime.options.associatedUser = {
+            objectId: cont.runtime.newUuid(),
             objectType: CoreTypes.OBJECT_TYPE_USER,
             coreType: "User",
             name: answers.deviceName,
