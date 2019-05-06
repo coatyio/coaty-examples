@@ -9,8 +9,8 @@ import { components, configuration } from "./agent.config";
 function associateClientUser(cont: Container) {
     "use strict";
 
-    cont.getRuntime().options.associatedUser = {
-        objectId: cont.getRuntime().newUuid(),
+    cont.runtime.options.associatedUser = {
+        objectId: cont.runtime.newUuid(),
         objectType: CoreTypes.OBJECT_TYPE_USER,
         coreType: "User",
         name: "ClientUser",
@@ -28,7 +28,7 @@ const container = Container.resolve(components, configuration);
 associateClientUser(container);
 
 // Finally start the communication manager.
-container.getCommunicationManager().start();
+container.communicationManager.start();
 
 // Log broker connection state changes (online/offline) to the console.
 NodeUtils.logCommunicationState(container);
