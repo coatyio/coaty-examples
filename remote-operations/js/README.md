@@ -148,10 +148,14 @@ responsible for publishing remote operations named
 `coaty.example.remoteops.switchLights` and maintaining the received results in
 an event log data structure.
 
-The local communication flow between these two controllers and their
-corresponding Angular view components (`LightComponent`, `ControlComponent`) is
-modelled using RxJS observables. Observables can be efficiently handled inside
-Angular view templates using the `async` pipe.
+Note that operation parameters for Call-Return events should always be validated
+by the receiving parties (CallEvent data by the `LightController` and
+ReturnEvent data by the `ControlController`).
+
+The local communication flow between a controller and its corresponding
+Angular view component (`LightComponent`, `ControlComponent`) is modelled using
+RxJS observables. Observables can be efficiently handled inside Angular view
+templates using the `async` pipe.
 
 Agent configuration parameters are contained in a central config file named
 `agent.config.json` located in the `src/assets/config/` folder of the project.
@@ -159,9 +163,10 @@ This configuration also contains common options to be used by the light UI and
 the control UI views, and commmunication options such as the URL of the Coaty
 broker.
 
-When a Coaty container is created by one of the two Angular modules, the
-configuration of the container is retrieved via a REST/HTTP GET request from the
-web server hosting the app (see file `agent.service.ts`). This way, the
+Each Coaty container is resolved by an Angular service class called
+`AgentService` when the corresponding Angular view component is instantiated.
+The configuration of a container is retrieved via a REST/HTTP GET request from
+the web server hosting the app (see file `agent.service.ts`). This way, the
 hostname/IP address for establishing a connection to the Coaty broker need not
 be hardcoded into the source code of the web app.
 
