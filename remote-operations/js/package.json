@@ -1,7 +1,7 @@
 {
   "name": "remote-operations",
   "description": "Coaty example on context-filtered remote operations",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "author": {
     "name": "Siemens AG"

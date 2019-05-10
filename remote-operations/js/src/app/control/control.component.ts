@@ -54,9 +54,9 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
 
     brokerConnectionInfo$: Observable<any>;
 
-    selectedBuildings: string[];
-    selectedFloors: string[];
-    selectedRooms: string[];
+    selectedBuildings: number[];
+    selectedFloors: number[];
+    selectedRooms: number[];
     selectedLightId: Uuid;
 
     availableBuildings: number[];
