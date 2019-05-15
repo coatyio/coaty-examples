@@ -89,11 +89,13 @@ browser with the light control UI at
 
 To open the **light UI** on your smartphone, just scan this QR Code:
 
-![Light UI URL](./qr-code-github-pages-light-url.png)
+[![Light UI
+URL](./qr-code-github-pages-light-url.png)](https://coatyio.github.io/coaty-examples/remote-operations/light)
 
 To open the **light control UI** on your tablet, just scan this QR Code:
 
-![Light Control UI URL](./qr-code-github-pages-control-url.png)
+[![Light Control UI
+URL](./qr-code-github-pages-control-url.png)](https://coatyio.github.io/coaty-examples/remote-operations/)
 
 > **Note**: This deployment uses the [Public HiveMQ MQTT
 > broker](https://www.hivemq.com/public-mqtt-broker/). This implies that every
@@ -126,7 +128,7 @@ Run `npm run build:ghpages` to build the Angular app for GitHub Pages. Then,
 commit your changes and push or create a merge request.
 
 You can see your deployed page at
-`https://coatyio.github.io/coaty-examples/remote-operations/`.
+[https://coatyio.github.io/coaty-examples/remote-operations/](https://coatyio.github.io/coaty-examples/remote-operations/).
 
 ## Deploy example on web server
 
