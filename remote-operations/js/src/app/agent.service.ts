@@ -42,7 +42,7 @@ export class AgentService {
             },
         };
 
-        console.log("Running build configuration ", defaultConfiguration.common.agentInfo.buildInfo.buildMode);
+        console.log("Running build configuration: ", defaultConfiguration.common.agentInfo.buildInfo.buildMode);
 
         return this.getAgentConfig()
             .pipe(

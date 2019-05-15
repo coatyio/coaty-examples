@@ -6,5 +6,5 @@ export const environment = {
     production: true,
 
     // Connect to the public HiveMQ MQTT broker.
-    brokerUrl: "mqtt://broker.hivemq.com:8000",
+    brokerUrl: "mqtts://foo:bar@broker.hivemq.com:8000",
 };
