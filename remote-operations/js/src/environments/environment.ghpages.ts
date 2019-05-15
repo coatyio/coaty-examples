@@ -5,6 +5,6 @@
 export const environment = {
     production: true,
 
-    // Connect to the public HiveMQ MQTT broker.
-    brokerUrl: "mqtts://foo:bar@broker.hivemq.com:8000",
+    // Connect to a public MQTT broker over secure websocket.
+    brokerUrl: "mqtts://iot.eclipse.org:443",
 };

@@ -14,7 +14,7 @@
     "start": "coaty-scripts info ./src/app && ng serve --open",
     "lint": "ng lint",
     "build:prod": "coaty-scripts info ./src/app production && ng build --prod && shx echo # Output deployed in dist/ folder",
-    "build:ghpages": "coaty-scripts info ./src/app ghpages && ng build -c ghpages --output-path ../../docs/remote-operations --base-href /coaty-examples/remote-operations/ && shx cp .nojekyll ../../docs/remote-operations && shx cp ../../docs/remote-operations/index.html ../../docs/remote-operations/404.html && shx echo # Output deployed in ../../docs/remote-operations/ folder",
+    "build:ghpages": "coaty-scripts info ./src/app ghpages && ng build -c ghpages --output-path ../../docs/remote-operations --base-href /coaty-examples/remote-operations/ --deploy-url /coaty-examples/remote-operations/ && shx cp .nojekyll ../../docs/remote-operations && shx cp ../../docs/remote-operations/index.html ../../docs/remote-operations/404.html && shx echo # Output deployed in ../../docs/remote-operations/ folder",
     "build:docker": "cd docker && docker-compose build",
     "docker:up": "cd docker && docker-compose up",
     "docker:down": "cd docker && docker-compose down"
