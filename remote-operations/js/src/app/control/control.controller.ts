@@ -77,8 +77,8 @@ export class ControlController extends Controller {
             contextFilter);
         const correlationId = this.addCallToEventLog(callEvent);
         this.communicationManager.publishCall(callEvent)
-            .subscribe(event => {
-                this.addReturnToEventLog(event, correlationId);
+            .subscribe(returnEvent => {
+                this.addReturnToEventLog(returnEvent, correlationId);
             });
     }
 

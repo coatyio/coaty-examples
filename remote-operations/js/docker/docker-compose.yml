@@ -1,0 +1,28 @@
+version: "3.4"
+services:
+  server:
+    build:
+      context: ..
+      args:
+        - http_proxy=${http_proxy}
+        - https_proxy=${http_proxy}
+      target: webui-server
+    depends_on:
+      - broker
+    environment:
+      # Replace localhost by your Docker host if web app should be opened remotely
+      BROKER_URL: mqtt://localhost:9883
+    ports:
+      - "8080:80"
+    command: ["sh","-c","sed -i 's|@BROKER_URL_PLACEHOLDER@|'$${BROKER_URL}'|' /usr/share/nginx/html/main.js && nginx -g 'daemon off;'"]
+  broker:
+    build:
+      context: ..
+      args:
+        - http_proxy=${http_proxy}
+        - https_proxy=${http_proxy}
+      target: install-base
+    ports:
+      - "1883:1883"
+      - "9883:9883"
+    command: npm run broker

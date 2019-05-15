@@ -1,7 +1,7 @@
 {
   "name": "remote-operations",
   "description": "Coaty example on context-filtered remote operations",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "license": "MIT",
   "author": {
     "name": "Siemens AG"
@@ -12,9 +12,12 @@
     "broker:verbose": "coaty-scripts broker --verbose --nobonjour",
     "serve": "coaty-scripts info ./src/app && ng serve",
     "start": "coaty-scripts info ./src/app && ng serve --open",
-    "build": "coaty-scripts info ./src/app && ng build",
-    "build:prod": "coaty-scripts info ./src/app production && ng build --prod",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "build:prod": "coaty-scripts info ./src/app production && ng build --prod && shx echo # Output deployed in dist/ folder",
+    "build:ghpages": "coaty-scripts info ./src/app ghpages && ng build -c ghpages --output-path docs --base-href /remote-operations/ && shx cp .nojekyll ./docs && shx cp ./docs/index.html ./docs/404.html && shx echo # Output deployed in docs/ folder",
+    "build:docker": "cd docker && docker-compose build",
+    "docker:up": "cd docker && docker-compose up",
+    "docker:down": "cd docker && docker-compose down"
   },
   "private": true,
   "dependencies": {
@@ -46,6 +49,7 @@
     "@angular/language-service": "^7.2.12",
     "@types/node": "~8.9.4",
     "codelyzer": "~5.0.0",
+    "shx": "^0.3.2",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.2.4"

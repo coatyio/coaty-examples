@@ -13,11 +13,11 @@ import { AgentInfo } from "coaty/runtime";
 export const agentInfo: AgentInfo = {
     packageInfo: {
         name: "remote-operations",
-        version: "1.1.0",
+        version: "1.2.0",
     },
     buildInfo: {
-        buildDate: "2019-05-06T13:22:08+02:00",
-        buildMode: "development",
+        buildDate: "2019-05-15T16:49:22+02:00",
+        buildMode: "ghpages",
     },
     configInfo: {
         serviceHost: "",

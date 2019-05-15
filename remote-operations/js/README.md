@@ -9,6 +9,12 @@ Remote light switching operations are context-filtered to enable control of
 individual lights or groups of lights in the same room, on the same floor, or in
 the same building.
 
+This example provides deployments
+
+* to run it on your local machine,
+* to run it from a public Github Pages host,
+* to run it with Docker.
+
 ## Run example locally
 
 To begin with, make sure that the `Node.js` JavaScript runtime (version 8 or
@@ -22,7 +28,8 @@ and install dependencies by `npm install`.
 Perform these steps in separate console windows:
 
 1. `npm run broker` - to start the Coaty broker,
-2. `npm run start` - to open a browser with the light control UI.
+2. `npm run start` - to open a browser with the light control UI on
+   `http://localhost:4200/`.
 
 Create several lights by clicking the "NEW LIGHT" button in the action bar. Each
 light is opened in its own popup window. Using the sliders, you can configure a
@@ -70,37 +77,87 @@ button "< >" to view the Call event data for a specific operation.
 > **Tip**: For debugging and introspection, you can start the Coaty broker in
 > verbose mode (`npm run broker:verbose`), so that all message subscriptions and
 > published messages are traced in the console window.
+>
+> **Tip**: The number of currently active Coaty agents for light UIs and light
+> control UIs is displayed in the footer bar.
 
-## Deploy example on a web server
+## Run example from GitHub Pages
+
+For convenience, this project has been deployed to GitHub Pages. You can open a
+browser with the light control UI at
+[https://coatyio.github.io/coaty-examples/remote-operations/](https://coatyio.github.io/coaty-examples/remote-operations/).
+
+To open the **light UI** on your smartphone, just scan this QR Code:
+
+![Light UI URL](./qr-code-github-pages-light-url.png)
+
+To open the **light control UI** on your tablet, just scan this QR Code:
+
+![Light Control UI URL](./qr-code-github-pages-control-url.png)
+
+> **Note**: This deployment uses the [Public HiveMQ MQTT
+> broker](https://www.hivemq.com/public-mqtt-broker/). This implies that every
+> participant who is opening light or light control UI apps served from GitHub
+> Pages is taking part in a shared light switching experience. You can see the
+> current number of active Coaty agents in the footer bar of the light control
+> UI.
+
+## Run example with Docker
+
+This example also comes with a Dockerfile and a Docker Compose file to run it
+inside Docker containers that host the web app on an Nginx web server and
+the Coaty broker, respectively.
+
+Use `npm run docker:up` to build (only once), start, and attach the containers.
+
+Then, open a browser with the light control UI on `http://<dockerhost>:8080`.
+
+If you want to open the example web app not only on your local Docker machine,
+you have to configure the broker URL. Since the broker is also running inside a
+Docker container, set the environment variable `BROKER_URL` to
+`mqtt://<dockerhost>:9883` before running docker:up.
+
+## Deploy example on Github Pages
+
+After you make changes or contributions to this example, the code should be
+rebuild and deployed on Github Pages.
+
+Run `npm run build:ghpages` to build the Angular app for GitHub Pages. Then,
+commit your changes and push or create a merge request.
+
+You can see your deployed page at
+`https://coatyio.github.io/coaty-examples/remote-operations/`.
+
+## Deploy example on web server
+
+For deployment on a production server, build the project in production mode `npm
+run build:prod`. The build artifacts will be stored in the `dist/` output
+folder.
+
+Copy *everything* within the output folder to a folder on your web server.
+
+Make sure that you adjust the `brokerUrl` property in the configuration file
+`environments/environment.prod.ts` to specify the location where your production
+broker is running.
+
+Configure the server to redirect requests for missing files to `index.html`.
+Configure HTML `base href` tag if you want to serve the app from a server
+subfolder. Detailed instructions can be found
+[here](https://angular.io/guide/deployment#production-servers).
+
+## Project structure
 
 This project is a single-page web application that was generated with [Angular
 CLI](https://github.com/angular/angular-cli). To get more help on the Angular
 CLI use `npm run ng help` or check out the [Angular CLI
 README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-Run `npm run build` to build the project. The build artifacts will be stored in
-the `dist/` directory. Use `npm run build:prod` for a production build.
-
-For development, first use `npm run broker` to start the Coaty broker. Then, run
-`npm run serve` or `npm run start` for a development server. Navigate to
-`http://localhost:4200/`. The app will automatically reload if you change any of
-the source files.
-
-For deployment on a web server, build the project and copy the `dist/` directory
-into the root directory of your web server. Make sure that you adjust the
-`brokerUrl` setting in the config file `dist/assets/config/agent.config.json` to
-point to the hostname/IP address where your broker is running.
-
-For convenience, the example also comes with a Dockerfile that enables you to
-run it in a Docker container packaged with all dependencies, an Nginx web server
-and an MQTT broker.
-
-## Project structure
-
 Here is the folder structure of the Angular singe-page web app. To keep it
 readable, only important files are displayed:
 
 ```
+|── docker/
+|   └── docker-compose.yaml           - Docker Compose file to start web server and Coaty broker
 |── src/
 │   |── app/                          - Angular web app
 |   |   ├── control/                  - Angular module for light control UI
@@ -123,6 +180,7 @@ readable, only important files are displayed:
 |   ├── polyfills.ts                  - Angular browser polyfills
 |   └── styles.scss                   - Angular global CSS styles
 |── angular.json                      - Angular project file
+|── Dockerfile                        - Dockerfile for dockerized build
 |── package.json                      - project package definition
 ├── README.md                         - this document
 |── tsconfig.json                     - TypeScript compiler options

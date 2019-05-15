@@ -8,6 +8,7 @@ import { catchError, map } from "rxjs/operators";
 import { Components, Configuration, Container, mergeConfigurations } from "coaty/runtime";
 
 import { agentInfo } from "./agent.info";
+import { environment } from './../environments/environment';
 
 /**
  * An app-wide service that provides a Coaty agent container for a specific
@@ -36,8 +37,12 @@ export class AgentService {
             common: { agentInfo },
             communication: {
                 shouldAutoStart: true,
+                // Retrieve broker url from active Angular environment configuration.
+                brokerUrl: environment.brokerUrl,
             },
         };
+
+        console.log("Running build configuration ", defaultConfiguration.common.agentInfo.buildInfo.buildMode);
 
         return this.getAgentConfig()
             .pipe(
