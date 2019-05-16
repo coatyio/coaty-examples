@@ -15,26 +15,12 @@ This example provides deployments
 * to run it from a public Github Pages host,
 * to run it with Docker.
 
-## Run example locally
+## User Interface
 
-To begin with, make sure that the `Node.js` JavaScript runtime (version 8 or
-higher) is globally installed on your target machine. Download and installation
-details can be found [here](http://nodejs.org/).
-
-Then, checkout the example sources from
-[here](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js)
-and install dependencies by `npm install`.
-
-Perform these steps in separate console windows:
-
-1. `npm run broker` - to start the Coaty broker,
-2. `npm run start` - to open a browser with the light control UI on
-   `http://localhost:4200/`.
-
-Create several lights by clicking the "NEW LIGHT" button in the action bar. Each
-light is opened in its own popup window. Using the sliders, you can configure a
-light's context, which indicates where the light should be physically located
-(i.e. building, floor, and room).
+After opening the light control UI, create several lights by clicking the "NEW
+LIGHT" button in the action bar. Each light is opened in its own popup window.
+Using the sliders, you can configure a light's context, which indicates where
+the light should be physically located (i.e. building, floor, and room).
 
 > **Tip**: If your browser has popups disabled, you can launch a new light UI in
 > a new browser tab by clicking the "NEW LIGHT AS TAB" button in the action bar.
@@ -81,28 +67,44 @@ button "< >" to view the Call event data for a specific operation.
 > **Tip**: The number of currently active Coaty agents for light UIs and light
 > control UIs is displayed in the footer bar.
 
+## Run example locally
+
+To begin with, make sure that the `Node.js` JavaScript runtime (version 8 or
+higher) is globally installed on your target machine. Download and installation
+details can be found [here](http://nodejs.org/).
+
+Then, checkout the example sources from
+[here](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js)
+and install dependencies by `npm install`.
+
+Perform these steps in separate console windows:
+
+1. `npm run broker` - to start the Coaty broker,
+2. `npm run start` - to open a browser with the light control UI on
+   `http://localhost:4200/`.
+
 ## Run example from GitHub Pages
 
-For convenience, this project has been deployed to GitHub Pages. You can open a
-browser with the light control UI at
-[https://coatyio.github.io/coaty-examples/remote-operations/](https://coatyio.github.io/coaty-examples/remote-operations/).
+For convenience, this project has been deployed to GitHub Pages.
 
-To open the **light UI** on your smartphone, just scan this QR Code:
+To open a **light UI**, just scan this QR Code with your mobile device or click
+it:
 
 [![Light UI
 URL](./qr-code-github-pages-light-url.png)](https://coatyio.github.io/coaty-examples/remote-operations/light)
 
-To open the **light control UI** on your tablet, just scan this QR Code:
+To open a **light control UI** on your tablet, just scan this QR Code with your
+mobile device or click it:
 
 [![Light Control UI
 URL](./qr-code-github-pages-control-url.png)](https://coatyio.github.io/coaty-examples/remote-operations/)
 
-> **Note**: This deployment uses the [Public HiveMQ MQTT
-> broker](https://www.hivemq.com/public-mqtt-broker/). This implies that every
-> participant who is opening light or light control UI apps served from GitHub
-> Pages is taking part in a shared light switching experience. You can see the
-> current number of active Coaty agents in the footer bar of the light control
-> UI.
+> **Note**: This deployment uses a [public MQTT
+> broker](https://iot.eclipse.org/getting-started/#sandboxes). This implies that
+> every participant who is opening light or light control UI apps served from
+> GitHub Pages is taking part in a shared light switching experience. You can
+> see the current number of active Coaty agents in the footer bar of the light
+> control UI.
 
 ## Run example with Docker
 

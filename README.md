@@ -6,15 +6,20 @@ are substructured by available Coaty language variants, such as `js` for Coaty
 JavaScript. Some examples, such as Hello World, provide interoperable Coaty
 agents programmed in different language variants.
 
-* **Hello World** - This example demonstrates the basic use of communication
-  event patterns to exchange typed data in a distributed Coaty application.
+* [**Hello
+  World**](https://github.com/coatyio/coaty-examples/tree/master/hello-world/js)
+  This example demonstrates the basic use of communication event patterns to
+  exchange typed data in a distributed Coaty application.
 
-* **Remote Operations** - This example demonstrates how to use the Call-Return
-  communication event pattern to perform context-filtered remote operations
-  between Coaty agents.
+* [**Remote
+  Operations**](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js)
+  This example demonstrates how to use the Call-Return communication event
+  pattern to perform context-filtered remote operations between Coaty agents.
 
-* **Sensor Things** - This example demonstrates how Coaty leverages the
-  SensorThings API to manage a self-discovering network of sensors.
+* [**Sensor
+  Things**](https://github.com/coatyio/coaty-examples/tree/master/sensor-things/js)
+  This example demonstrates how Coaty leverages the SensorThings API to manage a
+  self-discovering network of sensors.
 
 ## Contributing
 

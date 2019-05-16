@@ -358,7 +358,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
         const opts = this.controlContainer.getController("ControlController").options;
         const lw = opts.lightWindowWidth;
         const lh = opts.lightWindowHeight;
-        const newWindow = window.open("/light", "_blank",
+        const newWindow = window.open("./light", "_blank",
             `toolbar=no,resizable=no,status=no,location=no,menubar=no,titlebar=no,width=${lw},height=${lh}`);
         const newWindowLayout = {
             screenLeft: newWindow.screenLeft,

@@ -16,7 +16,7 @@
     </mat-card-header>
     <img mat-card-image *ngIf="lightColor$ | async as color; else initializing"
         class="app-map-card-image-centered light-card-image-mask"
-        src="/assets/images/light-bulb-mask.png"
+        src="./assets/images/light-bulb-mask.png"
         [style.background-color]="light.isDefect ? 'transparent' : color"
         alt="Photo of a light bulb">
     <ng-template #initializing>
@@ -67,10 +67,10 @@
                 [matTooltip]="agentInfo?.packageInfo.name + '@' + agentInfo?.packageInfo.version + ' on GitHub'"
                 href="https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js"
                 target="_blank">
-                <img src="/assets/images/github-icon.svg" alt="github-logo">
+                <img src="./assets/images/github-icon.svg" alt="github-logo">
             </a>
             <a mat-button href="https://coaty.io" target="_blank">
-                <img src="/assets/images/coaty-logo-accent.svg" alt="coaty-logo">
+                <img src="./assets/images/coaty-logo-accent.svg" alt="coaty-logo">
             </a>
         </div>
     </mat-card-footer>
