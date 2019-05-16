@@ -11,8 +11,8 @@ the same building.
 
 This example provides deployments
 
-* to run it on your local machine,
 * to run it from a public Github Pages host,
+* to run it on your local machine,
 * to run it with Docker.
 
 ## User Interface
@@ -67,22 +67,6 @@ button "< >" to view the Call event data for a specific operation.
 > **Tip**: The number of currently active Coaty agents for light UIs and light
 > control UIs is displayed in the footer bar.
 
-## Run example locally
-
-To begin with, make sure that the `Node.js` JavaScript runtime (version 8 or
-higher) is globally installed on your target machine. Download and installation
-details can be found [here](http://nodejs.org/).
-
-Then, checkout the example sources from
-[here](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js)
-and install dependencies by `npm install`.
-
-Perform these steps in separate console windows:
-
-1. `npm run broker` - to start the Coaty broker,
-2. `npm run start` - to open a browser with the light control UI on
-   `http://localhost:4200/`.
-
 ## Run example from GitHub Pages
 
 For convenience, this project has been deployed to GitHub Pages.
@@ -105,6 +89,22 @@ URL](./qr-code-github-pages-control-url.png)](https://coatyio.github.io/coaty-ex
 > GitHub Pages is taking part in a shared light switching experience. You can
 > see the current number of active Coaty agents in the footer bar of the light
 > control UI.
+
+## Run example locally
+
+To begin with, make sure that the `Node.js` JavaScript runtime (version 8 or
+higher) is globally installed on your target machine. Download and installation
+details can be found [here](http://nodejs.org/).
+
+Then, checkout the example sources from
+[here](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js)
+and install dependencies by `npm install`.
+
+Perform these steps in separate console windows:
+
+1. `npm run broker` - to start the Coaty broker,
+2. `npm run start` - to open a browser with the light control UI on
+   `http://localhost:4200/`.
 
 ## Run example with Docker
 
