@@ -25,7 +25,7 @@ the light should be physically located (i.e. building, floor, and room).
 > **Tip**: If your browser has popups disabled, you can launch a new light UI in
 > a new browser tab by clicking the "NEW LIGHT AS TAB" button in the action bar.
 
-Now, you can control a specific set of lights or individual lights in the
+Now, you can control a specific set of lights or individual lights in the light
 control UI by
 
 * selecting appropriate context filter settings that define matching lights,
@@ -45,6 +45,10 @@ The expandable event log view provides details on the published Call events and
 the results and execution info received by Return events. Click a code fab
 button "< >" to view the Call event data for a specific operation.
 
+To force errors to be returned by a remote operation, turn on the "Light defect"
+switch in the light UI or select the invalid "black" color from the color
+palette in the light control UI.
+
 > **Tip**: You can also control an individual light by dragging the QR Code
 > displayed in the light UI and dropping it onto the corresponding area in the
 > context filter panel. Now, the operation context is limited to the selected
@@ -52,17 +56,14 @@ button "< >" to view the Call event data for a specific operation.
 > these filters again, remove the QR Code from the context filter by clicking
 > the "clear" button.
 > 
-> **Tip**: To force errors to be returned by a remote operation, turn on the
-> "Light defect" switch in the light UI or select the invalid "black" color from
-> the color palette in the light control UI.
+> **Tip**: Alternatively, you can limit the context filter to a specific light
+> by clicking on the light's QR Code or by scanning the QR Code (with your
+> mobile device). On both cases, a new light control UI is opened with the
+> corresponding operation context.
 >
 > **Tip**: You can also start several light control UIs simultaneously to
 > demonstrate a decentralized lighting control system by clicking the "NEW LIGHT
 > CONTROL" button in the action bar.
->
-> **Tip**: For debugging and introspection, you can start the Coaty broker in
-> verbose mode (`npm run broker:verbose`), so that all message subscriptions and
-> published messages are traced in the console window.
 >
 > **Tip**: The number of currently active Coaty agents for light UIs and light
 > control UIs is displayed in the footer bar.
@@ -105,6 +106,10 @@ Perform these steps in separate console windows:
 1. `npm run broker` - to start the Coaty broker,
 2. `npm run start` - to open a browser with the light control UI on
    `http://localhost:4200/`.
+
+> **Tip**: For debugging and introspection, you can start the Coaty broker in
+> verbose mode (`npm run broker:verbose`), so that all message subscriptions and
+> published messages are traced in the console window.
 
 ## Run example with Docker
 

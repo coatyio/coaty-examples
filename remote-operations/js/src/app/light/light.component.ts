@@ -1,6 +1,7 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { ChangeDetectionStrategy, Component, OnDestroy, } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
+import { Location } from "@angular/common";
 import { Observable } from "rxjs";
 import { map, skip } from "rxjs/operators";
 
@@ -46,7 +47,10 @@ export class LightComponent implements OnDestroy {
     /** Observable that emits broker connection info on connection state changes. */
     brokerConnectionInfo$: Observable<any>;
 
-    constructor(public appContext: AppContextService, agentService: AgentService) {
+    /** Absolute URL pointing to light control UI with lightId query param. */
+    qrCodeUrl: string;
+
+    constructor(public appContext: AppContextService, private location: Location, agentService: AgentService) {
         this.appContext.setContext("Light");
         this.initNgModelBindings();
         this.connectLightController(agentService);
@@ -58,10 +62,23 @@ export class LightComponent implements OnDestroy {
         }
     }
 
+    onQrCodeClick(event: MouseEvent) {
+        // Open a new light control UI with the context filter preset to this light.
+        window.open(this.qrCodeUrl, "_blank");
+    }
+
     onQrCodeDrag(event: DragEvent, tooltip) {
         tooltip.hide();
         event.dataTransfer.setData("text/plain", this.light.objectId);
         event.dataTransfer.setData("text/qrcode", this.light.objectId);
+    }
+
+    /**
+     * Get absolute URL pointing to light control UI with lightId query param set.
+     */
+    getQrCodeUrl() {
+        const urlPath = this.location.prepareExternalUrl(`/control?light_id=${this.light ? this.light.objectId : ""}`);
+        return window.location.protocol + "//" + window.location.host + urlPath;
     }
 
     private initNgModelBindings() {
@@ -89,6 +106,7 @@ export class LightComponent implements OnDestroy {
                 this.lightContext = lightController.lightContext;
                 this.lightColor$ = lightController.lightColorChange$;
                 this.lastSwitched$ = lightController.lightColorChange$.pipe(skip(1));
+                this.qrCodeUrl = this.getQrCodeUrl();
                 this.initBrokerConnectionInfo(lightController.options);
 
                 // Provide the app context with the light ID to be displayed in

@@ -29,10 +29,11 @@
                 Defect
             </mat-slide-toggle>
         </div>
-        <qrcode draggable="true" (dragstart)="onQrCodeDrag($event, qrCodeTooltip)" #qrCodeTooltip="matTooltip"
-            matTooltip="Drag QR Code onto context filter to switch this light"
+        <qrcode draggable="true" (dragstart)="onQrCodeDrag($event, qrCodeTooltip)"
+            (click)="onQrCodeClick($event)" #qrCodeTooltip="matTooltip"
+            matTooltip="Click or scan or drag QR Code onto context filter to switch this light"
             matTooltipPosition="above" [title]="''" class="light-map-card-image-qrcode"
-            [qrdata]="light?.objectId" [usesvg]="true" [level]="'M'">
+            [qrdata]="qrCodeUrl" [usesvg]="true" [level]="'M'">
         </qrcode>
         <h4 class="app-heading-no-top-margin">CONTEXT</h4>
         <div class="light-card-context">

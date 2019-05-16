@@ -6,13 +6,15 @@ import {
     ChangeDetectorRef,
     Component,
     OnDestroy,
+    OnInit,
     ViewEncapsulation,
     ViewChild,
     ElementRef,
 } from "@angular/core";
+import { ActivatedRoute } from '@angular/router';
 import { MatBottomSheet, MatButtonToggleChange, MatSliderChange, MatSlideToggleChange } from "@angular/material";
-import { Observable, Subject, of } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable, Subject } from "rxjs";
+import { filter, map } from "rxjs/operators";
 
 import { CommunicationState, CallEventData } from "coaty/com";
 import { ContextFilter, filterOp, ObjectFilterCondition, ObjectFilterConditions, ObjectFilterOperator, Uuid } from "coaty/model";
@@ -45,7 +47,7 @@ interface WindowLayout {
     // Needed for custom theming of color slider.
     encapsulation: ViewEncapsulation.None,
 })
-export class ControlComponent implements AfterContentInit, OnDestroy {
+export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
 
     @ViewChild("controlCard", { read: ElementRef }) cardElementRef: ElementRef;
 
@@ -87,6 +89,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
         private appContext: AppContextService,
         private bottomSheet: MatBottomSheet,
         private changeRef: ChangeDetectorRef,
+        private route: ActivatedRoute,
         agentService: AgentService
     ) {
         this.appContext.setContext("Light Control");
@@ -95,6 +98,18 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
     }
 
     /* Event handler */
+
+    ngOnInit() {
+        // Capture the query param 'light_id' if available to set the light context filter.
+        this.route
+            .queryParamMap
+            .pipe(
+                map(params => params.get("light_id")),
+                filter(value => !!value))
+            .subscribe(lightId => {
+                setTimeout(() => this.selectedLightId = lightId);
+            });
+    }
 
     ngAfterContentInit() {
         // The native slider element is available in the DOM not until the next
@@ -283,7 +298,6 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
         this.selectedBuildings = options.initialContextFilterBuildings;
         this.selectedFloors = options.initialContextFilterFloors;
         this.selectedRooms = options.initialContextFilterRooms;
-        this.selectedLightId = undefined;
     }
 
     private createContextFilter(): ContextFilter {
@@ -331,7 +345,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy {
                 this.changeRef.detectChanges();
 
                 // Provide the app context with the container's communication
-                // manager ID to be displayed in the title of the HTML document.
+                // manager identity ID to be displayed in the title of the HTML document.
                 this.appContext.setContext(`Light Control #${container.communicationManager.identity.objectId}`);
             })
             .catch(error => {
