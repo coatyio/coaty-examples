@@ -51,10 +51,11 @@
             <mat-label class="control-context-qrcode-label">Light</mat-label>
             <qrcode class="control-context-qrcode" (dragover)="onQrCodeDragOver($event)"
                 (drop)="onQrCodeDrop($event)" [style.opacity]="selectedLightId ? 1 : 0.3"
-                [matTooltip]="selectedLightId ? '' : 'Drop QR Code of a light here to switch this light only'"
-                [qrdata]="selectedLightId || 'coaty.io'" [usesvg]="true" [level]="'M'">
+                [matTooltip]="selectedLightId ? selectedLightUrl : 'Drop QR Code of a light here to switch this light only'"
+                [title]="''" [qrdata]="selectedLightUrl || 'coaty.io'" [usesvg]="true"
+                [level]="'M'">
             </qrcode>
-            <a *ngIf="selectedLightId" (click)="this.selectedLightId = undefined"
+            <a *ngIf="selectedLightId" (click)="onQrCodeClear($event)"
                 class="control-context-qrcode-button" matTooltip="Remove light from context filter"
                 aria-label="icon button to remove QR Code from context filter">
                 <mat-icon color="primary">

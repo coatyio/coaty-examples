@@ -60,6 +60,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
     selectedFloors: number[];
     selectedRooms: number[];
     selectedLightId: Uuid;
+    selectedLightUrl: string;
 
     availableBuildings: number[];
     availableFloors: number[];
@@ -105,9 +106,13 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
             .queryParamMap
             .pipe(
                 map(params => params.get("light_id")),
-                filter(value => !!value))
+                filter(value => !!value)
+            )
             .subscribe(lightId => {
-                setTimeout(() => this.selectedLightId = lightId);
+                setTimeout(() => {
+                    this.selectedLightId = lightId;
+                    this.selectedLightUrl = window.location.href;
+                });
             });
     }
 
@@ -176,8 +181,18 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
     }
 
     onQrCodeDrop(event: DragEvent) {
-        this.selectedLightId = event.dataTransfer.getData("text/qrcode");
+        const url = event.dataTransfer.getData("text/qrcode");
+        const queryIndex = url.lastIndexOf("?light_id=");
+        if (queryIndex !== -1) {
+            this.selectedLightId = url.substr(queryIndex + 10);
+            this.selectedLightUrl = url;
+        }
         event.preventDefault();
+    }
+
+    onQrCodeClear(event: MouseEvent) {
+        this.selectedLightId = undefined;
+        this.selectedLightUrl = undefined;
     }
 
     /* Actions */

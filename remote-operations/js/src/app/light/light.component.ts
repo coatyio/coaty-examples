@@ -69,14 +69,14 @@ export class LightComponent implements OnDestroy {
 
     onQrCodeDrag(event: DragEvent, tooltip) {
         tooltip.hide();
-        event.dataTransfer.setData("text/plain", this.light.objectId);
-        event.dataTransfer.setData("text/qrcode", this.light.objectId);
+        event.dataTransfer.setData("text/plain", this.qrCodeUrl);
+        event.dataTransfer.setData("text/qrcode", this.qrCodeUrl);
     }
 
     /**
      * Get absolute URL pointing to light control UI with lightId query param set.
      */
-    getQrCodeUrl() {
+    private getQrCodeUrl() {
         const urlPath = this.location.prepareExternalUrl(`/control?light_id=${this.light ? this.light.objectId : ""}`);
         return window.location.protocol + "//" + window.location.host + urlPath;
     }
