@@ -1,4 +1,9 @@
 {
+    "communication": {
+        "mqttClientOptions": {
+            "keepalive": 10
+        }
+    },
     "common": {
         "lightControlOperation": "coaty.examples.remoteops.switchLight",
         "lightContextRanges": {

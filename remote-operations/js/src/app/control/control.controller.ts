@@ -172,7 +172,7 @@ export class ControlController extends Controller {
                 this._activeAgents.activeControls.add(agentId);
             }
         } else {
-            console.log("Deadvertise event processed for agent id", agentId);
+            // console.log("Deadvertise event received for object id", agentId);
             this._activeAgents.activeLights.delete(agentId);
             this._activeAgents.activeControls.delete(agentId);
         }
