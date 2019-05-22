@@ -66,7 +66,7 @@ palette in the light control UI.
 > CONTROL" button in the action bar.
 >
 > **Tip**: The number of currently active Coaty agents for light UIs and light
-> control UIs is displayed in the footer bar.
+> control UIs is displayed in the header bar of the control UI.
 
 ## Run example from GitHub Pages
 
@@ -88,8 +88,8 @@ URL](./qr-code-github-pages-control-url.png)](https://coatyio.github.io/coaty-ex
 > broker](https://iot.eclipse.org/getting-started/#sandboxes). This implies that
 > every participant who is opening light or light control UI apps served from
 > GitHub Pages is taking part in a shared light switching experience. You can
-> see the current number of active Coaty agents in the footer bar of the light
-> control UI.
+> see the current number of active Coaty light and light control agents in the
+> header bar of the light control UI.
 
 ## Run example locally
 
@@ -132,7 +132,8 @@ environment variable accordingly, e.g. to `wss://iot.eclipse.org:443/ws`.
 ## Deploy example on Github Pages
 
 After you make changes or contributions to this example, the code should be
-rebuild and deployed on Github Pages.
+rebuild and deployed on Github Pages. Don't forget to bump the package version
+of the project.
 
 Run `npm run build:ghpages` to build the Angular app for GitHub Pages. Then,
 commit your changes and push or create a merge request.
@@ -221,6 +222,13 @@ an event log data structure.
 Note that operation parameters for Call-Return events should always be validated
 by the receiving parties (CallEvent data by the `LightController` and
 ReturnEvent data by the `ControlController`).
+
+Additionally, the `ControlController` of the light control agent keeps track of
+light and light control agents which are currently active, i.e. connected to the
+broker. To realize this, the controller observes Advertise and Deadvertise
+events on agent communication manager components and discovers such components
+initially. The number of active agents is displayed in the header bar of the
+light control UI.
 
 The local communication flow between a controller and its corresponding
 Angular view component (`LightComponent`, `ControlComponent`) is modelled using

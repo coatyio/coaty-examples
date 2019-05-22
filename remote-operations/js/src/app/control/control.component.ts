@@ -23,7 +23,7 @@ import { Container } from "coaty/runtime";
 import { AgentService } from "../agent.service";
 import { AppContextService } from "../app-context.service";
 import { ColorRgba, LightContextRanges } from "../shared/light.model";
-import { ControlController, EventLogEntry } from "./control.controller";
+import { ActiveAgentsInfo, ControlController, EventLogEntry } from "./control.controller";
 import { CodeViewerBottomSheetComponent } from "./code-viewer-bottom-sheet.component";
 
 interface WindowLayout {
@@ -80,6 +80,9 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
 
     /** Call-Return event log emitted by an observable. */
     eventLog$: Observable<Array<EventLogEntry>>;
+
+    /** Active agent info emitted by an observable */
+    activeAgentsInfo$: Observable<ActiveAgentsInfo>;
 
     readonly currentClock$ = new Subject<number>();
     isClockStopped: boolean;
@@ -348,7 +351,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
         // Create and start up a Coaty container with the control controller.
         // Then connect the control assets provided by the controller to
         // corresponding data bindings of this view component.
-        agentService.resolveContainer("ControlController", ControlController)
+        agentService.resolveContainer("LightControlAgent", "ControlController", ControlController)
             .then(container => {
                 this.controlContainer = container;
                 const controlController: ControlController = container.getController("ControlController");
@@ -357,6 +360,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
                 this.initContextFilterBindings(container.runtime.options.lightContextRanges, controlController.options);
                 this.initOperationParams(controlController.options);
                 this.eventLog$ = controlController.eventLog$;
+                this.activeAgentsInfo$ = controlController.activeAgentsInfo$;
                 this.changeRef.detectChanges();
 
                 // Provide the app context with the container's communication
