@@ -16,7 +16,11 @@ export const agentInfo: AgentInfo = {
         version: "1.3.0",
     },
     buildInfo: {
+<<<<<<< HEAD
         buildDate: "2019-05-22T16:13:02+02:00",
+=======
+        buildDate: "2019-05-22T15:59:05+02:00",
+>>>>>>> ef46b234e7f4a40c1cb7f053f3b5be7a5bfe654e
         buildMode: "ghpages",
     },
     configInfo: {
