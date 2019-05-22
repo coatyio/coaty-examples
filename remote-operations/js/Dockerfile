@@ -33,3 +33,6 @@ EXPOSE 80
 
 # Routed Angular apps must fallback to index.html
 RUN    sed -i '/location \/ {/a\        try_files $uri $uri\/ \/index.html;' /etc/nginx/conf.d/default.conf
+
+# Redirect output of HTTP client requests from console to /var/log/nginx/host.access.log
+RUN    sed -i 's/#access_log/access_log/' /etc/nginx/conf.d/default.conf

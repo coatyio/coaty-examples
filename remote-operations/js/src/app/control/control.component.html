@@ -12,13 +12,17 @@
             {{info.isOnline ? "wifi" : "wifi_off"}}
         </mat-icon>
     </mat-card-header>
+    <h1 class="control-time-overlay">{{currentClock$ | async | date:"HH:mm:ss"}}</h1>
     <img mat-card-image class="app-map-card-image-centered app-keyvisual-layout"
         src="./assets/images/light-control-image.jpg" alt="Key visual with a light bulb">
     <ng-template #initializing>
         <mat-card-content>Initializing...</mat-card-content>
     </ng-template>
     <mat-card-content *ngIf="controlContainer; else initializing">
-        <h1 class="control-time-overlay">{{currentClock$ | async | date:"HH:mm:ss"}}</h1>
+        <h1 class="control-light-agents-info-overlay"># Lights:
+            {{(activeAgentsInfo$ | async)?.activeLights}}</h1>
+        <h1 class="control-control-agents-info-overlay"># Controls:
+            {{(activeAgentsInfo$ | async)?.activeControls}}</h1>
         <h4 class="app-heading-no-top-margin">SELECT CONTEXT FILTER</h4>
         <mat-form-field class="control-form-field">
             <mat-label>Buildings</mat-label>

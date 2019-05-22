@@ -8,11 +8,31 @@
     margin-right: 32px;
 }
 
-.control-time-overlay {
-    color:white;
+.control-light-agents-info-overlay {
+    color: #ff8c00;
+    background-color: rgba(0,0,0,.5);
     position: absolute;
-    margin-top: -86px !important;
+    margin-top: -100px !important;
     left: 16px;
+    padding: 4px;
+}
+
+.control-control-agents-info-overlay {
+    color: #ff8c00;
+    background-color: rgba(0,0,0,.5);
+    position: absolute;
+    margin-top: -62px !important;
+    left: 16px;
+    padding: 4px;
+}
+
+.control-time-overlay {
+    color: white;
+    background-color: rgba(0,0,0,.5);
+    position: absolute;
+    margin-top: 0px !important;
+    left: 16px;
+    padding: 4px;
 }
 
 .control-form-field {

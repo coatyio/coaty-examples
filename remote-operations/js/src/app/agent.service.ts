@@ -27,7 +27,7 @@ export class AgentService {
      *
      * @returns a promise resolving to a container for the given controller.
      */
-    resolveContainer(controllerName: string, controllerType: any) {
+    resolveContainer(agentName: string, controllerName: string, controllerType: any) {
         const controllers = {};
         controllers[controllerName] = controllerType;
         const components: Components = {
@@ -36,6 +36,9 @@ export class AgentService {
         const defaultConfiguration: Configuration = {
             common: { agentInfo },
             communication: {
+                identity: {
+                    name: agentName,
+                },
                 shouldAutoStart: true,
                 // Retrieve broker url from active Angular environment configuration.
                 brokerUrl: environment.brokerUrl,

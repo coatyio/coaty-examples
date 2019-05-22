@@ -96,7 +96,7 @@ export class LightComponent implements OnDestroy {
         // Create and start up a Coaty container with the light controller. Then
         // connect the light assets provided by the controller to corresponding
         // data bindings of this view component.
-        agentService.resolveContainer("LightController", LightController)
+        agentService.resolveContainer("LightAgent", "LightController", LightController)
             .then(container => {
                 this.lightContainer = container;
 
