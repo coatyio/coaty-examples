@@ -1,0 +1,7 @@
+# Ignore these files and folders on Docker COPY
+.git
+.dockerignore
+Dockerfile
+dist
+docker
+**/node_modules
