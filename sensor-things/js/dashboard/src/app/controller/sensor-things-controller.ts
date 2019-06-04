@@ -17,7 +17,8 @@ export class SensorThingsController extends ObjectCacheController<CoatyObject> {
     onInit() {
         super.onInit();
 
-        this.objectFilter = (obj: CoatyObject) => obj.objectType === SensorThingsTypes.OBJECT_TYPE_THING ||
+        this.objectFilter = (obj: CoatyObject) =>
+			obj.objectType === SensorThingsTypes.OBJECT_TYPE_THING ||
             obj.objectType === SensorThingsTypes.OBJECT_TYPE_SENSOR ||
             obj.objectType === SensorThingsTypes.OBJECT_TYPE_OBSERVATION ||
             obj.objectType === SensorThingsTypes.OBJECT_TYPE_FEATURE_OF_INTEREST;
