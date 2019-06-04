@@ -2,65 +2,53 @@
 
 import { Subscription } from "rxjs";
 
-import { Controller } from "coaty/controller";
-import { Component, Uuid } from "coaty/model";
+import { ObjectLifecycleController } from "coaty/controller";
+import { Component } from "coaty/model";
 
 import { LogTags } from "../shared/log-tags";
 
 /**
- * Observes the lifecycle of Hello World components by listening to
- * Advertise and Deadvertise events on Component objects and advertising 
- * a log object for each of them in return.
+ * Tracks the distributed lifecycle of Hello World components (service, client,
+ * monitor) by using a lifecycle management method provided by the
+ * `ObjectLifecycleController`. Whenever the lifecycle state of a Component
+ * object changes, it is advertised as a `Log` object.
  */
-export class ComponentController extends Controller {
+export class ComponentController extends ObjectLifecycleController {
 
-    private _registeredComponents: Map<Uuid, Component>;
-    private _advertiseSubscription: Subscription;
-    private _deadvertiseSubscription: Subscription;
-
-    onInit() {
-        super.onInit();
-        this._registeredComponents = new Map();
-    }
+    private _lifecycleSubscription: Subscription;
 
     onCommunicationManagerStarting() {
         super.onCommunicationManagerStarting();
-        this._advertiseSubscription = this._observeAdvertiseComponent();
-        this._deadvertiseSubscription = this._observeDeadvertiseComponents();
+        this._lifecycleSubscription = this.observeObjectLifecycleInfoByCoreType("Component")
+            .subscribe(info => {
+                // Called whenever tracked identity components have changed.
+                if (info.added !== undefined) {
+                    info.added.forEach(comp => this._onComponentRegistered(comp as Component));
+                }
+                if (info.changed !== undefined) {
+                    info.changed.forEach(comp => this._onComponentRegistered(comp as Component, true));
+                }
+                if (info.removed !== undefined) {
+                    info.removed.forEach(comp => this._onComponentDeregistered(comp as Component));
+                }
+            });
     }
 
     onCommunicationManagerStopping() {
         super.onCommunicationManagerStopping();
-        this._advertiseSubscription && this._advertiseSubscription.unsubscribe();
-        this._deadvertiseSubscription && this._deadvertiseSubscription.unsubscribe();
+        this._lifecycleSubscription && this._lifecycleSubscription.unsubscribe();
     }
 
-    private _observeAdvertiseComponent() {
-        return this.communicationManager
-            .observeAdvertiseWithCoreType(this.identity, "Component")
-            .subscribe(event => {
-                const comp = event.eventData.object as Component;
-                this._registeredComponents.set(comp.objectId, comp);
-                // Alternatively, the user ID can be read from the event using event.eventUserId
-                const compId = comp.assigneeUserId ? `Client User ID ${comp.assigneeUserId}` : `ID ${comp.objectId}`;
-                const parentId = comp.parentObjectId ? `, PARENT ID ${comp.parentObjectId}` : "";
-                this.logInfo(`Component registered: ${comp.name}, ${compId}${parentId}`, LogTags.LOG_TAG_SERVICE);
-            });
+    private _onComponentRegistered(comp: Component, isReregistered = false) {
+        const compId = comp.assigneeUserId ? `Client User ID ${comp.assigneeUserId}` : `ID ${comp.objectId}`;
+        const parentId = comp.parentObjectId ? `, PARENT ID ${comp.parentObjectId}` : "";
+        // tslint:disable-next-line: max-line-length
+        this.logInfo(`Component ${isReregistered ? "reregistered" : "registered"}: ${comp.name}, ${compId}${parentId}`, LogTags.LOG_TAG_SERVICE);
     }
 
-    private _observeDeadvertiseComponents() {
-        return this.communicationManager
-            .observeDeadvertise(this.identity)
-            .subscribe(event => {
-                event.eventData.objectIds.forEach(id => {
-                    const comp = this._registeredComponents.get(id);
-                    if (comp) {
-                        this._registeredComponents.delete(id);
-                        const compId = comp.assigneeUserId ? `Client User ID ${comp.assigneeUserId}` : `ID ${comp.objectId}`;
-                        const parentId = comp.parentObjectId ? `, PARENT ID ${comp.parentObjectId}` : "";
-                        this.logInfo(`Component deregistered: ${comp.name}, ${compId}${parentId}`, LogTags.LOG_TAG_SERVICE);
-                    }
-                });
-            });
+    private _onComponentDeregistered(comp: Component) {
+        const compId = comp.assigneeUserId ? `Client User ID ${comp.assigneeUserId}` : `ID ${comp.objectId}`;
+        const parentId = comp.parentObjectId ? `, PARENT ID ${comp.parentObjectId}` : "";
+        this.logInfo(`Component deregistered: ${comp.name}, ${compId}${parentId}`, LogTags.LOG_TAG_SERVICE);
     }
 }

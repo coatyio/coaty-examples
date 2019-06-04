@@ -44,19 +44,24 @@ The application scenario looks like the following:
 * The Hello World monitor presents informational log events that are
   advertised by system components on initialization and in case of errors.
 
-In addition to the basic scenario described above, the historian functionality is integrated:
+In addition to the basic scenario described above, the historian functionality
+is integrated:
 
-* The service is generating a `Snapshot` object whenever a new task request is generated or a property of an
-  existing task is changed. This is performed by calling the public method `generateSnapshot` of the generic
-  `HistorianController` in the Coaty framework. Note that the `TaskSnapshotController` used in the service
-  is just an extension to `HistorianController` providing additional logging functionality.
-* By setting the database key, the database collection and setting the `TaskSnapshotController` options
-  `shouldPersistLocalSnapshots` to `true` in the `app.config` of the service, the generic `HistorianController`
-  of the framework is able to retrieve the database context of the application and to persist all snapshot
-  objects in the corresponding database.
-* The client is performing a distributed query for snapshot objects whenever it completes a task. The
-  retrieved snapshot objects from the service are given as log output. For this, the service makes use of
-  the generic observe query functionality of the `HistorianController` enabled by the controller option
+* The service is generating a `Snapshot` object whenever a new task request is
+  generated or a property of an existing task is changed. This is performed by
+  calling the public method `generateSnapshot` of the generic
+  `HistorianController` in the Coaty framework. Note that the
+  `TaskSnapshotController` used in the service is just an extension to
+  `HistorianController` providing additional logging functionality.
+* By setting the database key, the database collection and setting the
+  `TaskSnapshotController` options `shouldPersistLocalSnapshots` to `true` in
+  the `app.config` of the service, the generic `HistorianController` of the
+  framework is able to retrieve the database context of the application and to
+  persist all snapshot objects in the corresponding database.
+* The client is performing a distributed query for snapshot objects whenever it
+  completes a task. The retrieved snapshot objects from the service are given as
+  log output. For this, the service makes use of the generic observe query
+  functionality of the `HistorianController` enabled by the controller option
   `shouldReplyToQueries`. The results are printed to the console.
 
 For simplicity and to focus on the essentials, the Hello World example is
@@ -299,31 +304,40 @@ on the client's console.
 ```
  Service                                Service   Client   Monitor
     |                                       |        |        |
+    | DISCOVER Component                    |        |        |
+    |-------------------------------------->|------->|------->|
+    |<--------------------------------------´--------´--------´
+    |                     RESOLVE Component |        |        |
+    |                                       |        |        |
     |                   ADVERTISE Component |        |        |
     |<--------------------------------------|--------|--------|
-    |                                       |        |        |
     |                                       |        |        |
     |                 DEADVERTISE Component |        |        |
     |<--------------------------------------|--------|--------|
 ```
 
-Whenever the Communication Manager of a Coaty container is started
-it advertises its identity as a `Component` object. Likewise,
-when it is stopped, it deadvertises its identity. In case the
-component is terminated abnormally, the MQTT broker takes over
-deadvertisement as a last will/testament.
+Whenever the Communication Manager of a Coaty container is started it advertises
+its identity as a `Component` object. Likewise, when it is stopped, it
+deadvertises its identity. In case the component is terminated abnormally, the
+MQTT broker takes over deadvertisement as a last will/testament.
 
 The same behavior applies to all controllers defined in a Coaty container.
 
-Identity advertisement/deadvertisement can be activated or deactivated
-by setting the boolean option `shouldAdvertiseIdentity` in the communication
-or controller options of the container configuration. By default, this option is
+Identity advertisement/deadvertisement can be activated or deactivated by
+setting the boolean option `shouldAdvertiseIdentity` in the communication or
+controller options of the container configuration. By default, this option is
 activated for both communication managers and controllers.
 
-The service component keeps track of connected components by
-observing Advertise and Deadvertise events for `Component` identities,
-storing them in an in-memory hash map, and advertising a log object
-for each of them in return (see class `ComponentController`).
+The service component keeps track of connected components by observing Advertise
+and Deadvertise events for `Component` identities, and by initially discovering
+them. To accomplish this, the service uses the convenience controller class
+`ObjectLifecycleController` provided by the Coaty framework (see class
+`ComponentController`). Whenever the tracked lifecycle state of an identity
+component changes, the new state is advertised as a `Log` object.
+
+> Note that the `ComponentController` in the service agent does not track its
+> own identity component, because communication events are intentionally *not*
+> dispatched back to the originating source component.
 
 ### Logging Event Flow
 
@@ -357,8 +371,8 @@ The service component observes advertised log objects (see
 `LogController._observeAdvertiseLog`), stores them in the database log
 collection and advertises a corresponding `DatabaseChange` object.
 
-The monitor component observes these Advertise events and in return
-queries the list of `Log` objects containing the top 100 log entries
+The monitor component observes Advertise events for `DatabaseChange` objects and
+in return queries the list of `Log` objects containing the top 100 log entries
 order descendingly by log date, then ascendingly by log level.
 
 This query event is satifies by the service component which responds with

@@ -10,7 +10,7 @@ import { NodeUtils } from "coaty/runtime-node";
  * 
  * Note: This class is for demonstration purposes only. If you don't need
  * to perform side effects on Query-Retrieve of snapshots the base
- * frameowrk class HistorianController should be used directly.
+ * framework class HistorianController should be used directly.
  */
 export class TaskSnapshotController extends HistorianController {
 
