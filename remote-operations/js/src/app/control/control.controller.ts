@@ -4,7 +4,7 @@ import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs'
 import { filter, map } from "rxjs/operators";
 
 import { CallEvent, DiscoverEvent, ReturnEvent } from 'coaty/com';
-import { Controller } from "coaty/controller";
+import { ObjectLifecycleController } from "coaty/controller";
 import { Component, ContextFilter, Uuid } from "coaty/model";
 
 import { ColorRgba } from '../shared/light.model';
@@ -46,7 +46,7 @@ export interface ActiveAgentsInfo {
 /** 
  * A Coaty controller that invokes remote operations to control lights.
  */
-export class ControlController extends Controller {
+export class ControlController extends ObjectLifecycleController {
 
     private _correlationIndex: number;
     private _eventLog: Array<EventLogEntry>;
@@ -54,9 +54,8 @@ export class ControlController extends Controller {
     private _eventLog$: Observable<Array<EventLogEntry>>;
     private _activeAgentsInfoSubject: Subject<ActiveAgentsInfo>;
     private _activeAgentsInfo$: Observable<ActiveAgentsInfo>;
-    private _activeAgentsInfoSubscription: Subscription;
-    private _inactiveAgentsInfoSubscription: Subscription;
-    private _activeAgents: { activeLights: Set<Uuid>, activeControls: Set<Uuid> };
+    private _agentsLifecycleSubscription: Subscription;
+    private _activeAgentsInfo: ActiveAgentsInfo;
 
     onInit() {
         super.onInit();
@@ -64,24 +63,36 @@ export class ControlController extends Controller {
         this._eventLog = [];
         this._eventLogSubject = new BehaviorSubject<Array<EventLogEntry>>(this._eventLog);
         this._eventLog$ = this._eventLogSubject.asObservable();
-        this._activeAgents = { activeLights: new Set<Uuid>(), activeControls: new Set<Uuid>() };
+        this._activeAgentsInfo = { activeLights: 0, activeControls: 0 };
         this._activeAgentsInfoSubject = new Subject<ActiveAgentsInfo>();
         this._activeAgentsInfo$ = this._activeAgentsInfoSubject.asObservable();
     }
 
     onCommunicationManagerStarting() {
-        // Observe and keep track of all light agents and light control agents
-        // in the system (including myself).
-        this._activeAgentsInfoSubscription = this.observeActiveAgents();
-        this._inactiveAgentsInfoSubscription = this.observeInactiveAgents();
+        // Keep track of all light agents and light control agents in the system
+        // (including my own light control agent).
+        this._agentsLifecycleSubscription = this.observeObjectLifecycleInfoByCoreType(
+            "Component",
+            comp => comp.name === "LightAgent" || comp.name === "LightControlAgent")
+            .subscribe(info => {
+                if (info.added !== undefined) {
+                    info.added.forEach(comp => this._updateActiveAgentsInfo(comp.name === "LightAgent", true));
+                }
+                if (info.changed !== undefined) {
+                    // Ignore agents with changed properties, since active agent
+                    // count won't change.
+                }
+                if (info.removed !== undefined) {
+                    info.removed.forEach(comp => this._updateActiveAgentsInfo(comp.name === "LightAgent", false));
+                }
+            });
     }
 
     onCommunicationManagerStopping() {
-        if (this._activeAgentsInfoSubscription) {
-            this._activeAgentsInfoSubscription.unsubscribe();
-        }
-        if (this._inactiveAgentsInfoSubscription) {
-            this._inactiveAgentsInfoSubscription.unsubscribe();
+        if (this._agentsLifecycleSubscription) {
+            // Stop observing lifecycle info of identity components for light
+            // agents and light control agents.
+            this._agentsLifecycleSubscription.unsubscribe();
         }
     }
 
@@ -127,58 +138,21 @@ export class ControlController extends Controller {
             });
     }
 
-    private observeActiveAgents() {
-        const discoveredTasks = this.communicationManager
-            // Note that this Discover event will also resolve the identity of
-            // this agent's communication manager itself!
-            .publishDiscover(DiscoverEvent.withCoreTypes(this.identity, ["Component"]))
-            .pipe(
-                map(event => event.eventData.object as Component),
-            );
-
-        const advertisedTasks = this.communicationManager
-            .observeAdvertiseWithCoreType(this.identity, "Component")
-            .pipe(
-                map(event => event.eventData.object as Component),
-            );
-
-        return merge(discoveredTasks, advertisedTasks)
-            .pipe(
-                // Check if emitted discovered or advertised identity component
-                // represents a light or light control agent.
-                filter(comp => comp !== undefined && (comp.name === "LightAgent" || comp.name === "LightControlAgent"))
-            )
-            .subscribe(comp => {
-                this._updateActiveAgentsInfo(comp.objectId, comp.name === "LightAgent", true);
-            });
-    }
-
-    private observeInactiveAgents() {
-        return this.communicationManager
-            .observeDeadvertise(this.identity)
-            .pipe(map(event => event.eventData.objectIds))
-            .subscribe(objectIds => {
-                // Check if object id relates to a light or control agent and
-                // update active agents accordingly.
-                objectIds.forEach(objectId => this._updateActiveAgentsInfo(objectId, undefined, false));
-            });
-    }
-
-    private _updateActiveAgentsInfo(agentId: Uuid, isLightAgent: boolean, isActive: boolean) {
+    private _updateActiveAgentsInfo(isLightAgent: boolean, isActive: boolean) {
         if (isActive) {
             if (isLightAgent) {
-                this._activeAgents.activeLights.add(agentId);
+                this._activeAgentsInfo.activeLights++;
             } else {
-                this._activeAgents.activeControls.add(agentId);
+                this._activeAgentsInfo.activeControls++;
             }
         } else {
-            this._activeAgents.activeLights.delete(agentId);
-            this._activeAgents.activeControls.delete(agentId);
+            if (isLightAgent) {
+                this._activeAgentsInfo.activeLights--;
+            } else {
+                this._activeAgentsInfo.activeControls--;
+            }
         }
-        this._activeAgentsInfoSubject.next({
-            activeLights: this._activeAgents.activeLights.size,
-            activeControls: this._activeAgents.activeControls.size,
-        });
+        this._activeAgentsInfoSubject.next({ ...this._activeAgentsInfo });
     }
 
     private addCallToEventLog(event: CallEvent) {

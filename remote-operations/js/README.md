@@ -225,10 +225,12 @@ ReturnEvent data by the `ControlController`).
 
 Additionally, the `ControlController` of the light control agent keeps track of
 light and light control agents which are currently active, i.e. connected to the
-broker. To realize this, the controller observes Advertise and Deadvertise
-events on agent communication manager components and discovers such components
-initially. The number of active agents is displayed in the header bar of the
-light control UI.
+broker. To realize this, the controller extends from
+`ObjectLifecycleController`, a convenience controller class provided by the
+Coaty JS framework, and uses its method `observeObjectLifecycleInfoByCoreType`
+to observe Advertise and Deadvertise events on agent communication manager
+identity components and discovers such components initially. The number of
+active agents is displayed in the header bar of the light control UI.
 
 The local communication flow between a controller and its corresponding
 Angular view component (`LightComponent`, `ControlComponent`) is modelled using
