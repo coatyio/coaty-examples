@@ -13,6 +13,7 @@ services:
       - BROKER_URL
     ports:
       - "8080:80"
+    restart: always
     command: ["sh","-c", "brokerurl=$${BROKER_URL:=mqtt://localhost:9883} && echo '# Using MQTT broker on '$${brokerurl} && sed -i 's|@BROKER_URL_PLACEHOLDER@|'$${brokerurl}'|' /usr/share/nginx/html/main.js && echo '# Open browser on http://localhost:8080' && nginx -g 'daemon off;'"]
   broker:
     build:
@@ -24,4 +25,5 @@ services:
     ports:
       - "1883:1883"
       - "9883:9883"
+    restart: always
     command: npm run broker
