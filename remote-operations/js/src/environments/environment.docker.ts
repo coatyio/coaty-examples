@@ -6,7 +6,7 @@ export const environment = {
 
     // DO NOT EDIT THIS PROPERTY.
     // This placeholder will be replaced by the specific broker url on
-    // "docker-compose up" using the default environment value specified in
-    // docker-compose.yaml or the overridden value from BROKER_URL env variable.
+    // "docker-compose up" using the default value specified in
+    // docker-compose.yml or the overridden value from BROKER_URL env variable.
     brokerUrl: "@BROKER_URL_PLACEHOLDER@",
 };
