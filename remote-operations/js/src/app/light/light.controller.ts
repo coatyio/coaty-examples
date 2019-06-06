@@ -14,7 +14,6 @@ import {
     OBJECT_TYPE_LIGHT_STATUS,
     OBJECT_TYPE_LIGHT_CONTEXT
 } from "../shared/light.model";
-import { timestamp } from 'rxjs/operators';
 
 /** 
  * A Coaty controller that manages a single light with its context and observes
