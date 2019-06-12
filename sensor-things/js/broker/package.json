@@ -10,7 +10,7 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "coaty": "~1.9.1",
+        "coaty": "~1.10.0",
         "rxjs": "6.4.0"
     }
 }
