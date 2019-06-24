@@ -6,6 +6,6 @@ export const environment = {
     production: true,
 
     // Connect to a public MQTT broker over secure websocket.
-    brokerUrl: "wss://iot.eclipse.org:443/ws",
+    brokerUrl: "mqtts://test.mosquitto.org:8081",
 
 };

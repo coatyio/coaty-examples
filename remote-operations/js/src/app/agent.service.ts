@@ -61,7 +61,7 @@ export class AgentService {
     }
 
     /**
-     * Retrieves the agent container configuration for the hosting server.
+     * Retrieves the agent container configuration from the hosting server.
      * 
      * @returns an observable that emits the configuration as a JSON object.
      */

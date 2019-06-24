@@ -19,7 +19,7 @@ export class AppComponent implements OnDestroy {
     private contextSubscription: Subscription;
 
     constructor(titleService: Title, appContext: AppContextService) {
-        // Set up a context subscription to update the title of the web apps"s
+        // Set up a context subscription to update the title of the web apps's
         // HTML document depending on the currently loaded module.
         this.contextSubscription = appContext.context$.subscribe(context => titleService.setTitle(context));
 

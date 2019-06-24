@@ -85,11 +85,11 @@ mobile device or click it:
 URL](./qr-code-github-pages-control-url.png)](https://coatyio.github.io/coaty-examples/remote-operations/)
 
 > **Note**: This deployment uses a [public MQTT
-> broker](https://iot.eclipse.org/getting-started/#sandboxes). This implies that
-> every participant who is opening light or light control UI apps served from
-> GitHub Pages is taking part in a shared light switching experience. You can
-> see the current number of active Coaty light and light control agents in the
-> header bar of the light control UI.
+> broker](https://test.mosquitto.org/). This implies that every participant who
+> is opening light or light control UI apps served from GitHub Pages is taking
+> part in a shared light switching experience. You can see the current number of
+> active Coaty light and light control agents in the header bar of the light
+> control UI.
 
 ## Run example locally
 
@@ -127,7 +127,7 @@ Docker container, set the environment variable `BROKER_URL` to
 `mqtt://<dockerhost>:9883` before running `npm run docker:up`.
 
 If you want to use the dockerized example with a public broker, set the
-environment variable accordingly, e.g. to `wss://iot.eclipse.org:443/ws`.
+environment variable accordingly, e.g. to `mqtts://test.mosquitto.org:8081`.
 
 ## Deploy example on Github Pages
 
