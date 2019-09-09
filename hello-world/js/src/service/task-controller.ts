@@ -153,9 +153,9 @@ export class TaskController extends Controller {
     }
 
     /** 
-     * Listen for task status changes and update the affected task object in the database.
-     * Generate a snaphot object for the received task object and process is 
-     * according to the controller config.
+     * Listen for task status changes and update the affected task object in the
+     * database. Generate a snaphot object for the received task object and
+     * process it according to the controller config.
      */
     private _observeAdvertiseTasks() {
         return this.communicationManager.observeAdvertiseWithObjectType(this.identity, modelTypes.OBJECT_TYPE_HELLO_WORLD_TASK)

@@ -115,6 +115,12 @@ export class TaskController extends Controller {
                 orderByProperties: [["creationTimestamp", "Desc"]],
             };
 
+            // Note that the queried snapshots may or may not include the latest
+            // task snapshot with task status "Done", because the task snaphot
+            // of the completed task may or may not have been stored in the
+            // database before the query is executed. A proper implementation
+            // should use an Update-Complete event to advertise task status
+            // changes and await the response before querying snapshots.
             NodeUtils.logEvent(`Snapshots by parentObjectId: ${task.name}`, "QUERY", "Out");
             this.communicationManager
                 .publishQuery(QueryEvent.withCoreTypes(this.identity, ["Snapshot"], objectFilter))
