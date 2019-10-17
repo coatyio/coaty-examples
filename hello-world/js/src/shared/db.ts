@@ -30,19 +30,34 @@ export class Db {
         DbAdapterFactory.registerAdapter("PostgresAdapter", PostgresAdapter);
     }
 
+    /**
+     * Set up the Postgres database by creating a database user and a database
+     * with two collections for logs and tasks.
+     *
+     * @param options Database options
+     * @param clearData if true, clear all collection data from previous runs
+     */
     public static initDatabase(options: DatabaseOptions, clearData: boolean = true): Promise<any> {
-        const dbc = new DbContext(options["db"]);
         const dbcAdmin = new DbContext(options["admindb"]);
 
-        return dbcAdmin.callExtension("createUser", Db.USER_NAME, Db.USER_PWD)
-            .then(() => dbcAdmin.callExtension("createDatabase", Db.DB_NAME, Db.USER_NAME))
+        return dbcAdmin.callExtension("initDatabase",
+            options["db"],
+            [Db.COLLECTION_LOG, Db.COLLECTION_TASK],
+            clearData);
 
-            // Add collections if they do not exist yet
-            .then(() => dbc.addCollection(Db.COLLECTION_LOG))
-            .then(() => dbc.addCollection(Db.COLLECTION_TASK))
-
-            // If requested, clear all data from previous runs
-            .then(() => clearData && dbc.clearCollection(Db.COLLECTION_LOG))
-            .then(() => clearData && dbc.clearCollection(Db.COLLECTION_TASK));
+        // Developer Note: The "initDatabase" extension is a convenience extension
+        // which uses the "createUser" and "createDatabase" extensions as follows:
+        // 
+        // const dbc = new DbContext(options["db"]);
+        // return dbcAdmin.callExtension("createUser", Db.USER_NAME, Db.USER_PWD)
+        //     .then(() => dbcAdmin.callExtension("createDatabase", Db.DB_NAME, Db.USER_NAME))
+        //
+        //     // Add collections if they do not exist yet
+        //     .then(() => dbc.addCollection(Db.COLLECTION_LOG))
+        //     .then(() => dbc.addCollection(Db.COLLECTION_TASK))
+        //
+        //     // If requested, clear all data from previous runs
+        //     .then(() => clearData && dbc.clearCollection(Db.COLLECTION_LOG))
+        //     .then(() => clearData && dbc.clearCollection(Db.COLLECTION_TASK));
     }
 }
