@@ -16,7 +16,7 @@ export const agentInfo: AgentInfo = {
         version: "1.0.0",
     },
     buildInfo: {
-        buildDate: "2019-06-12T15:22:37+02:00",
+        buildDate: "2019-10-17T12:53:12+02:00",
         buildMode: "development",
     },
     configInfo: {

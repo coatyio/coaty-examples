@@ -21,7 +21,7 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "coaty": "~1.10.0",
+        "coaty": "^1.11.0",
         "pg": "7.9.0",
         "rxjs": "6.4.0"
     },

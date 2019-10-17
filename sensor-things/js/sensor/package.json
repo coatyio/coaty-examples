@@ -14,7 +14,7 @@
     "private": true,
     "dependencies": {
         "@types/inquirer": "6.0.0",
-        "coaty": "~1.10.0",
+        "coaty": "^1.11.0",
         "inquirer": "6.2.2",
         "rxjs": "6.4.0"
     },
