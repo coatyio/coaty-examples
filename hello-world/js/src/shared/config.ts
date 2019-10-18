@@ -29,7 +29,7 @@ export function serviceConfig(agentInfo: AgentInfo): Configuration {
         },
         communication: {
             shouldAutoStart: true,
-            useReadableTopics: isDevMode,
+            useReadableTopics: false,
             brokerOptions: {
                 servers: [
                     {
@@ -68,7 +68,7 @@ export function clientConfig(agentInfo: AgentInfo): Configuration {
         },
         communication: {
             identity: { name: "Client" },
-            useReadableTopics: isDevMode,
+            useReadableTopics: false,
             brokerOptions: {
                 servers: [
                     {
