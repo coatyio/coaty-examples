@@ -43,7 +43,7 @@ Documentation is licensed under a
 ## Credits
 
 Last but certainly not least, a big *Thank You!* to the following folks that
-helped to realize and improve Coaty JS examples:
+helped to realize and improve Coaty examples:
 
 * Markus Sauer [@markussauer](https://github.com/markussauer)
 * Antoine Beyet

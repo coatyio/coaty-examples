@@ -1,10 +1,11 @@
-# Coaty - Hello World Example
+# Coaty JS - Hello World Example
 
 [![Powered by Coaty](https://img.shields.io/badge/Powered%20by-Coaty-FF8C00.svg)](https://coaty.io)
+[![TypeScript](https://img.shields.io/badge/Source%20code-TypeScript-007ACC.svg)](http://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Check this example to see a complete application scenario of the
-Coaty JavaScript framework in action.
+Check this example to see a complete application scenario of the [Coaty
+JavaScript](https://github.com/coatyio/coaty-js) framework in action.
 
 ## Table of Contents
 
@@ -20,7 +21,7 @@ Coaty JavaScript framework in action.
 
 ## Introduction
 
-Our Hello World example demonstrates the best practice use of communication
+Our Hello World example demonstrates the best practice use of Coaty communication
 events to discover, distribute, share, and persist information in a decentralized
 application. The example application realizes a simplified
 task scheduling and assignment scenario based on three system components:
