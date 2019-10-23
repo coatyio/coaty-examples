@@ -1,7 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  TaskController.swift
-//  CoatySwift_Example
+//  HelloWorld
 //
 
 import Foundation

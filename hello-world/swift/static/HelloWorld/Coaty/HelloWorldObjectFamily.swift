@@ -1,7 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  HelloWorldCoatyObjectFamily.swift
-//  CoatySwift_Example
+//  HelloWorld
 //
 
 import Foundation

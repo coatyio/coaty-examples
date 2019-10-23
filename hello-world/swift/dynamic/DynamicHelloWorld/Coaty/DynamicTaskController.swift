@@ -1,8 +1,9 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  DynamicTaskController.swift
-//  CoatySwift_Example
+//  DynamicHelloWorld
 //
+
 import Foundation
 import CoatySwift
 import RxSwift
