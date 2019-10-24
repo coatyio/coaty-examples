@@ -6,12 +6,14 @@
 
 import UIKit
 import CoatySwift
-var window: UIWindow?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    let enableSSL = false
+    let brokerIp = "127.0.0.1"
+    let brokerPort = 1883
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -20,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = DynamicHelloWorldExampleViewController()
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
+        
+        // Override point for customization after application launch.
+        launchContainer()
         
         return true
     }
@@ -44,6 +49,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    // MARK: - Coaty Container setup methods.
+
+    /// This method sets up the Coaty container necessary to run our application.
+    private func launchContainer() {
+        // Instantiate controllers.
+        let dynamicComponents = DynamicComponents(controllers:
+            ["DynamicTaskController": DynamicTaskController.self])
+        
+        guard let configuration = createHelloWorldConfiguration() else {
+            print("Invalid configuration! Please check your options.")
+            return
+        }
+        
+        // Resolve your components with the given configuration and get your CoatySwift
+        // application up and running.
+        _ = DynamicContainer.resolve(components: dynamicComponents, configuration: configuration)
+        
+    }
+    
+    /// Creates a basic configuration file for your HelloWorld application.
+    private func createHelloWorldConfiguration() -> Configuration? {
+        return try? .build { config in
+            
+            // This part defines the associated user (aka the identity associated with this client).
+            config.common = CommonOptions()
+            config.common?.associatedUser = User(name: "ClientUser",
+                                                 names: ScimUserNames(familyName: "ClientUser",
+                                                                      givenName: ""),
+                                                 objectType: CoatyObjectFamily.user.rawValue,
+                                                 objectId: CoatyUUID())
+            
+            // Adjusts the logging level of CoatySwift messages.
+            config.common?.logLevel = .debug
+            
+            // Here, we define that the TaskController should advertise its identity as soon as
+            // it gets online.
+            config.controllers = ControllerConfig(
+                controllerOptions: ["DynamicTaskController": ControllerOptions(shouldAdvertiseIdentity: true)])
+            
+            // Define the communication-related options, such as the Ip address of your broker and
+            // the port it exposes, and your own mqtt client Id. Also, make sure
+            // to immediately connect with the broker.
+            
+            let mqttClientOptions = MQTTClientOptions(host: brokerIp,
+                                                      port: UInt16(brokerPort),
+                                                      enableSSL: enableSSL,
+                                                      shouldTryMDNSDiscovery: false)
+            config.communication = CommunicationOptions(mqttClientOptions: mqttClientOptions,                                            identity: ["name": "Client"],
+                                                        shouldAutoStart: true)
+            
+            // The communicationManager will also advertise its identity upon connection to the
+            // mqtt broker.
+            config.communication?.shouldAdvertiseIdentity = true
+            
+        }
     }
     
     

@@ -1,14 +1,15 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
-//  HelloWorldExampleViewController.swift
-//  HelloWorld
+//  DynamicHelloWorldExampleViewController.swift
+//  DynamicHelloWorld
 //
 
 import Foundation
 import UIKit
 
-/// This example view controller shows how you can set up a basic CoatySwift bootstrap application.
-class HelloWorldExampleViewController: UIViewController {
+/// This example view controller shows how you can set up a basic CoatySwift
+/// bootstrap application using a DynamicController.
+class DynamicHelloWorldExampleViewController: UIViewController {
     
     override func viewDidLoad() {
         setupView()
