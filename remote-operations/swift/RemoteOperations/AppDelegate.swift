@@ -87,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                               port: UInt16(brokerPort),
                                               enableSSL: false)
             config.communication = CommunicationOptions(mqttClientOptions: mqttClientOptions,
-                                                        identity: ["name": "SwitchAgent"],
+                                                        identity: ["name": "LightAgent"],
                                                         shouldAutoStart: true)
             
             // The communicationManager will also advertise its identity upon connection to the
