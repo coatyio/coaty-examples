@@ -10,49 +10,21 @@ import CoatySwift
 
 class SwitchLightViewController: UIViewController {
     
-    // MARK: Configurable options.
-    
-    let brokerIp = "127.0.0.1"
-    let brokerPort = 1883
-    
     // MARK: - Private attributes.
     
     private var lightView: UIView?
-    private var container: Container<SwitchLightObjectFamily>?
+    private var container: Container<SwitchLightObjectFamily>? = nil
     
     override func viewDidLoad() {
         // Setup view.
         self.view.backgroundColor = .white
-        
-        setupContainer()
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        container = delegate.container
         setupButton()
         setupLight()
     }
     
     // MARK: Setup methods.
-    
-    private func setupContainer() {
-        // Instantiate controllers.
-        let components = Components(controllers: [
-            "ControlController": ControlController<SwitchLightObjectFamily>.self,
-            "LightController": LightController<SwitchLightObjectFamily>.self
-            ])
-        
-        guard let configuration = createSwitchLightConfiguration() else {
-            print("Invalid configuration! Please check your options.")
-            return
-        }
-        
-        // Resolve your components with the given configuration and get your CoatySwift
-        // application up and running.
-        // Important: You need to specify clearly which Object Family you are going to use.
-        // More details about what an ObjectFamily does can be found
-        // in `SwitchLightObjectFamily.swift`.
-        self.container = Container.resolve(components: components,
-                                           configuration: configuration,
-                                           objectFamily: SwitchLightObjectFamily.self)
-        
-    }
     
     /// Setup the switch button. Note that the button will only trigger random changes.
     private func setupButton() {
@@ -149,39 +121,6 @@ class SwitchLightViewController: UIViewController {
                                                     expression: .init(filterOperator: .In, op1: [62]))
             
             $0.conditions = ObjectFilterConditions.init(and: [buildingFilter, floorFilter, roomFilter])
-        }
-    }
-    
-    /// Creates a basic configuration file for your LightSwitch application.
-    private func createSwitchLightConfiguration() -> Configuration? {
-        return try? .build { config in
-            
-            // Adjusts the logging level of CoatySwift messages.
-            config.common = CommonOptions()
-            config.common?.logLevel = .debug
-            
-            // Here, we define that the ControlController should advertise its identity as soon as
-            // it gets online.
-            config.controllers = ControllerConfig(
-                controllerOptions: [
-                    "ControlController": ControllerOptions(shouldAdvertiseIdentity: true),
-                    "LightController": ControllerOptions(shouldAdvertiseIdentity: true)
-                ])
-            
-            // Define the communication-related options, such as the Ip address of your broker and
-            // the port it exposes, and your own mqtt client Id. Also, make sure
-            // to immediately connect with the broker.
-            let mqttClientOptions = MQTTClientOptions(host: brokerIp,
-                                              port: UInt16(brokerPort),
-                                              enableSSL: false)
-            config.communication = CommunicationOptions(mqttClientOptions: mqttClientOptions,
-                                                        identity: ["name": "SwitchAgent"],
-                                                        shouldAutoStart: true)
-            
-            // The communicationManager will also advertise its identity upon connection to the
-            // mqtt broker.
-            config.communication?.shouldAdvertiseIdentity = true
-            
         }
     }
 }
