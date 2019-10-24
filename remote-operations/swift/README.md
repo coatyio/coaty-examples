@@ -32,8 +32,7 @@ CoatySwift is available through [CocoaPods](https://cocoapods.org). Ensure you
 have installed **at least** version `1.8.4` of CocoaPods, i.e. running `pod
 --version` should yield `1.8.4` or higher.
 
-To interoperate with a Coaty JS Light Control UI agent, set up this agent as
-explained
+To interoperate with a Coaty JS Light Control UI agent, set it up as explained
 [here](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js).
 
 ## Installation
@@ -50,12 +49,11 @@ Open the `xcworkspace` of the project folder in Xcode, then build and run it.
 Now, you can invoke "Switch light" control operations in the Coaty JS Light
 Control UI and see how the CoatySwift Light UI agent reacts accordingly.
 
-> **Note**: The broker IP address of the CoatySwift Light UI agent is preconfigured
-> to the localhost, i.e. `127.0.0.1` (see class `SwitchLightViewController`).
->
-> If you run your Coaty broker on another machine in your network, adjust the
-> variable `brokerIp` accordingly.
+> **Note**: The broker IP address of the CoatySwift Light UI agent is
+> preconfigured to localhost, i.e. `127.0.0.1` (see class
+> `SwitchLightViewController`). If your Coaty broker runs on another machine,
+> adjust the variable `brokerIp` accordingly.
 >
 > **Note**: The current version of CoatySwift does not support context-based
-> filtering of Call-Return events. This means that context filter settings for lights in a Light Control UI agent
-> are ignored by the CoatySwift Light UI app.
+> filtering of Call-Return events. This means that context filter settings for
+> lights in a Light Control UI agent are ignored by the CoatySwift Light UI app.

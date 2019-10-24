@@ -61,13 +61,12 @@ Ensure the Coaty JS Hello World components, i.e. broker, service, monitor, and
 client(s) have been started.
 
 Open the `xcworkspace` of the static or dynamic project folder in Xcode, then
-build and run it. Now, the CoatySwift Hello World client outputs log messages on
-the console, identical in format to a Coaty JS Hello World client.
+build and run it. Now, the CoatySwift Hello World client interoperates with the
+other Hello World components and outputs log messages on the console, identical
+in format to a Coaty JS Hello World client.
 
-> Note: The broker IP address of the CoatySwift Hello World agent is
-> preconfigured to the localhost, i.e. `127.0.0.1` (see class
+> **Note**: The broker IP address of the CoatySwift Light UI agent is
+> preconfigured to localhost, i.e. `127.0.0.1` (see class
 > `HelloWorldExampleViewController` or `DynamicHelloWorldExampleViewController`,
-> respectively).
->
-> If you run your Coaty broker on another machine in your network, adjust the
+> respectively). If your Coaty broker runs on another machine, adjust the
 > variable `brokerIp` accordingly.
