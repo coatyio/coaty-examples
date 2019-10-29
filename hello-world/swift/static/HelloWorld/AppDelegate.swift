@@ -11,19 +11,13 @@ import CoatySwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var container: Container<HelloWorldObjectFamily>?
     let enableSSL = false
     let brokerIp = "127.0.0.1"
     let brokerPort = 1883
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        // Set starting point for application
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = HelloWorldExampleViewController()
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-        
         launchContainer()
         
         return true
@@ -60,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Important: You need to specify clearly which Object Family you are going to use.
         // More details about what an ObjectFamily does can be found
         // in `HelloWorldObjectFamily.swift`.
-        _ = Container.resolve(components: components,
+        container = Container.resolve(components: components,
                               configuration: configuration,
                               objectFamily: HelloWorldObjectFamily.self)
     }

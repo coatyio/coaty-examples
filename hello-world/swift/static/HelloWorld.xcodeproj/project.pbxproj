@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -69,9 +69,11 @@
 		2A61B4E32355F5E30012B3A9 /* HelloWorld */ = {
 			isa = PBXGroup;
 			children = (
-				2A61B4F92355F6700012B3A9 /* Coaty */,
-				2A61B4F82355F6700012B3A9 /* HelloWorldExampleViewController.swift */,
 				2A61B4E42355F5E30012B3A9 /* AppDelegate.swift */,
+				2A61B4FA2355F6700012B3A9 /* HelloWorldTask.swift */,
+				2A61B4FC2355F6700012B3A9 /* HelloWorldObjectFamily.swift */,
+				2A61B4FD2355F6700012B3A9 /* TaskController.swift */,
+				2A61B4F82355F6700012B3A9 /* HelloWorldExampleViewController.swift */,
 				2A61B4E62355F5E30012B3A9 /* SceneDelegate.swift */,
 				2A61B4EA2355F5E30012B3A9 /* Main.storyboard */,
 				2A61B4ED2355F5E40012B3A9 /* Assets.xcassets */,
@@ -79,16 +81,6 @@
 				2A61B4F22355F5E40012B3A9 /* Info.plist */,
 			);
 			path = HelloWorld;
-			sourceTree = "<group>";
-		};
-		2A61B4F92355F6700012B3A9 /* Coaty */ = {
-			isa = PBXGroup;
-			children = (
-				2A61B4FA2355F6700012B3A9 /* HelloWorldTask.swift */,
-				2A61B4FC2355F6700012B3A9 /* HelloWorldObjectFamily.swift */,
-				2A61B4FD2355F6700012B3A9 /* TaskController.swift */,
-			);
-			path = Coaty;
 			sourceTree = "<group>";
 		};
 		2D172BAF9A29D30F5B734C74 /* Frameworks */ = {
