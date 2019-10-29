@@ -55,7 +55,7 @@ class DynamicTaskController: DynamicController {
         super.onCommunicationManagerStopping()
     }
     
-    override func initializeIdentity(identity: Component) {
+    override func initializeIdentity(identity: Identity) {
         // You can change your client identity in the following way, for example:
         identity.assigneeUserId = self.runtime.commonOptions?.associatedUser?.objectId
     }

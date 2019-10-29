@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Shutdown container in order to trigger a graceful deadvertise of all advertised controllers.
+        container?.shutdown()
+    }
 
     // MARK: UISceneSession Lifecycle
 
