@@ -17,8 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let brokerIp = "127.0.0.1"
     let brokerPort = 1883
-    
-    var container: Container<SwitchLightObjectFamily>? = nil
+    var container: Container<SwitchLightObjectFamily>?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         launchContainer()
@@ -37,6 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Shutdown container in order to trigger a graceful deadvertise of all advertised controllers.
+        container?.shutdown()
     }
     
     // MARK: - Coaty Container setup methods.
@@ -76,8 +80,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // it gets online.
             config.controllers = ControllerConfig(
                 controllerOptions: [
-                    "ControlController": ControllerOptions(shouldAdvertiseIdentity: true),
-                    "LightController": ControllerOptions(shouldAdvertiseIdentity: true)
+                    "ControlController": ControllerOptions(identity: ["name": "LightControlAgent"],
+                                                           shouldAdvertiseIdentity: true),
+                    "LightController": ControllerOptions(identity: ["name": "LightController"],
+                                                         shouldAdvertiseIdentity: true)
                 ])
             
             // Define the communication-related options, such as the Ip address of your broker and
