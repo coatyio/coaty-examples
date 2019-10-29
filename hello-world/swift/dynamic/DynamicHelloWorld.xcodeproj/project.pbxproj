@@ -3,31 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A4A18E7236859F700078860 /* DynamicHelloWorldExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4A18E6236859F700078860 /* DynamicHelloWorldExampleViewController.swift */; };
+		9F7AB2FD89F4B8A735D0CA3E /* Pods_DynamicHelloWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A94FF6E6B5BA7CFEF089196 /* Pods_DynamicHelloWorld.framework */; };
 		BCD2A39E2355F3FA00F11077 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD2A39D2355F3FA00F11077 /* AppDelegate.swift */; };
-		BCD2A3A02355F3FA00F11077 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD2A39F2355F3FA00F11077 /* ViewController.swift */; };
 		BCD2A3A32355F3FA00F11077 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCD2A3A12355F3FA00F11077 /* Main.storyboard */; };
 		BCD2A3A82355F3FC00F11077 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCD2A3A72355F3FC00F11077 /* Assets.xcassets */; };
 		BCD2A3AB2355F3FC00F11077 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCD2A3A92355F3FC00F11077 /* LaunchScreen.storyboard */; };
 		BCD2A3B32355F5E900F11077 /* DynamicTaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD2A3B22355F5E900F11077 /* DynamicTaskController.swift */; };
-		BCD2A3B52355F60400F11077 /* DynamicHelloWorldExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD2A3B42355F60400F11077 /* DynamicHelloWorldExampleViewController.swift */; };
 		BCD2A3BB2355F81E00F11077 /* HelloWorldTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD2A3BA2355F81E00F11077 /* HelloWorldTask.swift */; };
 		BCD2A3BD2355F83800F11077 /* HelloWorldObjectFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD2A3BC2355F83800F11077 /* HelloWorldObjectFamily.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A4A18E6236859F700078860 /* DynamicHelloWorldExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicHelloWorldExampleViewController.swift; sourceTree = "<group>"; };
+		4E1444B9DF75CCAD56BF5DD6 /* Pods-DynamicHelloWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DynamicHelloWorld.debug.xcconfig"; path = "Target Support Files/Pods-DynamicHelloWorld/Pods-DynamicHelloWorld.debug.xcconfig"; sourceTree = "<group>"; };
+		7A94FF6E6B5BA7CFEF089196 /* Pods_DynamicHelloWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DynamicHelloWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CBCCF921EDFBFBAD8F27D36 /* Pods-DynamicHelloWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DynamicHelloWorld.release.xcconfig"; path = "Target Support Files/Pods-DynamicHelloWorld/Pods-DynamicHelloWorld.release.xcconfig"; sourceTree = "<group>"; };
 		BCD2A39A2355F3FA00F11077 /* DynamicHelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DynamicHelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCD2A39D2355F3FA00F11077 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		BCD2A39F2355F3FA00F11077 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		BCD2A3A22355F3FA00F11077 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BCD2A3A72355F3FC00F11077 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BCD2A3AA2355F3FC00F11077 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BCD2A3AC2355F3FC00F11077 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCD2A3B22355F5E900F11077 /* DynamicTaskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTaskController.swift; sourceTree = "<group>"; };
-		BCD2A3B42355F60400F11077 /* DynamicHelloWorldExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicHelloWorldExampleViewController.swift; sourceTree = "<group>"; };
 		BCD2A3BA2355F81E00F11077 /* HelloWorldTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldTask.swift; sourceTree = "<group>"; };
 		BCD2A3BC2355F83800F11077 /* HelloWorldObjectFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldObjectFamily.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,21 +39,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F7AB2FD89F4B8A735D0CA3E /* Pods_DynamicHelloWorld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BCB21F16235EEDE40062A498 /* Coaty */ = {
+		9F5C849594050BD058754C87 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BCD2A3B22355F5E900F11077 /* DynamicTaskController.swift */,
-				BCD2A3B42355F60400F11077 /* DynamicHelloWorldExampleViewController.swift */,
-				BCD2A3BA2355F81E00F11077 /* HelloWorldTask.swift */,
-				BCD2A3BC2355F83800F11077 /* HelloWorldObjectFamily.swift */,
+				7A94FF6E6B5BA7CFEF089196 /* Pods_DynamicHelloWorld.framework */,
 			);
-			path = Coaty;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		BCD2A3912355F3FA00F11077 = {
@@ -60,6 +60,7 @@
 				BCD2A39C2355F3FA00F11077 /* DynamicHelloWorld */,
 				BCD2A39B2355F3FA00F11077 /* Products */,
 				F2ADC5AF09F1635CB359B34D /* Pods */,
+				9F5C849594050BD058754C87 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,9 +75,11 @@
 		BCD2A39C2355F3FA00F11077 /* DynamicHelloWorld */ = {
 			isa = PBXGroup;
 			children = (
-				BCB21F16235EEDE40062A498 /* Coaty */,
 				BCD2A39D2355F3FA00F11077 /* AppDelegate.swift */,
-				BCD2A39F2355F3FA00F11077 /* ViewController.swift */,
+				2A4A18E6236859F700078860 /* DynamicHelloWorldExampleViewController.swift */,
+				BCD2A3B22355F5E900F11077 /* DynamicTaskController.swift */,
+				BCD2A3BA2355F81E00F11077 /* HelloWorldTask.swift */,
+				BCD2A3BC2355F83800F11077 /* HelloWorldObjectFamily.swift */,
 				BCD2A3A12355F3FA00F11077 /* Main.storyboard */,
 				BCD2A3A92355F3FC00F11077 /* LaunchScreen.storyboard */,
 				BCD2A3A72355F3FC00F11077 /* Assets.xcassets */,
@@ -88,6 +91,8 @@
 		F2ADC5AF09F1635CB359B34D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				4E1444B9DF75CCAD56BF5DD6 /* Pods-DynamicHelloWorld.debug.xcconfig */,
+				7CBCCF921EDFBFBAD8F27D36 /* Pods-DynamicHelloWorld.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -99,9 +104,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BCD2A3AF2355F3FC00F11077 /* Build configuration list for PBXNativeTarget "DynamicHelloWorld" */;
 			buildPhases = (
+				ED7DC861AF988CA7CDFD1AFC /* [CP] Check Pods Manifest.lock */,
 				BCD2A3962355F3FA00F11077 /* Sources */,
 				BCD2A3972355F3FA00F11077 /* Frameworks */,
 				BCD2A3982355F3FA00F11077 /* Resources */,
+				E9DB405FC574415764A93707 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -158,16 +165,57 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E9DB405FC574415764A93707 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DynamicHelloWorld/Pods-DynamicHelloWorld-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DynamicHelloWorld/Pods-DynamicHelloWorld-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DynamicHelloWorld/Pods-DynamicHelloWorld-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ED7DC861AF988CA7CDFD1AFC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DynamicHelloWorld-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BCD2A3962355F3FA00F11077 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCD2A3A02355F3FA00F11077 /* ViewController.swift in Sources */,
 				BCD2A39E2355F3FA00F11077 /* AppDelegate.swift in Sources */,
 				BCD2A3B32355F5E900F11077 /* DynamicTaskController.swift in Sources */,
 				BCD2A3BD2355F83800F11077 /* HelloWorldObjectFamily.swift in Sources */,
-				BCD2A3B52355F60400F11077 /* DynamicHelloWorldExampleViewController.swift in Sources */,
+				2A4A18E7236859F700078860 /* DynamicHelloWorldExampleViewController.swift in Sources */,
 				BCD2A3BB2355F81E00F11077 /* HelloWorldTask.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +360,7 @@
 		};
 		BCD2A3B02355F3FC00F11077 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E1444B9DF75CCAD56BF5DD6 /* Pods-DynamicHelloWorld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -330,6 +379,7 @@
 		};
 		BCD2A3B12355F3FC00F11077 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7CBCCF921EDFBFBAD8F27D36 /* Pods-DynamicHelloWorld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

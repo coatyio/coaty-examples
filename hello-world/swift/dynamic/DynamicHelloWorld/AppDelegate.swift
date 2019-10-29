@@ -11,18 +11,12 @@ import CoatySwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    var container: DynamicContainer?
     let enableSSL = false
     let brokerIp = "127.0.0.1"
     let brokerPort = 1883
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = DynamicHelloWorldExampleViewController()
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-        
         // Override point for customization after application launch.
         launchContainer()
         
@@ -66,7 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Resolve your components with the given configuration and get your CoatySwift
         // application up and running.
-        _ = DynamicContainer.resolve(components: dynamicComponents, configuration: configuration)
+        container = DynamicContainer.resolve(components: dynamicComponents,
+                                             configuration: configuration)
         
     }
     
