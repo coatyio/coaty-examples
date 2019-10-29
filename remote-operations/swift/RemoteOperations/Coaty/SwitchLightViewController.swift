@@ -22,6 +22,7 @@ class SwitchLightViewController: UIViewController {
         container = delegate.container
         setupButton()
         setupLight()
+        setupConnectivityIndicator()
     }
     
     // MARK: Setup methods.
@@ -31,6 +32,9 @@ class SwitchLightViewController: UIViewController {
         let switchButton = UIButton(frame: CGRect.zero)
         switchButton.setTitle("Random Color Change", for: .normal)
         switchButton.backgroundColor = .lightGray
+        switchButton.layer.cornerRadius = 10.0
+        switchButton.layer.borderColor = UIColor.darkGray.cgColor
+        switchButton.layer.borderWidth = 2.0
         switchButton.addTarget(self, action: #selector(switchButtonTapped), for: .touchUpInside)
         
         // Setup constraints.
@@ -58,7 +62,6 @@ class SwitchLightViewController: UIViewController {
         let lightLabel = UILabel(frame: .zero)
         lightLabel.textAlignment = .center
         lightLabel.text = "Lightbulb"
-        lightLabel.textColor = .blue
         
         // Setup the delegate that controls the light.
         guard let lightController = container?.getController(name: "LightController") as? LightController else {
@@ -81,13 +84,52 @@ class SwitchLightViewController: UIViewController {
         lightView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         lightView.topAnchor.constraint(equalTo: view.topAnchor, constant: 125).isActive = true
         
-        lightLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        lightLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        lightLabel.widthAnchor.constraint(equalToConstant: lightLabel.intrinsicContentSize.width).isActive = true
+        lightLabel.heightAnchor.constraint(equalToConstant: lightLabel.intrinsicContentSize.height).isActive = true
         lightLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        lightLabel.topAnchor.constraint(equalTo: lightView.bottomAnchor).isActive = true
+        lightLabel.topAnchor.constraint(equalTo: lightView.bottomAnchor, constant: 5).isActive = true
+    }
+    
+    func setupConnectivityIndicator() {
         
+        // Fetch reference to AppDelegate.
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
-        
+        // Add broker info.
+        let broker = UILabel(frame: CGRect.zero)
+        broker.font = broker.font.withSize(14)
+        broker.textAlignment = .center
+        broker.text = "MQTT Broker: \(appDelegate.brokerIp):\(appDelegate.brokerPort)"
+          
+        broker.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(broker)
+          
+        broker.topAnchor.constraint(equalTo: self.lightView!.bottomAnchor, constant: 25).isActive = true
+        broker.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        broker.widthAnchor.constraint(equalToConstant:broker.intrinsicContentSize.width).isActive = true
+        broker.heightAnchor.constraint(equalToConstant: 30).isActive = true
+          
+        // Add connectivity indicator.
+        let indicator = UIView(frame: CGRect.zero)
+        indicator.backgroundColor = .red
+        indicator.layer.cornerRadius = 12
+          
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+          
+        indicator.centerYAnchor.constraint(equalTo: broker.centerYAnchor).isActive = true
+        indicator.rightAnchor.constraint(equalTo: broker.leftAnchor, constant: -5).isActive = true
+        indicator.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        indicator.heightAnchor.constraint(equalToConstant: 24).isActive = true
+          
+        // Dynamically update the indicator color based on the connection state.
+        _ = appDelegate
+            .container?
+            .communicationManager?
+            .getCommunicationState()
+            .subscribe(onNext: {
+                indicator.backgroundColor = $0 == .online ? .green : .red
+        })
     }
     
     @objc func switchButtonTapped() {
