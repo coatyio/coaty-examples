@@ -22,7 +22,7 @@
 		2A61B4D52355DE000012B3A9 /* LightExecutionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4CB2355DE000012B3A9 /* LightExecutionInfo.swift */; };
 		2A61B4D62355DE000012B3A9 /* SwitchLightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4CC2355DE000012B3A9 /* SwitchLightViewController.swift */; };
 		2A61B4D72355DE000012B3A9 /* ControlController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4CD2355DE000012B3A9 /* ControlController.swift */; };
-		BAEE51C2B8037FF43C6CC0AB /* Pods_RemoteOperations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F396C6995730C8DAC2F882B0 /* Pods_RemoteOperations.framework */; };
+		C98177AD05176F564D5C7FE3 /* Pods_RemoteOperations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36F3C4441350B82F001E3F12 /* Pods_RemoteOperations.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,9 +43,9 @@
 		2A61B4CB2355DE000012B3A9 /* LightExecutionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightExecutionInfo.swift; sourceTree = "<group>"; };
 		2A61B4CC2355DE000012B3A9 /* SwitchLightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchLightViewController.swift; sourceTree = "<group>"; };
 		2A61B4CD2355DE000012B3A9 /* ControlController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlController.swift; sourceTree = "<group>"; };
-		8A99562DE9D105BBE26E3DFF /* Pods-RemoteOperations.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteOperations.debug.xcconfig"; path = "Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations.debug.xcconfig"; sourceTree = "<group>"; };
-		BF939B1AB2F8FF9A6CA6CC34 /* Pods-RemoteOperations.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteOperations.release.xcconfig"; path = "Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations.release.xcconfig"; sourceTree = "<group>"; };
-		F396C6995730C8DAC2F882B0 /* Pods_RemoteOperations.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RemoteOperations.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		307731A20ED5B7CA0857AD9F /* Pods-RemoteOperations.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteOperations.debug.xcconfig"; path = "Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations.debug.xcconfig"; sourceTree = "<group>"; };
+		36F3C4441350B82F001E3F12 /* Pods_RemoteOperations.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RemoteOperations.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB020159A6C3F4D9CF0B22DF /* Pods-RemoteOperations.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteOperations.release.xcconfig"; path = "Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BAEE51C2B8037FF43C6CC0AB /* Pods_RemoteOperations.framework in Frameworks */,
+				C98177AD05176F564D5C7FE3 /* Pods_RemoteOperations.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,7 +66,7 @@
 				2A61B4AC2355DD870012B3A9 /* RemoteOperations */,
 				2A61B4AB2355DD870012B3A9 /* Products */,
 				D6597A5AE4A224AF96FABA11 /* Pods */,
-				7534FFBDBD0ADAC60524E39F /* Frameworks */,
+				B35FFFE8075B155D87A8F19A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -117,10 +117,10 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		7534FFBDBD0ADAC60524E39F /* Frameworks */ = {
+		B35FFFE8075B155D87A8F19A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F396C6995730C8DAC2F882B0 /* Pods_RemoteOperations.framework */,
+				36F3C4441350B82F001E3F12 /* Pods_RemoteOperations.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -128,8 +128,8 @@
 		D6597A5AE4A224AF96FABA11 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8A99562DE9D105BBE26E3DFF /* Pods-RemoteOperations.debug.xcconfig */,
-				BF939B1AB2F8FF9A6CA6CC34 /* Pods-RemoteOperations.release.xcconfig */,
+				307731A20ED5B7CA0857AD9F /* Pods-RemoteOperations.debug.xcconfig */,
+				DB020159A6C3F4D9CF0B22DF /* Pods-RemoteOperations.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -141,11 +141,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2A61B4BE2355DD880012B3A9 /* Build configuration list for PBXNativeTarget "RemoteOperations" */;
 			buildPhases = (
-				1A07FE5EA4918C845A871AC1 /* [CP] Check Pods Manifest.lock */,
+				CC2DB6EBF0573C6106ED9AD6 /* [CP] Check Pods Manifest.lock */,
 				2A61B4A62355DD870012B3A9 /* Sources */,
 				2A61B4A72355DD870012B3A9 /* Frameworks */,
 				2A61B4A82355DD870012B3A9 /* Resources */,
-				E1B1FC8DF01409D506FA4416 /* [CP] Embed Pods Frameworks */,
+				725307DD15F9145C37EAD3A6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,7 +203,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1A07FE5EA4918C845A871AC1 /* [CP] Check Pods Manifest.lock */ = {
+		725307DD15F9145C37EAD3A6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC2DB6EBF0573C6106ED9AD6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -223,23 +240,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E1B1FC8DF01409D506FA4416 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RemoteOperations/Pods-RemoteOperations-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -402,7 +402,7 @@
 		};
 		2A61B4BF2355DD880012B3A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A99562DE9D105BBE26E3DFF /* Pods-RemoteOperations.debug.xcconfig */;
+			baseConfigurationReference = 307731A20ED5B7CA0857AD9F /* Pods-RemoteOperations.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -420,7 +420,7 @@
 		};
 		2A61B4C02355DD880012B3A9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF939B1AB2F8FF9A6CA6CC34 /* Pods-RemoteOperations.release.xcconfig */;
+			baseConfigurationReference = DB020159A6C3F4D9CF0B22DF /* Pods-RemoteOperations.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

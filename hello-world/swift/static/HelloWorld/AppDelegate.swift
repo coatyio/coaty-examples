@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
-        // Shutdown container in order to trigger a graceful deadvertise of all advertised controllers.
+        // Shutdown container in order to trigger a graceful deadvertise of all advertised components.
         container?.shutdown()
     }
 
@@ -40,11 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Shutdown container in order to trigger a graceful deadvertise of all advertised components.
-        container?.shutdown()
     }
 
     // MARK: - Coaty Container setup methods.
