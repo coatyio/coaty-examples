@@ -1,0 +1,32 @@
+version: "3.7"
+
+x-build:
+  &default-build
+  context: .
+  args:
+    - http_proxy=${http_proxy}
+    - https_proxy=${http_proxy}
+
+services:
+  agent:
+    container_name: "template-agent"
+    build:
+      << : *default-build
+    image: coaty-template-agent:latest
+    env_file: .env
+    environment:
+      - BROKER_URL=${BROKER_URL}
+    command: npm run start
+    restart: unless-stopped
+  broker:
+    container_name: "coaty-broker"
+    build:
+      << : *default-build
+    image: coaty-broker:latest
+    env_file: .env
+    ports:
+      - "1883:1883"
+      - "9883:9883"
+    command: npm run broker
+    restart: unless-stopped
+

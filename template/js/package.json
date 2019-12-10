@@ -1,0 +1,34 @@
+{
+    "name": "template-agent",
+    "version": "1.0.0",
+    "description": "Coaty template project for Node.js",
+    "scripts": {
+        "build": "gulp build",
+        "lint": "gulp lint",
+        "lint:fix": "gulp lint:fix",
+        "broker": "coaty-scripts broker",
+        "broker:verbose": "coaty-scripts broker --verbose",
+        "start": "node -r dotenv/config dist/agent.js",
+        "docker:build": "docker-compose build",
+        "docker:up": "docker-compose up"
+    },
+    "readme": "README.md",
+    "author": "Siemens AG",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "coaty": "^1.11.0",
+        "dotenv": "^8.2.0",
+        "rxjs": "6.4.0"
+    },
+    "devDependencies": {
+        "@types/node": "12.0.0",
+        "fs-extra": "8.0.1",
+        "gulp": "4.0.0",
+        "gulp-sourcemaps": "2.6.5",
+        "gulp-tslint": "8.1.4",
+        "gulp-typescript": "5.0.1",
+        "tslint": "5.15.0",
+        "typescript": "3.4.1"
+    }
+}

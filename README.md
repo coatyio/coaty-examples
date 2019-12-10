@@ -22,6 +22,16 @@ language variants.
   This example demonstrates how Coaty leverages the SensorThings API to manage a
   self-discovering network of sensors.
 
+## Coaty Templates
+
+This project also includes a ready-to-use
+[**template**](https://github.com/coatyio/coaty-examples/tree/master/template/js)
+for a Coaty agent running in Node.js and programmed in TypeScript. Copy and use
+it as a blueprint for your own Coaty agent projects.
+
+A template for a Coaty Swift agent can be found in the `Example` folder of the
+[CoatySwift](https://github.com/coatyio/coaty-swift) repo.
+
 ## Contributing
 
 If you like Coaty examples, please consider &#x2605; starring [the project on
