@@ -1,30 +1,17 @@
 # Coaty Examples
 
-This project includes a set of fully documented code examples that demonstrate
-best practices and typical usage patterns for Coaty applications. The examples
-are substructured by available Coaty language variants, such as `js` for Coaty
-JavaScript and `swift` for CoatySwift. Some examples, such as Hello World and
-Remote Operations provide interoperable Coaty agents programmed in different
-language variants.
+This repository includes a set of fully documented code examples that
+demonstrate best practices and typical usage patterns of the Coaty core
+framework functionality.
 
-* [**Hello
-  World**](https://github.com/coatyio/coaty-examples/tree/master/hello-world/js)
-  This example demonstrates the basic use of communication event patterns to
-  exchange typed data in a distributed Coaty application.
-
-* [**Remote
-  Operations**](https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js)
-  This example demonstrates how to use the Call-Return communication event
-  pattern to perform context-filtered remote operations between Coaty agents.
-
-* [**Sensor
-  Things**](https://github.com/coatyio/coaty-examples/tree/master/sensor-things/js)
-  This example demonstrates how Coaty leverages the SensorThings API to manage a
-  self-discovering network of sensors.
+The examples are substructured by available Coaty language variants, such as
+`js` for Coaty JavaScript and `swift` for CoatySwift. Some examples, e.g. "Hello
+World" and "Remote Operations" provide interoperable Coaty agents programmed in
+different language variants.
 
 ## Coaty Templates
 
-This project also includes a ready-to-use
+This repository also includes a ready-to-use
 [**template**](https://github.com/coatyio/coaty-examples/tree/master/template/js)
 for a Coaty agent running in Node.js and programmed in TypeScript. Copy and use
 it as a blueprint for your own Coaty agent projects.
