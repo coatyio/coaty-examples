@@ -17,7 +17,7 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "coaty": "^1.11.0",
+        "coaty": "^1.11.1",
         "dotenv": "^8.2.0",
         "rxjs": "6.4.0"
     },
