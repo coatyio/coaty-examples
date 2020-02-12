@@ -49,7 +49,7 @@ interface WindowLayout {
 })
 export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
 
-    @ViewChild("controlCard", { read: ElementRef }) cardElementRef: ElementRef;
+    @ViewChild("controlCard", { read: ElementRef, static: true }) cardElementRef: ElementRef;
 
     /** The container of the Coaty light control agent. */
     controlContainer: Container;

@@ -31,6 +31,6 @@ export class AppComponent implements OnDestroy {
     ngOnDestroy() {
         // Ensure to dispose resources held by the context subscription after
         // this component is destroyed.
-        this.contextSubscription.unsubscribe();
+        this.contextSubscription?.unsubscribe();
     }
 }

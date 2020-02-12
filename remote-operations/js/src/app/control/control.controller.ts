@@ -89,11 +89,9 @@ export class ControlController extends ObjectLifecycleController {
     }
 
     onCommunicationManagerStopping() {
-        if (this._agentsLifecycleSubscription) {
-            // Stop observing lifecycle info of identity components for light
-            // agents and light control agents.
-            this._agentsLifecycleSubscription.unsubscribe();
-        }
+        // Stop observing lifecycle info of identity components for light
+        // agents and light control agents.
+        this._agentsLifecycleSubscription?.unsubscribe();
     }
 
     /**
