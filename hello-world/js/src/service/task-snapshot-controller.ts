@@ -1,9 +1,8 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { QueryEvent } from "coaty/com";
-import { HistorianController } from "coaty/controller";
-import { Snapshot } from "coaty/model";
-import { NodeUtils } from "coaty/runtime-node";
+import { QueryEvent, Snapshot } from "@coaty/core";
+import { HistorianController } from "@coaty/core/db";
+import { NodeUtils } from "@coaty/core/runtime-node";
 
 /**
  * A HistorianController that logs Query-Retrieve events on snapshots.

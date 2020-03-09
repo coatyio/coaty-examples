@@ -1,12 +1,9 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 
-import { AdvertiseEvent, RetrieveEvent } from "coaty/com";
-import { Controller } from "coaty/controller";
-import { DbContext } from "coaty/db";
-import { Log } from "coaty/model";
+import { AdvertiseEvent, Controller, Log, RetrieveEvent } from "@coaty/core";
+import { DbContext } from "@coaty/core/db";
 
 import { Db } from "../shared/db";
 import { DatabaseChange, modelTypes } from "../shared/models";
@@ -19,8 +16,6 @@ import { DatabaseChange, modelTypes } from "../shared/models";
  */
 export class LogController extends Controller {
 
-    private _advertiseSubscription: Subscription;
-    private _querySubscription: Subscription;
     private _dbCtx: DbContext;
 
     onInit() {
@@ -30,35 +25,31 @@ export class LogController extends Controller {
 
     onCommunicationManagerStarting() {
         super.onCommunicationManagerStarting();
-        this._querySubscription = this._observeQueryLog();
-        this._advertiseSubscription = this._observeAdvertiseLog();
-    }
-
-    onCommunicationManagerStopping() {
-        super.onCommunicationManagerStopping();
-        this._querySubscription && this._querySubscription.unsubscribe();
-        this._advertiseSubscription && this._advertiseSubscription.unsubscribe();
+        this._observeQueryLog();
+        this._observeAdvertiseLog();
     }
 
     private _observeAdvertiseLog() {
         return this.communicationManager
-            .observeAdvertiseWithCoreType(this.identity, "Log")
+            .observeAdvertiseWithCoreType("Log")
             .subscribe(event => {
-                const log = event.eventData.object as Log;
+                const log = event.data.object as Log;
                 this._dbCtx.insertObjects(Db.COLLECTION_LOG, log, true)
                     .then(() => this._advertiseDatabaseChange());
             });
     }
 
     private _observeQueryLog() {
-        return this.communicationManager
-            .observeQuery(this.identity)
-            .pipe(filter(event => event.eventData.isCoreTypeCompatible("Log")))
+        this.communicationManager
+            .observeQuery()
+            .pipe(
+                filter(event => event.data.isCoreTypeCompatible("Log")),
+            )
             .subscribe(event => {
                 this._dbCtx
-                    .findObjects<Log>(Db.COLLECTION_LOG, event.eventData.objectFilter)
+                    .findObjects<Log>(Db.COLLECTION_LOG, event.data.objectFilter)
                     .then(iterator => iterator.forBatch(batch => {
-                        event.retrieve(RetrieveEvent.withObjects(this.identity, batch));
+                        event.retrieve(RetrieveEvent.withObjects(batch));
                     }))
                     .catch(error => {
                         // In case of retrieval error, do not respond with a 
@@ -79,6 +70,6 @@ export class LogController extends Controller {
             hasLogChanged: true,
             hasTaskChanged: false,
         };
-        this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(this.identity, change));
+        this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(change));
     }
 }

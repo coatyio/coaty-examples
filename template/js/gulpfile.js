@@ -5,7 +5,7 @@ const gulp = require("gulp");
 const sourcemaps = require("gulp-sourcemaps");
 const tsc = require("gulp-typescript");
 const tslint = require("gulp-tslint");
-const infoAgentScript = require("coaty/scripts/info");
+const infoAgentScript = require("@coaty/core/scripts/info");
 
 /**
  * Clean distribution folder

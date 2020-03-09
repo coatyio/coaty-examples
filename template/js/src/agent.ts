@@ -1,7 +1,7 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { Components, Configuration, Container } from "coaty/runtime";
-import { NodeUtils } from "coaty/runtime-node";
+import { Components, Configuration, Container } from "@coaty/core";
+import { NodeUtils } from "@coaty/core/runtime-node";
 
 import { agentInfo } from "./agent.info";
 import { FooController } from "./controller/foo-controller";
@@ -22,10 +22,10 @@ const components: Components = {
 const configuration: Configuration = {
     common: {
         agentInfo,
+        agentIdentity: { name: "template agent" },
     },
     communication: {
         brokerUrl: process.env.BROKER_URL,
-        identity: { name: "template agent" },
         shouldAutoStart: true,
     },
     controllers: {

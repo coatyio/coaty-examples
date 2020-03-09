@@ -1,8 +1,8 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { DbAdapterFactory, DbContext } from "coaty/db";
-import { PostgresAdapter } from "coaty/db-adapter-postgres";
-import { DatabaseOptions } from "coaty/runtime";
+import { DatabaseOptions } from "@coaty/core";
+import { DbAdapterFactory, DbContext } from "@coaty/core/db";
+import { PostgresAdapter } from "@coaty/core/db/adapter-postgres";
 
 /**
  * Defines static constants and functions for database initialization

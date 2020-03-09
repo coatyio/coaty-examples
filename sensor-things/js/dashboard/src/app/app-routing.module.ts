@@ -1,12 +1,15 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { SensorComponent } from './sensor/sensor.component';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { WelcomeComponent } from "./welcome/welcome.component";
+import { SensorComponent } from "./sensor/sensor.component";
 
 const routes: Routes = [];
 
+/**
+ * Defines the route configuration for the welcome and the sensor modules.
+ */
 @NgModule({
     imports: [
         RouterModule.forRoot([

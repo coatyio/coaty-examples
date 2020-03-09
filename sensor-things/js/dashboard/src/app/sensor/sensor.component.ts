@@ -6,23 +6,27 @@ import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 
-import { SensorThingsController } from "../controller/sensor-things-controller";
-import { CoatyObject, Uuid } from "coaty/model";
+import { CoatyObject, Uuid } from "@coaty/core";
 import {
     Observation,
+    Sensor,
     SensorObserverController,
     SensorThingsTypes,
-    ThingObserverController
-} from "coaty/sensor-things";
+    Thing,
+    ThingObserverController,
+    FeatureOfInterest
+} from "@coaty/core/sensor-things";
+
+import { SensorThingsController } from "../controller/sensor-things-controller";
 
 /** 
- * Format of this._chartdata elements.
+ * Format of ChartItem objects.
  */
 interface ChartItem {
-    "product_id": Uuid;
-    "name": string;
-    "objectType": string;
-    "parents_id": { id: Uuid }[];
+    product_id: Uuid;
+    name: string;
+    objectType: string;
+    parents_id: { id: Uuid }[];
 }
 
 /**
@@ -36,7 +40,7 @@ interface ChartItem {
 export class SensorComponent implements OnDestroy {
 
     private _channeledObservationsSubscription: Subscription;
-    private _root: CoatyObject;
+    private _root: Thing | Sensor | Observation | FeatureOfInterest;
 
     private _chartData = new Map<Uuid, ChartItem>();
     private _objects: CoatyObject[] = [];
@@ -49,7 +53,7 @@ export class SensorComponent implements OnDestroy {
         private _thingObserverController: ThingObserverController) {
 
         this._route.params.subscribe(params => {
-            const id = params['id'];
+            const id = params.id;
 
             this._sensorThingsController
                 .resolveSensorThingsObject(id)
@@ -72,10 +76,10 @@ export class SensorComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this._channeledObservationsSubscription && this._channeledObservationsSubscription.unsubscribe();
+        this._channeledObservationsSubscription?.unsubscribe();
     }
 
-    get root(): CoatyObject {
+    get root() {
         return this._root;
     }
 
@@ -93,6 +97,10 @@ export class SensorComponent implements OnDestroy {
 
     isSensorRoot(): boolean {
         return this._root && this._root.objectType === SensorThingsTypes.OBJECT_TYPE_SENSOR;
+    }
+
+    isObservationRoot(): boolean {
+        return this._root && this._root.objectType === SensorThingsTypes.OBJECT_TYPE_OBSERVATION;
     }
 
     isLinkedField(object: CoatyObject, fieldName: string): boolean {
@@ -114,7 +122,7 @@ export class SensorComponent implements OnDestroy {
     }
 
     public objectToArray(object: CoatyObject) {
-        return Object.keys(object).map((key) => ({ key: key, value: object[key] }));
+        return Object.keys(object).map(key => ({ key, value: object[key] }));
     }
 
     private _discoverNeighbors(object: CoatyObject, parent?: CoatyObject) {
@@ -140,7 +148,7 @@ export class SensorComponent implements OnDestroy {
     }
 
     private _observeObservations(sensorId: Uuid) {
-        this._channeledObservationsSubscription && this._channeledObservationsSubscription.unsubscribe();
+        this._channeledObservationsSubscription?.unsubscribe();
 
         this._channeledObservationsSubscription = this._sensorObserverController
             .observeChanneledObservations(sensorId)
@@ -155,10 +163,10 @@ export class SensorComponent implements OnDestroy {
     private _addElement(object: CoatyObject, parent?: CoatyObject) {
         this._objects.push(object);
         this._chartData.set(object.objectId, {
-            "product_id": object.objectId,
-            "name": object.name,
-            "objectType": object.objectType,
-            "parents_id": (this._chartData.size === 0 || parent === undefined ? undefined : [{ id: parent.objectId }])
+            product_id: object.objectId,
+            name: object.name,
+            objectType: object.objectType,
+            parents_id: (this._chartData.size === 0 || parent === undefined ? undefined : [{ id: parent.objectId }])
         });
     }
 }

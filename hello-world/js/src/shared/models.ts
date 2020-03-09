@@ -1,6 +1,6 @@
 ﻿/*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { CoatyObject, Task } from "coaty/model";
+import { CoatyObject, Task } from "@coaty/core";
 
 export const modelTypes = {
     OBJECT_TYPE_HELLO_WORLD_TASK: "com.helloworld.Task",

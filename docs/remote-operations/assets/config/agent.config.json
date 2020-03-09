@@ -5,22 +5,24 @@
         }
     },
     "common": {
-        "lightControlOperation": "coaty.examples.remoteops.switchLight",
-        "lightContextRanges": {
-            "building": {
-                "min": 10,
-                "max": 95,
-                "tickInterval": 10
-            },
-            "floor": {
-                "min": 1,
-                "max": 9,
-                "tickInterval": 1
-            },
-            "room": {
-                "min": 1,
-                "max": 99,
-                "tickInterval": 10
+        "extra": {
+            "lightControlOperation": "coaty.examples.remoteops.switchLight",
+            "lightContextRanges": {
+                "building": {
+                    "min": 10,
+                    "max": 95,
+                    "tickInterval": 10
+                },
+                "floor": {
+                    "min": 1,
+                    "max": 9,
+                    "tickInterval": 1
+                },
+                "room": {
+                    "min": 1,
+                    "max": 99,
+                    "tickInterval": 10
+                }
             }
         }
     },
@@ -60,7 +62,7 @@
                 }
             ],
             "lightWindowWidth": 400,
-            "lightWindowHeight": 642
+            "lightWindowHeight": 648
         }
     }
 }

@@ -1,8 +1,8 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
 import { Component, Inject } from '@angular/core';
-import { MAT_BOTTOM_SHEET_DATA } from '@angular/material';
-import { MatBottomSheetRef } from "@angular/material";
+import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { MatBottomSheetRef } from "@angular/material/bottom-sheet";
 
 /**
  * A bottom sheet that display the JavaScript objects representing the currently

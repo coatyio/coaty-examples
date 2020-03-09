@@ -9,15 +9,15 @@
                 <strong>Object:</strong> {{ root.objectId }} <br/>
                 <strong>Coaty Type: </strong> {{ root.coreType }} <br/>
                 <strong>Object Type: </strong> {{ root.objectType }}
-                <span *ngIf="root.hasOwnProperty('description') !== undefined"><br/>
-                    <strong>Description: </strong> {{ root.description }}</span>
+                <span *ngIf="!isObservationRoot()"><br/>
+                    <strong>Description: </strong> {{ root["description"] }}</span>
             </div>
             <h4 class="mb-3">
                 Sensor things objects<span class="float-right">&nbsp;({{ objects.length }})</span>
             </h4>
             <div *ngFor="let o of objects" class="hidden mb-3" id="{{ o.objectId }}">
                 <h5>
-                    <a href="/#/object/{{ o.objectId }}">{{ o.name }} ({{ o.objectId | truncate: 6
+                    <a href="/#/object/{{ o.objectId }}">{{ o.name }} ({{ o.objectId | truncate: 8
                         }}...)</a>
                 </h5>
                 <table class="table table-striped table-sm">
@@ -49,7 +49,7 @@
             </h4>
             <div *ngFor="let o of observations" class="mb-3">
                 <h5 class="text-nowrap">
-                    <a href="/#/object/{{ o.objectId }}">{{ o.name }} ({{ o.objectId | truncate: 6
+                    <a href="/#/object/{{ o.objectId }}">{{ o.name }} ({{ o.objectId | truncate: 8
                         }}...)</a>
                 </h5>
                 <table class="table table-striped table-sm">

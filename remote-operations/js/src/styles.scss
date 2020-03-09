@@ -67,7 +67,7 @@ body {
 
 /** App specific media queries */
 
-@media #{screen and (min-width: 768px)} {
+@media screen and (min-width: 768px) {
     .app-keyvisual-layout {
         height: 150px;
     }

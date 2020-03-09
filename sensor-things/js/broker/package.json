@@ -1,16 +1,17 @@
 {
     "name": "sensor-things-broker",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Development purpose MQTT broker for Sensor Things example",
     "scripts": {
-        "start": "coaty-scripts broker --verbose"
+        "start": "coaty-scripts broker --nobonjour",
+        "start:verbose": "coaty-scripts broker --verbose --nobonjour"
     },
     "readme": "README.md",
     "author": "Siemens AG",
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "coaty": "^1.11.0",
-        "rxjs": "6.4.0"
+        "@coaty/core": "^2.0.0",
+        "rxjs": "~6.5.4"
     }
 }

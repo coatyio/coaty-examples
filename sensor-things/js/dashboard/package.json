@@ -1,47 +1,43 @@
 {
-  "name": "sensor-things-dashboard",
-  "description": "A dashboard for Coaty Sensor Things example",
-  "version": "1.0.0",
-  "license": "MIT",
-  "author": {
-    "name": "Antoine Beyet"
-  },
-  "scripts": {
-    "ng": "ng",
-    "start": "coaty-scripts info ./src/app && ng serve",
-    "build": "coaty-scripts info ./src/app && ng build",
-    "lint": "ng lint"
-  },
-  "private": true,
-  "dependencies": {
-    "@angular/animations": "^7.2.12",
-    "@angular/common": "^7.2.12",
-    "@angular/compiler": "^7.2.12",
-    "@angular/core": "^7.2.12",
-    "@angular/forms": "^7.2.12",
-    "@angular/platform-browser": "^7.2.12",
-    "@angular/platform-browser-dynamic": "^7.2.12",
-    "@angular/router": "^7.2.12",
-    "bootstrap": "^4.3.1",
-    "coaty": "^1.11.0",
-    "core-js": "^2.6.10",
-    "d3": "^5.12.0",
-    "rxjs": "~6.4.0",
-    "tslib": "^1.9.0",
-    "zone.js": "~0.8.29"
-  },
-  "devDependencies": {
-    "@angular-builders/custom-webpack": "^7.4.3",
-    "@angular-builders/dev-server": "^7.3.1",
-    "@angular-devkit/build-angular": "^0.13.8",
-    "@angular/cli": "^7.3.8",
-    "@angular/compiler-cli": "^7.2.12",
-    "@angular/language-service": "^7.2.12",
-    "@types/d3": "^5.7.2",
-    "@types/node": "~8.9.4",
-    "codelyzer": "~5.0.0",
-    "ts-node": "~7.0.0",
-    "tslint": "~5.11.0",
-    "typescript": "~3.2.4"
-  }
+    "name": "sensor-things-dashboard",
+    "version": "2.0.0",
+    "description": "A dashboard for Coaty Sensor Things example",
+    "scripts": {
+        "ng": "ng",
+        "start": "coaty-scripts info ./src/app && ng serve --open",
+        "build": "coaty-scripts info ./src/app production && ng build --prod",
+        "lint": "ng lint"
+    },
+    "author": {
+        "name": "Antoine Beyet"
+    },
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "@angular/common": "~9.0.0",
+        "@angular/compiler": "~9.0.0",
+        "@angular/core": "~9.0.0",
+        "@angular/platform-browser": "~9.0.0",
+        "@angular/platform-browser-dynamic": "~9.0.0",
+        "@angular/router": "~9.0.0",
+        "@coaty/core": "^2.0.0",
+        "bootstrap": "^4.4.1",
+        "d3": "^5.15.0",
+        "rxjs": "~6.5.4",
+        "tslib": "^1.10.0",
+        "zone.js": "~0.10.2"
+    },
+    "devDependencies": {
+        "@angular-builders/custom-webpack": "^8.4.1",
+        "@angular-devkit/build-angular": "~0.900.1",
+        "@angular/cli": "~9.0.1",
+        "@angular/compiler-cli": "~9.0.0",
+        "@angular/language-service": "~9.0.0",
+        "@types/d3": "^5.7.2",
+        "@types/node": "^12.11.1",
+        "codelyzer": "^5.1.2",
+        "ts-node": "~8.3.0",
+        "tslint": "~5.18.0",
+        "typescript": "~3.7.5"
+    }
 }

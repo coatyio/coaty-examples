@@ -1,4 +1,5 @@
-<em class="d-inline-block mb-3">Start the broker, connect some sensors and let the dashboard discover them.</em>
+<em class="d-inline-block mb-3">Start the broker, connect some sensors and let the dashboard
+    discover them.</em>
 
 <div *ngIf="things.length === 0" class="text-center">
     <h4>Waiting for sensors to be advertised...</h4>
@@ -10,7 +11,7 @@
     Connected things
     <div *ngFor="let u of things;">
         <a class="btn btn-secondary" href="/#/object/{{u.objectId}}">
-            {{ u.name }} ({{ u.objectId | truncate: 6}}...)
+            {{ u.name }} ({{ u.objectId | truncate: 8 }}...)
         </a>
         <br><br>
 

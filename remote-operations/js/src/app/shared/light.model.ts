@@ -1,6 +1,6 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { CoatyObject, Uuid } from "coaty/model";
+import { CoatyObject, Uuid } from "@coaty/core";
 
 /**
  * Defines a color tuple array with RGBA values.

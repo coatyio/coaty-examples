@@ -1,7 +1,6 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { Controller } from "coaty/controller";
-import { RemoteCallErrorCode, RemoteCallErrorMessage, ReturnEvent } from "coaty/com";
+import { Controller, RemoteCallErrorCode, RemoteCallErrorMessage, ReturnEvent } from "@coaty/core";
 import { Observable, BehaviorSubject } from "rxjs";
 
 import {
@@ -45,8 +44,12 @@ export class LightController extends Controller {
         // Set initial color on the subject for emission when observers subscribe to it.
         this._lightColorChangeSubject = new BehaviorSubject<string>(this.convertLightStatusToColor());
         this._lightColorChange$ = this._lightColorChangeSubject.asObservable();
+    }
 
-        // Finally start observing remote call operations for light status control.
+    onCommunicationManagerStarting() {
+        super.onCommunicationManagerStarting();
+
+        // Start observing remote call operations for light status control.
         this.observeCallEvents();
     }
 
@@ -78,20 +81,18 @@ export class LightController extends Controller {
 
     private observeCallEvents() {
         return this.communicationManager.observeCall(
-            this.identity,
-            this.runtime.options.lightControlOperation,
+            this.runtime.commonOptions.extra.lightControlOperation,
             this._lightContext)
             .subscribe(event => {
-                const on = event.eventData.getParameterByName("on");
-                const color = event.eventData.getParameterByName("color");
-                const luminosity = event.eventData.getParameterByName("luminosity");
-                const switchTime = event.eventData.getParameterByName("switchTime");
+                const on = event.data.getParameterByName("on");
+                const color = event.data.getParameterByName("color");
+                const luminosity = event.data.getParameterByName("luminosity");
+                const switchTime = event.data.getParameterByName("switchTime");
 
                 // Respond with an InvalidParams error if parameter validation
                 // failed.
                 if (!this.validateSwitchOpParams(on, color, luminosity, switchTime)) {
                     event.returnEvent(ReturnEvent.withError(
-                        this.identity,
                         RemoteCallErrorCode.InvalidParameters,
                         RemoteCallErrorMessage.InvalidParameters,
                         { lightId: this._light.objectId, triggerTime: Date.now() }));
@@ -102,7 +103,6 @@ export class LightController extends Controller {
                     // Respond with a custom error if the light is currently defect.
                     if (this.light.isDefect) {
                         event.returnEvent(ReturnEvent.withError(
-                            this.identity,
                             1,
                             "Light is defect",
                             { lightId: this._light.objectId, triggerTime: Date.now() }));
@@ -117,7 +117,6 @@ export class LightController extends Controller {
                     // Respond with a result indicating whether the light is in
                     // state on or off.
                     event.returnEvent(ReturnEvent.withResult(
-                        this.identity,
                         this._lightStatus.on,
                         { lightId: this._light.objectId, triggerTime: Date.now() }));
                 }, Math.max(0, switchTime === undefined ? 0 : switchTime));
@@ -145,7 +144,7 @@ export class LightController extends Controller {
             // Reference to light object
             parentObjectId: this._light.objectId,
 
-            on: on,
+            on,
             luminosity,
             color,
         };

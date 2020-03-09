@@ -34,4 +34,4 @@ tmp/config.txt
 Thumbs.db
 .typingsrc
 UserInterfaceState.xcuserstate
-src/agent.info.ts
+agent.info.ts

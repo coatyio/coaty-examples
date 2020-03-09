@@ -1,14 +1,10 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { Subscription } from "rxjs";
-import { filter, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
-import { AdvertiseEvent, CompleteEvent } from "coaty/com";
-import { Controller } from "coaty/controller";
-import { DbContext } from "coaty/db";
-import { TaskStatus } from "coaty/model";
-import { Container } from "coaty/runtime";
-import { NodeUtils } from "coaty/runtime-node";
+import { AdvertiseEvent, CompleteEvent, Controller, TaskStatus } from "@coaty/core";
+import { DbContext } from "@coaty/core/db";
+import { NodeUtils } from "@coaty/core/runtime-node";
 
 import { Db } from "../shared/db";
 import { LogTags } from "../shared/log-tags";
@@ -16,42 +12,31 @@ import { HelloWorldTask, HelloWorldTaskUrgency, modelTypes } from "../shared/mod
 import { TaskSnapshotController } from "./task-snapshot-controller";
 
 /**
- * Periodically generates new task requests and advertises them to 
- * connected Hello World clients. Assigns tasks to offering clients 
- * on a first-come first-served basis. The created and managed tasks 
- * are persisted in the database task collection. For each change of a task a
- * snapshot object is created and persisted with the HistorianController, which 
- * can be queried by any other connected Hello World component.
+ * Periodically generates new task requests and advertises them to connected
+ * Hello World clients. Assigns tasks to offering clients on a first-come
+ * first-served basis. The created and managed tasks are persisted in the
+ * database task collection. For each change of a task a snapshot object is
+ * created and persisted with the HistorianController, which can be queried by
+ * any other connected Hello World agent.
  */
 export class TaskController extends Controller {
 
     private static _taskCounter = 1;
 
-    private _advertiseSubscription: Subscription;
-    private _updateSubscription: Subscription;
     private _dbCtx: DbContext;
     private _taskSnapshotController: TaskSnapshotController;
 
     onInit() {
         super.onInit();
+        this._taskSnapshotController = this.container.getController("TaskSnapshotController");
         this._dbCtx = new DbContext(this.runtime.databaseOptions["db"]);
     }
 
     onCommunicationManagerStarting() {
         super.onCommunicationManagerStarting();
-        this._updateSubscription = this._observeUpdateRequests();
-        this._advertiseSubscription = this._observeAdvertiseTasks();
+        this._observeUpdateRequests();
+        this._observeAdvertiseTasks();
         this._generateRequests();
-    }
-
-    onCommunicationManagerStopping() {
-        super.onCommunicationManagerStopping();
-        this._updateSubscription && this._updateSubscription.unsubscribe();
-        this._advertiseSubscription && this._advertiseSubscription.unsubscribe();
-    }
-
-    onContainerResolved(container: Container) {
-        this._taskSnapshotController = container.getController("TaskSnapshotController");
     }
 
     /**
@@ -62,7 +47,7 @@ export class TaskController extends Controller {
         setInterval(() => {
             const request = this._createRequest();
             this._dbCtx.insertObjects(Db.COLLECTION_TASK, request)
-                .then(() => this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(this.identity, request)))
+                .then(() => this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(request)))
                 .then(() => NodeUtils.logEvent(`Request advertised: ${request.name}`, "ADVERTISE", "Out"))
                 .catch(error => this.logError(error, "Failed to advertise new task", LogTags.LOG_TAG_DB, LogTags.LOG_TAG_SERVICE));
 
@@ -81,7 +66,7 @@ export class TaskController extends Controller {
             objectType: modelTypes.OBJECT_TYPE_HELLO_WORLD_TASK,
             coreType: "Task",
             name: `Hello World Task ${TaskController._taskCounter++}`,
-            creatorId: this.runtime.options.associatedUser.objectId,
+            creatorId: this.runtime.commonOptions.extra.serviceUser.objectId,
             creationTimestamp: Date.now(),
             status: TaskStatus.Request,
             urgency: HelloWorldTaskUrgency.Critical,
@@ -89,18 +74,17 @@ export class TaskController extends Controller {
     }
 
     /**
-     * Assigns tasks to offering clients on a first-come first-served basis.
-     * As soon as the properties of task are changed generated a snaphot and process is 
-     * according to the controller config.
+     * Assigns tasks to offering clients on a first-come first-served basis. As
+     * soon as the properties of task are changed generate a snaphot and process
+     * it according to the controller config.
      */
     private _observeUpdateRequests() {
-        return this.communicationManager
-            .observeUpdate(this.identity)
-            .pipe(filter(event => event.eventData.isPartialUpdate))
+        this.communicationManager
+            .observeUpdateWithObjectType(modelTypes.OBJECT_TYPE_HELLO_WORLD_TASK)
             .subscribe(event => {
                 // Use a database transaction to ensure integrity of stored data (see _observeAdvertiseTasks)
                 this._dbCtx.transaction(txCtx => {
-                    return txCtx.findObjectById<HelloWorldTask>(Db.COLLECTION_TASK, event.eventData.objectId)
+                    return txCtx.findObjectById<HelloWorldTask>(Db.COLLECTION_TASK, event.data.object.objectId)
                         .then(task => {
                             if (task === undefined) {
                                 // Do not reply to an Update event which doesn't target a known task.
@@ -114,36 +98,37 @@ export class TaskController extends Controller {
                                 NodeUtils.logEvent(`Task offer rejected - already assigned: ${task.name}`, "COMPLETE", "Out");
 
                                 // Reply to the Update requester with the already assigned task.
-                                event.complete(CompleteEvent.withObject(this.identity, task));
+                                event.complete(CompleteEvent.withObject(task));
                                 return;
                             }
 
                             // Assign task to the offering client and change task status to pending.
-                            task.assigneeUserId = event.eventData.changedValues["assigneeUserId"];
-                            task.dueTimestamp = event.eventData.changedValues["dueTimestamp"];
+                            task.assigneeObjectId = (event.data.object as HelloWorldTask).assigneeObjectId;
+                            task.dueTimestamp = (event.data.object as HelloWorldTask).dueTimestamp;
                             task.status = TaskStatus.Pending;
                             task.lastModificationTimestamp = Date.now();
 
                             NodeUtils.logEvent(
-                                `Task offer accepted: ${task.name}, Client User ID: ${task.assigneeUserId}`,
+                                `Task offer accepted: ${task.name}, Client User ID: ${task.assigneeObjectId}`,
                                 "COMPLETE",
                                 "Out");
 
                             return txCtx.updateObjects(Db.COLLECTION_TASK, task)
                                 .then(() => {
                                     // Reply to the Update requester with the updated task.
-                                    event.complete(CompleteEvent.withObject(this.identity, task));
+                                    event.complete(CompleteEvent.withObject(task));
 
                                     NodeUtils.logEvent(
-                                        `Task assigned: ${task.name}, Client User ID: ${task.assigneeUserId}`,
+                                        `Task assigned: ${task.name}, Client User ID: ${task.assigneeObjectId}`,
                                         "ADVERTISE",
                                         "Out");
 
                                     // Notify other components that task is pending.
-                                    this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(this.identity, task));
+                                    this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(task));
 
-                                    // Generate a snapshot object of the changed task and process it
-                                    // according to the controller config
+                                    // Generate a snapshot object of the changed
+                                    // task and process it according to the
+                                    // controller config.
                                     this._taskSnapshotController.generateSnapshot(task);
                                     NodeUtils.logInfo(`Snapshot created: ${task.name}`);
                                 });
@@ -158,8 +143,10 @@ export class TaskController extends Controller {
      * process it according to the controller config.
      */
     private _observeAdvertiseTasks() {
-        return this.communicationManager.observeAdvertiseWithObjectType(this.identity, modelTypes.OBJECT_TYPE_HELLO_WORLD_TASK)
-            .pipe(map(event => event.eventData.object as HelloWorldTask))
+        this.communicationManager.observeAdvertiseWithObjectType(modelTypes.OBJECT_TYPE_HELLO_WORLD_TASK)
+            .pipe(
+                map(event => event.data.object as HelloWorldTask),
+            )
             .subscribe(task => {
                 NodeUtils.logEvent(`Task status ${TaskStatus[task.status]}: ${task.name}`, "ADVERTISE", "In");
 

@@ -1,7 +1,7 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { Component, Input } from '@angular/core';
-import * as d3 from 'd3';
+import { Component, Input } from "@angular/core";
+import * as d3 from "d3";
 
 @Component({
     selector: 'app-object-network',
@@ -9,14 +9,14 @@ import * as d3 from 'd3';
         <p><em>When number of sensor things objects on the right column is stable, click button to show
         a graph of objects.<br/><br/>
         Objects are displayed in the same order they have been discovered.<br/>
-        Hover over a circle to get details. Click on a circle to pin the object on the right.<br/><br/>
-        Clikc on the name of a sensor things object on the right to show its incoming observations.</em></p>
+        Hover over a circle to get details. Click a circle to pin the object on the right.<br/><br/>
+        Click the name of a sensor things object on the right to show its incoming observations.</em></p>
         <button (click)="onDrawClick()" class="btn btn-primary">Show network of sensor things objects</button><br/>
     <svg class="graph-container" width="960" height="500"></svg>
   `,
 })
 /**
- * Display a tree of objects using d3js
+ * Display a tree of objects using d3js.
  * Initially based on https://github.com/RazumO/MultipleParentsTree 
  * (even though everything has been adapted/rewritten)
  */
@@ -115,7 +115,11 @@ export class ObjectNetworkComponent {
         const margin = this._renderOptions.svgMargin;
         const width = this._renderOptions.svgWidth - margin.right - margin.left;
         const height = this._renderOptions.svgHeight - margin.top - margin.bottom;
-        let nodes, nodeGroup, links, nodesMap, isBackRelations;
+        let nodes;
+        let nodeGroup;
+        let links;
+        let nodesMap;
+        let isBackRelations;
 
         const tree = d3.cluster().size([height, width]);
         this._svg = d3.select(".graph-container").append("svg")
@@ -140,16 +144,16 @@ export class ObjectNetworkComponent {
         nodeGroup = this._drawNodes(nodes);
         nodeGroup.append("circle")
             .attr("r", this._renderOptions.circleCssStyles.r)
-            .style("fill", (d) => this._renderOptions.circleCssStyles.fill);
+            .style("fill", d => this._renderOptions.circleCssStyles.fill);
         nodeGroup.append("text")
-            .attr("x", (d) => {
+            .attr("x", d => {
                 return d.children || d._children ? undefined : undefined;
             })
             .attr("dy", this._renderOptions.circleCssStyles.text.dy)
-            .attr("text-anchor", (d) => {
+            .attr("text-anchor", d => {
                 return d.children || d._children ? "end" : "start";
             })
-            .text((d) => d.data.name)
+            .text(d => d.data.name)
             .style("fill-opacity", this._renderOptions.circleCssStyles.fillOpacity);
         this._drawLinks(links, nodes);
     }
@@ -158,7 +162,7 @@ export class ObjectNetworkComponent {
     private _drawNodes(nodes) {
         let i = 0;
         const node = this._svg.selectAll("g.node")
-            .data(nodes, (d) => {
+            .data(nodes, d => {
                 if (!d.id) {
                     i += 1;
                     d.id = i;
@@ -167,21 +171,22 @@ export class ObjectNetworkComponent {
             });
 
         return node.enter().append("g")
-            .attr("class", (d) => {
+            .attr("class", d => {
                 let nodeClasses = this._renderOptions.classes.nodeClass;
                 if (d.data.hidden) {
                     nodeClasses += ' ' + this._renderOptions.classes.classToHideElement;
                 }
                 return nodeClasses;
             })
-            .attr("data-index", (d) => d.index)
-            .attr("data-parent-index", (d) => {
+            .attr("data-index", d => d.index)
+            .attr("data-parent-index", d => {
                 return (d.parent ? d.parent.index : undefined);
             })
-            .attr("data-type", (d) => d.type)
-            .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")")
-            .on("click", function (d) { // click on the element. If pinned ? unpin : pin. 
-                // keep function declaration to use context in select
+            .attr("data-type", d => d.type)
+            .attr("transform", d => "translate(" + d.y + "," + d.x + ")")
+            .on("click", function(d) {
+                // Click on the element. Toggle pin state. 
+                // Keep function declaration to use context in select.
                 const element = document.getElementById(d.data.product_id);
                 if (element === null) {
                     return;
@@ -194,13 +199,13 @@ export class ObjectNetworkComponent {
                     d3.select(this).style("fill", () => "#000FFF");
                 }
             })
-            .on("mouseover", (d) => { // display detailled description in the right column
+            .on("mouseover", d => { // display detailled description in the right column
                 const element = document.getElementById(d.data.product_id);
                 if (element !== null) {
                     element.classList.remove("hidden");
                 }
             })
-            .on("mouseout", (d) => { // hide detailled description unless pinned
+            .on("mouseout", d => { // hide detailled description unless pinned
                 const element = document.getElementById(d.data.product_id);
                 if (element !== null && !element.classList.contains("pinned")) {
                     element.classList.add("hidden");
@@ -211,16 +216,16 @@ export class ObjectNetworkComponent {
     /** Draw links between every nodes (except those hidden) */
     private _drawLinks(links, nodes) {
         const link = this._svg.selectAll("path.link")
-            .data(links, (d) => d.target.id);
+            .data(links, d => d.target.id);
         link.enter().insert("path", "g")
-            .attr("class", (d) => {
+            .attr("class", d => {
                 let linkClasses = this._renderOptions.classes.linkClass + " " + d.target.type;
                 if (d.target.data.hidden) {
                     linkClasses += " " + this._renderOptions.classes.classToHideElement;
                 }
                 return linkClasses;
             })
-            .attr("d", (d) => this._diagonal(d));
+            .attr("d", d => this._diagonal(d));
     }
 
     /** 

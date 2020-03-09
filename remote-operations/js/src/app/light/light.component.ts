@@ -5,8 +5,7 @@ import { Location } from "@angular/common";
 import { Observable } from "rxjs";
 import { map, skip } from "rxjs/operators";
 
-import { CommunicationState } from "coaty/com";
-import { Container } from "coaty/runtime";
+import { CommunicationState, Container } from "@coaty/core";
 
 import { AgentService } from '../agent.service';
 import { AppContextService } from "../app-context.service";
@@ -86,9 +85,9 @@ export class LightComponent implements OnDestroy {
         // so that ngModel bindings do not throw error initially.
         this.lightContext = { building: 0, floor: 0, room: 0 } as LightContext;
         this.lightContextRanges = {
-            "building": { "min": 0, "max": 0, "tickInterval": 1 },
-            "floor": { "min": 0, "max": 0, "tickInterval": 1 },
-            "room": { "min": 0, "max": 0, "tickInterval": 1 }
+            building: { min: 0, max: 0, tickInterval: 1 },
+            floor: { min: 0, max: 0, tickInterval: 1 },
+            room: { min: 0, max: 0, tickInterval: 1 }
         };
     }
 
@@ -100,8 +99,8 @@ export class LightComponent implements OnDestroy {
             .then(container => {
                 this.lightContainer = container;
 
-                const lightController: LightController = container.getController("LightController");
-                this.lightContextRanges = container.runtime.options.lightContextRanges;
+                const lightController: LightController = container.getController<LightController>("LightController");
+                this.lightContextRanges = container.runtime.commonOptions.extra.lightContextRanges;
                 this.light = lightController.light;
                 this.lightContext = lightController.lightContext;
                 this.lightColor$ = lightController.lightColorChange$;
@@ -122,7 +121,7 @@ export class LightComponent implements OnDestroy {
         this.brokerConnectionInfo$ = this.lightContainer.communicationManager.observeCommunicationState()
             .pipe(map(state => {
                 return {
-                    state: state,
+                    state,
                     isOnline: state === CommunicationState.Online,
                     brokerHost: this.lightContainer.communicationManager.options.brokerUrl
                 };

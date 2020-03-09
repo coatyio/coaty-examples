@@ -5,18 +5,18 @@
  *     the code is regenerated.
  * </auto-generated>
  * ------------------------------------------------------------------------------
- * Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
+ * Copyright (c) 2020 Siemens AG. Licensed under the MIT License.
  */
 
-import { AgentInfo } from "coaty/runtime";
+import { AgentInfo } from "@coaty/core";
 
 export const agentInfo: AgentInfo = {
     packageInfo: {
         name: "sensor-things-dashboard",
-        version: "1.0.0",
+        version: "2.0.0",
     },
     buildInfo: {
-        buildDate: "2019-10-17T12:53:12+02:00",
+        buildDate: "2020-03-09T18:26:18+01:00",
         buildMode: "development",
     },
     configInfo: {

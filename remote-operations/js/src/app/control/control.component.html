@@ -5,7 +5,7 @@
             Light Control
         </mat-card-title>
         <mat-card-subtitle class="app-text-with-ellipsis">
-            #{{controlContainer?.communicationManager.identity.objectId}}
+            #{{controlContainer?.identity.objectId}}
         </mat-card-subtitle>
         <mat-icon class="control-card-title-icon" *ngIf="brokerConnectionInfo$ | async as info"
             [matTooltip]="info.isOnline ? 'Connected to ' + info.brokerHost : 'Not connected to ' + info.brokerHost">
@@ -162,20 +162,20 @@
                     <div matLine class="control-event-log-heading">
                         CallEvent @ {{entry.callEventTime | date:'HH:mm:ss.SSS'}}
                         <code class="control-event-log-code">
-                            <span>on: {{entry.callEvent.eventData.getParameterByName('on')}}, 
+                            <span>on: {{entry.callEvent.data.getParameterByName('on')}}, 
                             </span>
                             <span>luminosity: 
-                                {{entry.callEvent.eventData.getParameterByName('luminosity')}}, 
+                                {{entry.callEvent.data.getParameterByName('luminosity')}}, 
                             </span>
                             <span>color: 
-                                {{entry.callEvent.eventData.getParameterByName('color')}}, 
+                                {{entry.callEvent.data.getParameterByName('color')}}, 
                             </span>
                             <span>switchTime: 
-                                {{entry.callEvent.eventData.getParameterByName('switchTime')}}
+                                {{entry.callEvent.data.getParameterByName('switchTime')}}
                             </span>
                         </code>
                         <a class="control-code-icon"
-                            (click)="viewCallEventData(entry.callEvent.eventData)"
+                            (click)="viewCallEventData(entry.callEvent.data)"
                             matTooltip="View CallEvent data"
                             aria-label="icon button for viewing CallEvent data in bottom sheet">
                             <mat-icon color="primary">
@@ -186,25 +186,25 @@
                     <mat-list-item matLine class="control-event-log-return-list-item"
                         *ngFor="let returnInfo of entry.returnEvents">
                         <mat-icon matListIcon
-                            [color]="returnInfo.event.eventData.isError ? 'warn' : ''">
+                            [color]="returnInfo.event.data.isError ? 'warn' : ''">
                             arrow_forward</mat-icon>
                         <h4 class="control-event-log-heading"
-                            [class.control-event-log-warn]="returnInfo.event.eventData.isError">
+                            [class.control-event-log-warn]="returnInfo.event.data.isError">
                             ReturnEvent @ {{returnInfo.eventTime | date:'HH:mm:ss.SSS'}}
                         </h4>
                         <code class="control-event-log-code control-event-log-warn"
-                            *ngIf="returnInfo.event.eventData.isError">
-                            <span>light #{{returnInfo.event.eventData.executionInfo.lightId}} </span>
+                            *ngIf="returnInfo.event.data.isError">
+                            <span>light #{{returnInfo.event.data.executionInfo.lightId}} </span>
                             <span>error message: 
-                                {{returnInfo.event.eventData.error.message | json}}
+                                {{returnInfo.event.data.error.message | json}}
                                 , </span>
-                            <span>error code: {{returnInfo.event.eventData.error.code}}</span>
+                            <span>error code: {{returnInfo.event.data.error.code}}</span>
                             </code>
                         <code class="control-event-log-code"
-                            *ngIf="!returnInfo.event.eventData.isError">
-                            <span>light #{{returnInfo.event.eventData.executionInfo.lightId}} </span>
-                            <span>result: {{returnInfo.event.eventData.result | json}}, </span>
-                            <span>triggerTime: {{returnInfo.event.eventData.executionInfo.triggerTime| date:'HH:mm:ss.SSS'}}</span>
+                            *ngIf="!returnInfo.event.data.isError">
+                            <span>light #{{returnInfo.event.data.executionInfo.lightId}} </span>
+                            <span>result: {{returnInfo.event.data.result | json}}, </span>
+                            <span>triggerTime: {{returnInfo.event.data.executionInfo.triggerTime| date:'HH:mm:ss.SSS'}}</span>
                         </code>
                     </mat-list-item>
                 </mat-list-item>
@@ -238,7 +238,7 @@
             <div>Last switch operation:</div>
         </ng-template>
         <div class="app-card-footer-link-group"
-            *ngIf="controlContainer?.runtime.options.agentInfo as agentInfo">
+            *ngIf="controlContainer?.runtime.commonOptions.agentInfo as agentInfo">
             <a mat-button
                 [matTooltip]="agentInfo?.packageInfo.name + '@' + agentInfo?.packageInfo.version + ' on GitHub'"
                 href="https://github.com/coatyio/coaty-examples/tree/master/remote-operations/js"

@@ -1,15 +1,16 @@
 {
     "name": "hello-world",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Hello world example for Coaty JS framework",
     "scripts": {
         "build": "gulp build",
         "lint": "gulp lint",
         "lint:fix": "gulp lint:fix",
-        "broker": "coaty-scripts broker --verbose",
-        "client": "node dist/client/agent.js",
-        "monitor": "node dist/monitor/agent.js",
-        "service": "node dist/service/agent.js",
+        "broker": "coaty-scripts broker",
+        "broker:verbose": "coaty-scripts broker --verbose",
+        "client": "node -r dotenv/config dist/client/agent.js",
+        "monitor": "node -r dotenv/config dist/monitor/agent.js",
+        "service": "node -r dotenv/config dist/service/agent.js",
         "docker-build": "docker build -t coaty/hello-world .",
         "docker-run": "docker run -t --name coaty-hello-world coaty/hello-world",
         "docker-service": "docker exec -t coaty-hello-world npm run service",
@@ -21,18 +22,19 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "coaty": "^1.11.0",
-        "pg": "7.9.0",
-        "rxjs": "6.4.0"
+        "@coaty/core": "^2.0.0",
+        "dotenv": "^8.2.0",
+        "pg": "^7.18.2",
+        "rxjs": "^6.5.4"
     },
     "devDependencies": {
-        "@types/node": "12.0.0",
-        "fs-extra": "8.0.1",
-        "gulp": "4.0.0",
-        "gulp-sourcemaps": "2.6.5",
-        "gulp-tslint": "8.1.4",
-        "gulp-typescript": "5.0.1",
-        "tslint": "5.15.0",
-        "typescript": "3.4.1"
+        "@types/node": "^13.9.0",
+        "fs-extra": "^8.1.0",
+        "gulp": "^4.0.2",
+        "gulp-sourcemaps": "^2.6.5",
+        "gulp-tslint": "^8.1.4",
+        "gulp-typescript": "^5.0.1",
+        "tslint": "^5.20.1",
+        "typescript": "^3.8.3"
     }
 }

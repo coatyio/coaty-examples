@@ -1,18 +1,34 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { LogLevel } from "coaty/model";
-import { Container } from "coaty/runtime";
-import { NodeUtils } from "coaty/runtime-node";
+import { Components, Configuration, Container, LogLevel, mergeConfigurations } from "@coaty/core";
+import { NodeUtils } from "@coaty/core/runtime-node";
 
+import { serviceConfig } from "../shared/config";
 import { Db } from "../shared/db";
 
-import { components, configuration } from "./agent.config";
+import { agentInfo } from "./agent.info";
 import { MonitorController } from "./monitor-controller";
+
+const components: Components = {
+    controllers: {
+        MonitorController,
+    },
+};
+
+const configuration: Configuration = mergeConfigurations(
+    serviceConfig(agentInfo, "Monitor"),
+    {
+        controllers: {
+            MonitorController: {
+                queryTimeoutMillis: 5000,
+            },
+        },
+    });
 
 NodeUtils.handleProcessTermination();
 
 // Register database adapters before resolving a Coaty container so that
-// controllers can create database contexts at instantiation.
+// controllers can create database contexts on initialization.
 Db.initDatabaseAdapters();
 
 // First, initialize the database (do not clear data)
@@ -38,14 +54,12 @@ Db.initDatabase(configuration.databases, false)
  * log data emitted by the monitor controller.
  */
 function initConsoleOutput(monitor: MonitorController) {
-    "use strict";
-
     monitor.log$.subscribe(logs => {
         console.log("#############################");
         console.log(`## Log updated (${logs.length})`);
         console.log("##");
         logs.forEach(log => {
-            console.log(`## [${log.logDate}] level:${LogLevel[log.logLevel]} tags:${(log.logTags || []).join(",")} ${log.logMessage}`);
+            console.log(`## [${log.logDate}] [${LogLevel[log.logLevel]}] [${(log.logTags || []).join(",")}] ${log.logMessage}`);
         });
         console.log("##");
         console.log("#############################");

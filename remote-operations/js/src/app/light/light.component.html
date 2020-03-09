@@ -60,7 +60,7 @@
         </div>
     </mat-card-content>
     <mat-divider class="light-card-divider-dark"></mat-divider>
-    <mat-card-footer *ngIf="lightContainer?.runtime.options.agentInfo as agentInfo"
+    <mat-card-footer *ngIf="lightContainer?.runtime.commonOptions.agentInfo as agentInfo"
         class="light-card-subtitle-dark">
         <div>Last switched: {{lastSwitched$ | async | dateNow | date:'HH:mm:ss.SSS'}}</div>
         <div class="app-card-footer-link-group">

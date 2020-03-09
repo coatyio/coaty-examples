@@ -161,10 +161,14 @@ subfolder. Detailed instructions can be found
 
 ## Project structure
 
-This project is a single-page web application that was generated with [Angular
+This project is a single-page web application that was built with
+[Angular](https://angular.io) and generated with [Angular
 CLI](https://github.com/angular/angular-cli). To get more help on the Angular
 CLI use `npm run ng help` or check out the [Angular CLI
 README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+For details on integrating Coaty in an Angular project, see [Coaty JS Developer
+Guide](https://coatyio.github.io/coaty-js/man/developer-guide/#coaty-and-angular-cli).
 
 Here is the folder structure of the Angular singe-page web app. To keep it
 readable, only important files are displayed:

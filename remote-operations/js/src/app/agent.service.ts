@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { HttpClient } from "@angular/common/http";
 import { catchError, map } from "rxjs/operators";
 
-import { Components, Configuration, Container, mergeConfigurations } from "coaty/runtime";
+import { Components, Configuration, Container, mergeConfigurations } from "@coaty/core";
 
 import { agentInfo } from "./agent.info";
 import { environment } from './../environments/environment';
@@ -34,11 +34,13 @@ export class AgentService {
             controllers,
         };
         const defaultConfiguration: Configuration = {
-            common: { agentInfo },
-            communication: {
-                identity: {
+            common: {
+                agentInfo,
+                agentIdentity: {
                     name: agentName,
                 },
+            },
+            communication: {
                 shouldAutoStart: true,
                 // Retrieve broker url from active Angular environment configuration.
                 brokerUrl: environment.brokerUrl,

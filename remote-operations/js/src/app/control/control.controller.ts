@@ -1,11 +1,8 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
-import { filter, map } from "rxjs/operators";
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
-import { CallEvent, DiscoverEvent, ReturnEvent } from 'coaty/com';
-import { ObjectLifecycleController } from "coaty/controller";
-import { Component, ContextFilter, Uuid } from "coaty/model";
+import { CallEvent, ContextFilter, Uuid, ObjectLifecycleController, ReturnEvent } from "@coaty/core";
 
 import { ColorRgba } from '../shared/light.model';
 
@@ -48,13 +45,11 @@ export interface ActiveAgentsInfo {
  */
 export class ControlController extends ObjectLifecycleController {
 
-    private _correlationIndex: number;
     private _eventLog: Array<EventLogEntry>;
     private _eventLogSubject: BehaviorSubject<Array<EventLogEntry>>;
     private _eventLog$: Observable<Array<EventLogEntry>>;
     private _activeAgentsInfoSubject: Subject<ActiveAgentsInfo>;
     private _activeAgentsInfo$: Observable<ActiveAgentsInfo>;
-    private _agentsLifecycleSubscription: Subscription;
     private _activeAgentsInfo: ActiveAgentsInfo;
 
     onInit() {
@@ -71,8 +66,8 @@ export class ControlController extends ObjectLifecycleController {
     onCommunicationManagerStarting() {
         // Keep track of all light agents and light control agents in the system
         // (including my own light control agent).
-        this._agentsLifecycleSubscription = this.observeObjectLifecycleInfoByCoreType(
-            "Component",
+        this.observeObjectLifecycleInfoByCoreType(
+            "Identity",
             comp => comp.name === "LightAgent" || comp.name === "LightControlAgent")
             .subscribe(info => {
                 if (info.added !== undefined) {
@@ -86,12 +81,6 @@ export class ControlController extends ObjectLifecycleController {
                     info.removed.forEach(comp => this._updateActiveAgentsInfo(comp.name === "LightAgent", false));
                 }
             });
-    }
-
-    onCommunicationManagerStopping() {
-        // Stop observing lifecycle info of identity components for light
-        // agents and light control agents.
-        this._agentsLifecycleSubscription?.unsubscribe();
     }
 
     /**
@@ -120,13 +109,12 @@ export class ControlController extends ObjectLifecycleController {
 
     switchLights(contextFilter: ContextFilter, onOff: boolean, luminosity: number, rgba: ColorRgba, switchTime: number) {
         const callEvent = CallEvent.with(
-            this.identity,
-            this.runtime.options.lightControlOperation,
+            this.runtime.commonOptions.extra.lightControlOperation,
             {
                 on: onOff,
                 color: rgba,
-                luminosity: luminosity,
-                switchTime: switchTime,
+                luminosity,
+                switchTime,
             },
             contextFilter);
         const correlationId = this.addCallToEventLog(callEvent);

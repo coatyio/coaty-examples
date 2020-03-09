@@ -1,6 +1,7 @@
-version: "3.4"
+version: "3.7"
 services:
   server:
+    container_name: "server"
     build:
       context: ..
       args:
@@ -13,9 +14,10 @@ services:
       - BROKER_URL
     ports:
       - "8080:80"
-    restart: always
-    command: ["sh","-c", "brokerurl=$${BROKER_URL:=mqtt://localhost:9883} && echo '# Using MQTT broker on '$${brokerurl} && sed -i 's|@BROKER_URL_PLACEHOLDER@|'$${brokerurl}'|' /usr/share/nginx/html/main.js && echo '# Open browser on http://localhost:8080' && nginx -g 'daemon off;'"]
+    restart: unless-stopped
+    command: ["sh","-c", "brokerurl=$${BROKER_URL:=mqtt://localhost:9883} && echo '# Using MQTT broker on '$${brokerurl} && sed -i 's|@BROKER_URL_PLACEHOLDER@|'$${brokerurl}'|' /usr/share/nginx/html/main-es5.js && sed -i 's|@BROKER_URL_PLACEHOLDER@|'$${brokerurl}'|' /usr/share/nginx/html/main-es2015.js && echo '# Open browser on http://localhost:8080' && nginx -g 'daemon off;'"]
   broker:
+    container_name: "broker"
     build:
       context: ..
       args:
@@ -25,5 +27,5 @@ services:
     ports:
       - "1883:1883"
       - "9883:9883"
-    restart: always
+    restart: unless-stopped
     command: npm run broker

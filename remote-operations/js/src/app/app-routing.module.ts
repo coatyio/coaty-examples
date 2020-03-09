@@ -9,8 +9,8 @@ import { Routes, RouterModule } from "@angular/router";
  */
 const routes: Routes = [
     { path: "", redirectTo: "/control", pathMatch: "full" },
-    { path: "light", loadChildren: () => import('./light/light.module').then(m => m.LightModule) },
-    { path: "control", loadChildren: () => import('./control/control.module').then(m => m.ControlModule) },
+    { path: "light", loadChildren: () => import("./light/light.module").then(m => m.LightModule) },
+    { path: "control", loadChildren: () => import("./control/control.module").then(m => m.ControlModule) },
     { path: "**", redirectTo: "/control" },
 ];
 

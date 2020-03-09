@@ -1,7 +1,7 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { Controller } from "coaty/controller";
-import { NodeUtils } from "coaty/runtime-node";
+import { Controller } from "@coaty/core";
+import { NodeUtils } from "@coaty/core/runtime-node";
 
 /**
  * Template controller with lifecycle methods.

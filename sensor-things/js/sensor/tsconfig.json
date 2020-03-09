@@ -11,7 +11,7 @@
         "inlineSourceMap": true,
         "inlineSources": false,
         "noImplicitAny": false,
-        "removeComments": false,
+        "removeComments": true,
         "rootDir": "src",
         "outDir": "dist",
         "lib": [

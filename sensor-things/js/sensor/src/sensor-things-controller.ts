@@ -1,9 +1,9 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { Subscription } from "rxjs";
+import { freemem, hostname, loadavg, type as osType, uptime } from "os";
 
-import { AdvertiseEvent, ResolveEvent } from "coaty/com";
-import { CoatyObject, Uuid } from "coaty/model";
+import { AdvertiseEvent, CoatyObject, ResolveEvent, TimeInterval, Uuid } from "@coaty/core";
+import { NodeUtils } from "@coaty/core/runtime-node";
 import {
     EncodingTypes,
     FeatureOfInterest,
@@ -17,14 +17,13 @@ import {
     SensorThingsTypes,
     Thing,
     UnitOfMeasurement,
-} from "coaty/sensor-things";
-import { TimeInterval } from "coaty/util";
-import { freemem, hostname, loadavg, type as osType, uptime } from "os";
+} from "@coaty/core/sensor-things";
 
 /**
- * Handles registration and discoveries of sensor objects.
+ * Handles registration and discovery of sensor objects.
  */
 export class SensorThingsController extends SensorSourceController {
+
     private _thing: Thing;
     private _sensorsArray: Sensor[] = [];
     private _featureOfInterest: FeatureOfInterest;
@@ -36,22 +35,13 @@ export class SensorThingsController extends SensorSourceController {
      */
     private _dataStore = new Map<Uuid, CoatyObject>();
 
-    /** Subscription to discover events */
-    private _discoverSensorThingsSubscription: Subscription;
-
     onCommunicationManagerStarting() {
         super.onCommunicationManagerStarting();
         this._createObjects(this.options.answers);
 
-        console.log(`# Client User ID: ${this.runtime.options.associatedUser.objectId}`);
-        console.log(`# Thing ID: ${this._thing.objectId}`);
+        NodeUtils.logInfo(`${this._thing.name} ID: ${this._thing.objectId}`);
 
-        this._discoverSensorThingsSubscription = this._observeDiscover();
-    }
-
-    onCommunicationManagerStopping() {
-        super.onCommunicationManagerStopping();
-        this._discoverSensorThingsSubscription && this._discoverSensorThingsSubscription.unsubscribe();
+        this._observeDiscover();
     }
 
     protected createObservation(
@@ -77,15 +67,14 @@ export class SensorThingsController extends SensorSourceController {
      * by ThingsController to find all the things in the system).
      */
     private _observeDiscover() {
-        return this.communicationManager.observeDiscover(this.identity)
+        this.communicationManager.observeDiscover()
             .subscribe(event => {
-                if (event.eventData.isDiscoveringObjectId) {
-                    if (this._dataStore.has(event.eventData.objectId)) {
-                        event.resolve(ResolveEvent.withObject(
-                            this.identity, this._dataStore.get(event.eventData.objectId)));
+                if (event.data.isDiscoveringObjectId) {
+                    if (this._dataStore.has(event.data.objectId)) {
+                        event.resolve(ResolveEvent.withObject(this._dataStore.get(event.data.objectId)));
                     }
-                } else if (event.eventData.isObjectTypeCompatible(SensorThingsTypes.OBJECT_TYPE_THING)) {
-                    event.resolve(ResolveEvent.withObject(this.identity, this._thing));
+                } else if (event.data.isObjectTypeCompatible(SensorThingsTypes.OBJECT_TYPE_THING)) {
+                    event.resolve(ResolveEvent.withObject(this._thing));
                 }
             });
     }
@@ -93,20 +82,20 @@ export class SensorThingsController extends SensorSourceController {
     /**
      * Creates a single Thing and FeatureOfInterest, and a Sensor for each metric. 
      */
-    private _createObjects(answers: { metrics: string[], names: { deviceName: string, roomName: string } }) {
+    private _createObjects(answers: { metrics: string[], deviceName: string, roomName: string }) {
         this._sensorsArray = [];
         this._thing = {
-            name: "Thing " + answers.names.deviceName,
+            name: "Thing " + answers.deviceName,
             objectId: this.runtime.newUuid(),
             objectType: SensorThingsTypes.OBJECT_TYPE_THING,
             coreType: "CoatyObject",
-            description: "A device you can monitor (os.name: " + hostname() + ")", // nodejs os.hostname() function
+            description: "A device you can monitor (os.name: " + hostname() + ")",
         };
         this._dataStore.set(this._thing.objectId, this._thing);
-        this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(this.identity, this._thing));
+        this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(this._thing));
 
         this._featureOfInterest = {
-            name: "Feature of Interest " + answers.names.roomName,
+            name: "Feature of Interest " + answers.roomName,
             objectId: this.runtime.newUuid(),
             objectType: SensorThingsTypes.OBJECT_TYPE_FEATURE_OF_INTEREST,
             coreType: "CoatyObject",
@@ -136,38 +125,39 @@ export class SensorThingsController extends SensorSourceController {
             };
             this._dataStore.set(sensor.objectId, sensor);
 
-            // Register Sensor with SensorController.
+            // Register Sensor with SensorSourceController.
             this._sensorsArray.push(sensor);
-            this.registerSensor(sensor, new MockSensorIo(), "channel", this.options["monitoringInterval"]);
+            this.registerSensor(sensor, new MockSensorIo(), "channel", this.options.monitoringInterval);
         }
     }
 
     /**
      * Returns a UnitOfMeasurement based on the given metric
-     * @param metric string (Load average || Free memory || Uptime)
+     * @param metric string (load-average | free-memory | uptime)
      * @return UnitOfMeasurement
      */
     private _getUnitOfMeasurement(metric: string): UnitOfMeasurement {
-        if (metric === "Load average") {
-            return {
-                name: "Percentage",
-                symbol: "%",
-                definition: "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Percent",
-            };
-        } else if (metric === "Free memory") {
-            return {
-                name: "Byte",
-                symbol: "B",
-                definition: "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Byte",
-            };
-        } else if (metric === "Uptime") {
-            return {
-                name: "Second",
-                symbol: "s",
-                definition: "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#SecondTime",
-            };
-        } else {
-            throw new TypeError("'Load average', 'Free memory' , 'Uptime' expected. Got " + metric);
+        switch (metric) {
+            case "load-average":
+                return {
+                    name: "Percentage",
+                    symbol: "%",
+                    definition: "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Percent",
+                };
+            case "free-memory":
+                return {
+                    name: "Byte",
+                    symbol: "B",
+                    definition: "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Byte",
+                };
+            case "uptime":
+                return {
+                    name: "Second",
+                    symbol: "s",
+                    definition: "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#SecondTime",
+                };
+            default:
+                throw new TypeError("'load-average', 'free-memory' , 'uptime' expected. Got " + metric);
         }
     }
 

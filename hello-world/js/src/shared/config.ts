@@ -1,43 +1,32 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { AgentInfo, Configuration } from "coaty/runtime";
+import { AgentInfo, Configuration } from "@coaty/core";
+import { NodeUtils } from "@coaty/core/runtime-node";
 
 import { Db } from "./db";
 
-// Constants
+NodeUtils.logInfo(`BROKER_URL=${process.env.BROKER_URL}`);
 
-const DEFAULT_SERVICE_HOST_DEV = "127.0.0.1";
-const DEFAULT_SERVICE_HOST_PROD = "127.0.0.1";
-const DEFAULT_SERVICE_BROKER_PORT = "1883";
+if (!process.env.BROKER_URL) {
+    NodeUtils.logError(new Error("Missing Broker URL"), "Environment variable BROKER_URL not specified.");
+    process.exit(1);
+}
 
 /**
  * Gets common Configuration object for Hello World service and monitor
  * components.
- * 
+ *
  * @param agentInfo the component's agent info
  */
-export function serviceConfig(agentInfo: AgentInfo): Configuration {
-    "use strict";
-
-    const isDevMode = agentInfo.buildInfo.buildMode === "development";
-
-    const host = process.env.COATY_SERVICE_HOST || agentInfo.configInfo.serviceHost ||
-        (isDevMode ? DEFAULT_SERVICE_HOST_DEV : DEFAULT_SERVICE_HOST_PROD);
-
+export function serviceConfig(agentInfo: AgentInfo, agentName: string): Configuration {
     return {
         common: {
+            agentInfo,
+            agentIdentity: { name: agentName },
         },
         communication: {
+            brokerUrl: process.env.BROKER_URL,
             shouldAutoStart: true,
-            useReadableTopics: false,
-            brokerOptions: {
-                servers: [
-                    {
-                        host: host,
-                        port: DEFAULT_SERVICE_BROKER_PORT,
-                    },
-                ],
-            },
         },
         databases: {
             db: {
@@ -54,33 +43,18 @@ export function serviceConfig(agentInfo: AgentInfo): Configuration {
 
 /**
  * Gets a common Configuration object for Hello World clients.
+ * 
  * @param agentInfo the client's agent info
  */
 export function clientConfig(agentInfo: AgentInfo): Configuration {
-    "use strict";
-
-    const isDevMode = agentInfo.buildInfo.buildMode === "development";
-
-    const host = agentInfo.configInfo.serviceHost || (isDevMode ? DEFAULT_SERVICE_HOST_DEV : DEFAULT_SERVICE_HOST_PROD);
-
     return {
         common: {
+            agentInfo,
+            agentIdentity: { name: "Client" },
         },
         communication: {
-            identity: { name: "Client" },
-            useReadableTopics: false,
-            brokerOptions: {
-                servers: [
-                    {
-                        host: host,
-
-                        // Note: a real client running in a browser environment should use
-                        // websocket port 9883. We are using the TCP socket port 1884 
-                        // here because the client is just a Node.js program.
-                        port: DEFAULT_SERVICE_BROKER_PORT,
-                    },
-                ],
-            },
+            brokerUrl: process.env.BROKER_URL,
+            shouldAutoStart: true,
         },
     };
 }

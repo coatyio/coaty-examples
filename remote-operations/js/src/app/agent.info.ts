@@ -5,19 +5,19 @@
  *     the code is regenerated.
  * </auto-generated>
  * ------------------------------------------------------------------------------
- * Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
+ * Copyright (c) 2020 Siemens AG. Licensed under the MIT License.
  */
 
-import { AgentInfo } from "coaty/runtime";
+import { AgentInfo } from "@coaty/core";
 
 export const agentInfo: AgentInfo = {
     packageInfo: {
         name: "remote-operations",
-        version: "1.3.0",
+        version: "2.0.0",
     },
     buildInfo: {
-        buildDate: "2019-10-17T12:42:23+02:00",
-        buildMode: "ghpages",
+        buildDate: "2020-03-09T18:44:18+01:00",
+        buildMode: "docker",
     },
     configInfo: {
         serviceHost: "",

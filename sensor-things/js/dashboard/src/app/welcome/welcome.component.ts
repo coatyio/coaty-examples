@@ -1,8 +1,9 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Thing, ThingObserverController } from "coaty/sensor-things";
+
+import { Thing, ThingObserverController } from "@coaty/core/sensor-things";
 
 @Component({
     templateUrl: './welcome.component.html'
@@ -21,8 +22,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this._discoverThingsSubscription && this._discoverThingsSubscription.unsubscribe();
-        this._advertiseThingSubscription && this._advertiseThingSubscription.unsubscribe();
+        this._discoverThingsSubscription?.unsubscribe();
+        this._advertiseThingSubscription?.unsubscribe();
 
         this._discoverThingsSubscription = this._thingObserverController
             .discoverThings()
@@ -34,8 +35,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this._advertiseThingSubscription && this._advertiseThingSubscription.unsubscribe();
-        this._discoverThingsSubscription && this._discoverThingsSubscription.unsubscribe();
+        this._advertiseThingSubscription?.unsubscribe();
+        this._discoverThingsSubscription?.unsubscribe();
     }
 
     private _onThing(thing: Thing) {

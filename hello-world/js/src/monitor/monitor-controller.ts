@@ -1,23 +1,20 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { filter, map, take, timeout } from "rxjs/operators";
 
-import { QueryEvent } from "coaty/com";
-import { Controller } from "coaty/controller";
-import { filterOp, Log, LogLevel, ObjectFilter } from "coaty/model";
+import { Controller, filterOp, Log, LogLevel, ObjectFilter, QueryEvent } from "@coaty/core";
 
 import { LogTags } from "../shared/log-tags";
 import { DatabaseChange, modelTypes } from "../shared/models";
 
 /**
- * Whenever a new Log object has been advertised query all 
- * log objects and provide them to consumers.
+ * Whenever a new Log object has been advertised query all log objects and
+ * provide them to consumers.
  */
 export class MonitorController extends Controller {
 
     private _logSubject: BehaviorSubject<Log[]>;
-    private _advertiseSubscription: Subscription;
 
     onInit() {
         super.onInit();
@@ -26,15 +23,10 @@ export class MonitorController extends Controller {
 
     onCommunicationManagerStarting() {
         super.onCommunicationManagerStarting();
-        this._advertiseSubscription = this._observeAdvertiseLog();
+        this._observeAdvertiseLog();
 
         // Query log objects on startup
         this._queryLogs();
-    }
-
-    onCommunicationManagerStopping() {
-        super.onCommunicationManagerStopping();
-        this._advertiseSubscription && this._advertiseSubscription.unsubscribe();
     }
 
     /**
@@ -46,10 +38,10 @@ export class MonitorController extends Controller {
     }
 
     private _observeAdvertiseLog() {
-        return this.communicationManager
-            .observeAdvertiseWithObjectType(this.identity, modelTypes.OBJECT_TYPE_DATABASE_CHANGE)
+        this.communicationManager
+            .observeAdvertiseWithObjectType(modelTypes.OBJECT_TYPE_DATABASE_CHANGE)
             .pipe(
-                map(event => event.eventData.object as DatabaseChange),
+                map(event => event.data.object as DatabaseChange),
                 filter(dbChange => dbChange.hasLogChanged),
             )
             .subscribe(dbChange => this._queryLogs());
@@ -65,16 +57,16 @@ export class MonitorController extends Controller {
         };
 
         this.communicationManager
-            .publishQuery(QueryEvent.withCoreTypes(this.identity, ["Log"], objectFilter))
-            // Unsubscribe automatically after first response event arrives.
+            .publishQuery(QueryEvent.withCoreTypes(["Log"], objectFilter))
             .pipe(
+                // Unsubscribe automatically after first response event arrives.
                 take(1),
                 // Issue an Rx.TimeoutError if queryTimeoutMillis elapses without any emitted event.
                 timeout(this.options["queryTimeoutMillis"]),
             )
             .subscribe(
                 event => {
-                    this._logSubject.next(event.eventData.objects as Log[]);
+                    this._logSubject.next(event.data.objects as Log[]);
                 },
                 error => {
                     // No response has been received within the given period of time.

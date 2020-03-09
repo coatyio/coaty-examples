@@ -1,10 +1,13 @@
 /*! Copyright (c) 2018 Siemens AG. Licensed under the MIT License. */
 
-import { Component, NgZone } from '@angular/core';
-import { CommunicationManager } from 'coaty/com';
+import { Component, NgZone } from "@angular/core";
+import { CommunicationManager } from "@coaty/core";
 
-import { agentInfo } from './agent.info';
+import { agentInfo } from "./agent.info";
 
+/**
+ * The root component of the web app.
+ */
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',

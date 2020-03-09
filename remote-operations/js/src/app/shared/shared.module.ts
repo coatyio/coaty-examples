@@ -23,7 +23,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // Used by MatOptionSelectAllComponent
-import { MatPseudoCheckboxModule } from "@angular/material";
+import { MatPseudoCheckboxModule } from "@angular/material/core";
 import { MatOptionSelectAllComponent } from "./mat-option-select-all.component";
 
 import { DateNowPipe } from "./date-now.pipe";

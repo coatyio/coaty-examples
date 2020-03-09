@@ -12,13 +12,24 @@ import {
     ElementRef,
 } from "@angular/core";
 import { ActivatedRoute } from '@angular/router';
-import { MatBottomSheet, MatButtonToggleChange, MatSliderChange, MatSlideToggleChange } from "@angular/material";
+import { MatBottomSheet } from "@angular/material/bottom-sheet";
+import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
+import { MatSliderChange } from "@angular/material/slider";
 import { Observable, Subject } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
-import { CommunicationState, CallEventData } from "coaty/com";
-import { ContextFilter, filterOp, ObjectFilterCondition, ObjectFilterConditions, ObjectFilterOperator, Uuid } from "coaty/model";
-import { Container } from "coaty/runtime";
+import {
+    CommunicationState,
+    CallEventData,
+    Container,
+    ContextFilter,
+    filterOp,
+    ObjectFilterCondition,
+    ObjectFilterConditions,
+    ObjectFilterOperator,
+    Uuid,
+} from "@coaty/core";
 
 import { AgentService } from "../agent.service";
 import { AppContextService } from "../app-context.service";
@@ -205,7 +216,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
      * matching the selected context filter.
      */
     switchLights() {
-        const ctrl = this.controlContainer.getController("ControlController") as ControlController;
+        const ctrl = this.controlContainer.getController<ControlController>("ControlController");
         ctrl.switchLights(this.createContextFilter(), this.onOff, this.luminosity, this.effectiveColor, this.switchTime);
     }
 
@@ -357,15 +368,15 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
                 const controlController: ControlController = container.getController("ControlController");
 
                 this.initBrokerConnectionInfo(controlController.options);
-                this.initContextFilterBindings(container.runtime.options.lightContextRanges, controlController.options);
+                this.initContextFilterBindings(container.runtime.commonOptions.extra.lightContextRanges, controlController.options);
                 this.initOperationParams(controlController.options);
                 this.eventLog$ = controlController.eventLog$;
                 this.activeAgentsInfo$ = controlController.activeAgentsInfo$;
                 this.changeRef.detectChanges();
 
-                // Provide the app context with the container's communication
-                // manager identity ID to be displayed in the title of the HTML document.
-                this.appContext.setContext(`Light Control #${container.communicationManager.identity.objectId}`);
+                // Provide the app context with the container's identity ID to
+                // be displayed in the title of the HTML document.
+                this.appContext.setContext(`Light Control #${container.identity.objectId}`);
             })
             .catch(error => {
                 throw new Error(`Agent container for ControlComponent couldn't be resolved: ${error}`);
@@ -378,7 +389,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
         this.brokerConnectionInfo$ = this.controlContainer.communicationManager.observeCommunicationState()
             .pipe(map(state => {
                 return {
-                    state: state,
+                    state,
                     isOnline: state === CommunicationState.Online,
                     brokerHost: this.controlContainer.communicationManager.options.brokerUrl
                 };
@@ -388,7 +399,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
     /* Open Light */
 
     private openLightAppInPopup() {
-        const opts = this.controlContainer.getController("ControlController").options;
+        const opts = this.controlContainer.getController<ControlController>("ControlController").options;
         const lw = opts.lightWindowWidth;
         const lh = opts.lightWindowHeight;
         const newWindow = window.open("./light", "_blank",
@@ -398,7 +409,9 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
             screenTop: newWindow.screenTop,
             outerWidth: newWindow.outerWidth,
             outerHeight: newWindow.outerHeight,
+            // tslint:disable-next-line: no-string-literal
             availTop: newWindow.screen["availTop"] || 0,
+            // tslint:disable-next-line: no-string-literal
             availLeft: newWindow.screen["availLeft"] || 0,
             availWidth: newWindow.screen.availWidth,
             availHeight: newWindow.screen.availHeight,
@@ -497,7 +510,9 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
             return undefined;
         }
 
-        let r = 0, g = 0, b = 0;
+        let r = 0;
+        let g = 0;
+        let b = 0;
         const pos = position / this.primaryColorPositionMax;
         const d = 1 / 6;
 
@@ -579,7 +594,7 @@ export class ControlComponent implements AfterContentInit, OnDestroy, OnInit {
         };
 
         return {
-            operation: formatter(this.controlContainer.runtime.options.lightControlOperation),
+            operation: formatter(this.controlContainer.runtime.commonOptions.extra.lightControlOperation),
             operationParameters: formatter({
                 on,
                 luminosity,
