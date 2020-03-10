@@ -1,6 +1,6 @@
 # CoatySwift - Hello World Example
 
-[![Powered by Coaty](https://img.shields.io/badge/Powered%20by-Coaty-FF8C00.svg)](https://coaty.io)
+[![Powered by Coaty 2](https://img.shields.io/badge/Powered%20by-Coaty%202-FF8C00.svg)](https://coaty.io)
 [![Swift](https://img.shields.io/badge/Source%20code-Swift%205-FF4029.svg)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -41,33 +41,58 @@ Coaty JS Hello World components as explained
 and
 [here](https://github.com/coatyio/coaty-examples/tree/master/hello-world/js#start-up).
 
+If you want to install all prerequisites of the example locally on macOS, we
+recommend to install PostgreSQL using this [interactive
+installer](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads).
+
 ## Installation
 
-There are two versions of the CoatySwift Hello World example:
+To build the CoatySwift Hello World example, just clone this repo and run `pod
+install` on the `hello-world/swift/` Xcode project folder.
 
-* a *static* one that uses the static typesafe object types defined in
-  CoatySwift, and
-* a *dynamic* one that uses less static and less type safe object types in
-  CoatySwift to deal with Coaty objects whose type is not yet known at compile
-  time. This feature is currently experimental.
+This Xcode project contains two versions of the CoatySwift Hello World example,
+realized as two separate Xcode build targets:
 
-To build either version, just clone this repo and run `pod install` on either
-the `hello-world/swift/static` or `hello-world/swift/dynamic` Xcode project
-folder, respectively.
+* `HelloWorld` - default target that defines and registers the object type
+  `"com.helloworld.Task"` with a corresponding Swift class named
+  `HelloWorldTask` so that custom fields are directly accessible as typesafe
+  instance properties, and
+* `HelloWorld Dynamic` - target that *only* uses the Coaty core type `Task` to
+  represent the object type `"com.helloworld.Task"` so that custom fields are
+  accessible in the `custom` instance property in the form of less typesafe
+  attribute-value pairs of type `Any`.
+
+The dynamic approach is especially useful if you want to deal with arbitary
+Coaty objects whose *object type* is not known when you program your CoatySwift
+app. A detailed discussion of this topic can be found
+[here](https://coatyio.github.io/coaty-swift/man/developer-guide/#custom-object-types).
 
 ## Start-up
 
 Ensure the Coaty JS Hello World components, i.e. broker, service, monitor, and
-client(s) have been started.
+clients (optional) have been started.
 
-Open the `xcworkspace` of the static or dynamic project folder in Xcode, then
-build and run it. Now, the CoatySwift Hello World client interoperates with the
-other Hello World components and outputs log messages on the console, identical
-in format to a Coaty JS Hello World client.
+Open the `xcworkspace` of the project folder in Xcode, then build and run it.
+Now, the CoatySwift Hello World client interoperates with the other Hello World
+components and outputs log messages on the console, identical in format to a
+Coaty JS Hello World client.
 
-> **Note**: The broker IP address of the CoatySwift app is preconfigured to
-> localhost, i.e. `127.0.0.1` (see class `HelloWorldExampleViewController` or
-> `DynamicHelloWorldExampleViewController`, respectively). This is okay for
+You can switch between the two build targets by setting the active scheme to
+either `HelloWorld` or `HelloWorld Dynamic`.
+
+> **Note**
+>
+> If you run the `HelloWorld Dynamic` scheme, the `urgency` property
+> of a received HelloWorldTask is displayed as a raw Integer value, while in the
+> `HelloWorld` scheme it is displayed as an Enum value. This is due to the fact,
+> that in the dynamic scheme the task object is decoded as core type `Task` with
+> the non-core type property `urgency` decoded in the `custom` dictionary
+> property as type `Int` according to the transmitted JSON raw value.
+>
+> **Note**
+>
+> The broker host address of the CoatySwift app is preconfigured to
+> localhost, i.e. `127.0.0.1` (see class `AppDelegate`). This is okay for
 > testing the app in the Xcode simulator in combination with a local broker.
 > However, if you deploy and run your app on a device, you need to adjust the
-> variable `brokerIp` accordingly.
+> variable `brokerHost` accordingly.

@@ -1,8 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  Light.swift
-//  CoatySwift_Example
-//
+//  RemoteOperations
 //
 
 import Foundation
@@ -14,13 +13,23 @@ import CoatySwift
 /// relationship.
 final class Light: CoatyObject {
     
+    // MARK: - Class registration.
+
+    override class var objectType: String {
+        return register(objectType: "coaty.examples.remoteops.Light", with: self)
+    }
+    
+    // MARK: - Properties.
+    
     /// Determines whether the light is currently defect. The default value is `false`.
     var isDefect: Bool
+    
+    // MARK: - Initializers.
     
     init(isDefect: Bool = false) {
         self.isDefect = isDefect
         super.init(coreType: .CoatyObject,
-                   objectType: SwitchLightObjectFamily.light.rawValue,
+                   objectType: Light.objectType,
                    objectId: .init(),
                    name: "Light")
     }

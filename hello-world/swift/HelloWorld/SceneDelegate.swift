@@ -1,7 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  SceneDelegate.swift
-//  RemoteOperations
+//  HelloWorld
 //
 
 import UIKit

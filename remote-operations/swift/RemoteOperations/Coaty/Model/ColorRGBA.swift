@@ -1,12 +1,12 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  ColorRGBA.swift
-//  CoatySwift_Example
-//
+//  RemoteOperations
 //
 
 import Foundation
 
+/// Represents an RGBA color value encodable to and decodable from an array of r,g,b,a values.
 class ColorRGBA: Codable {
     
     private(set) public var r = 0

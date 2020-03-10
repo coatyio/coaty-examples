@@ -1,8 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  LightContext.swift
-//  CoatySwift_Example
-//
+//  RemoteOperations
 //
 
 import Foundation
@@ -14,16 +13,13 @@ import CoatySwift
 /// light, the light's ID is also defined in the context.
 final class LightContext: CoatyObject {
     
-    init(lightId: CoatyUUID = .init(), building: Int, floor: Int, room: Int) {
-        self.lightId = lightId
-        self.building = building
-        self.floor = floor
-        self.room = room
-        super.init(coreType: .CoatyObject,
-                   objectType: SwitchLightObjectFamily.lightContext.rawValue,
-                   objectId: .init(),
-                   name: "LightContext")
+    // MARK: - Class registration.
+
+    override class var objectType: String {
+        return register(objectType: "coaty.examples.remoteops.LightContext", with: self)
     }
+    
+    // MARK: - Properties.
     
     /// The object Id of the associated light.
     var lightId: CoatyUUID;
@@ -36,6 +32,19 @@ final class LightContext: CoatyObject {
     
     /// The number of the room on which the light is located.
     var room: Int
+    
+    // MARK: - Initializers.
+    
+    init(lightId: CoatyUUID = .init(), building: Int, floor: Int, room: Int) {
+        self.lightId = lightId
+        self.building = building
+        self.floor = floor
+        self.room = room
+        super.init(coreType: .CoatyObject,
+                   objectType: LightContext.objectType,
+                   objectId: .init(),
+                   name: "LightContext")
+    }
     
     // MARK: Codable methods.
     

@@ -1,7 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  AppDelegate.swift
-//  RemoteOperations
+//  HelloWorld
 //
 
 import UIKit
@@ -12,20 +12,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var container: Container?
-    
-    // Run the app locally in Xcode simulator.
+
     let brokerHost = "127.0.0.1"
-    
-    // To run the app in combination with the Remote Operations example deployed
-    // on Github Pages (https://coatyio.github.io/coaty-examples/remote-operations/).
-    // use this public broker.
-    //
-    // let brokerHost = "test.mosquitto.org"
-    
     let brokerPort = 1883
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
         launchContainer()
+        
         return true
     }
     
@@ -54,28 +48,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func launchContainer() {
         
         // Register controllers.
-        let components = Components(controllers: [
-            "ControlController": ControlController.self,
-            "LightController": LightController.self
-        ])
-        
+        let components = Components(controllers: ["TaskController": TaskController.self])
+
         // Create a configuration.
-        guard let configuration = createSwitchLightConfiguration() else {
+        guard let configuration = createHelloWorldConfiguration() else {
             print("Invalid configuration! Please check your options.")
             return
         }
         
-        // Resolve your components with the given configuration and get
-        // your CoatySwift controllers up and running.
-        self.container = Container.resolve(components: components,
-                                           configuration: configuration)
+        // Resolve your components with the given configuration and
+        // get your CoatySwift controllers up and running.
+        container = Container.resolve(components: components,
+                                      configuration: configuration)
     }
-
+    
     /// Creates a configuration for the container.
-    private func createSwitchLightConfiguration() -> Configuration? {
-        return try? .build { config in
-            
-            // Adjusts the logging level of CoatySwift messages.
+    private func createHelloWorldConfiguration() -> Configuration? {
+           return try? .build { config in
+               
             config.common = CommonOptions()
             
             // Adjusts the logging level of CoatySwift messages, which is especially
@@ -83,47 +73,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             config.common?.logLevel = .info
             
             // Configure an expressive `name` of the container's identity here.
-            config.common?.agentIdentity = ["name": "LightAgent & LightControlAgent"]
+            config.common?.agentIdentity = ["name": "Client"]
             
-            // Here, we define initial values for specific options of
-            // the light controller and the light control controller.
+            // Associate a distinct user with each client agent.
+            config.common?.extra = ["clientUser": User(name: "Client User",
+                                                       names: ScimUserNames(familyName: "ClientUser",
+                                                                            givenName: ""),
+                                                       objectType: User.objectType,
+                                                       objectId: CoatyUUID())]
+               
+            // Here, we define configuration options for the TaskController.
             config.controllers = ControllerConfig(
-                controllerOptions: [
-                    // Currently, the initial values for building, floor, and room are fixed
-                    // because the UI yet provides no means to adjust them interactively.
-                    "LightController": ControllerOptions(extra: [
-                        "building" : 33,
-                        "floor": 4,
-                        "room": 62,
-                        "lightOn": false,
-                        "lightLuminosity": 1.0,
-                        "lightColor": (255, 140, 0, 1.0)
-                    ]),
-                    // Currently, these initial settings are used for any SwitchLight operation
-                    // because the UI yet provides no means to modify them interactively.
-                    "ControlController": ControllerOptions(extra: [
-                       "initialContextFilterBuildings" : [33],
-                       "initialContextFilterFloors" : [4],
-                       "initialContextFilterRooms" : [62],
-                       "initialOpParamOnOff" : true,
-                       "initialOpParamLuminosity" : 0.75,
-                       "initialSwitchTime" : 0
+                controllerOptions: ["TaskController":
+                    ControllerOptions(extra: [
+                        
+                        // Minimum amount of time in milliseconds until an offer is sent.
+                        "minTaskOfferDelay": 2000,
+                        
+                        // Minimum amount of time in milliseconds until a task is completed.
+                        "minTaskDuration": 5000,
+                        
+                        // Timeout for the query-retrieve event in milliseconds.
+                        "queryTimeout": 5000
+                        
                     ])
-                ])
-            
+            ])
+               
             // Define communication-related options, such as the host address of your broker
             // and the port it exposes. Also, make sure to immediately connect with the broker,
             // indicated by `shouldAutoStart: true`.
-            //
-            // Note: Keep alive for the broker connection has been reduced to 10secs to minimize
-            // connectivity issues when running with a remote public broker.
             let mqttClientOptions = MQTTClientOptions(host: brokerHost,
-                                                      port: UInt16(brokerPort),
-                                                      keepAlive: 10)
+                                                      port: UInt16(brokerPort))
             config.communication = CommunicationOptions(mqttClientOptions: mqttClientOptions,
                                                         shouldAutoStart: true)
         }
     }
-
 }
-

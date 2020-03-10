@@ -1,6 +1,6 @@
 # CoatySwift - Remote Operations Example
 
-[![Powered by Coaty](https://img.shields.io/badge/Powered%20by-Coaty-FF8C00.svg)](https://coaty.io)
+[![Powered by Coaty 2](https://img.shields.io/badge/Powered%20by-Coaty%202-FF8C00.svg)](https://coaty.io)
 [![Swift](https://img.shields.io/badge/Source%20code-Swift%205-FF4029.svg)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -48,16 +48,18 @@ UI have been started.
 
 Open the `xcworkspace` of the project folder in Xcode, then build and run it.
 Now, you can invoke "Switch light" control operations in the Coaty JS Light
-Control UI and see how the CoatySwift Light UI reacts accordingly. You can also
-press the "Random Color Change" button in the CoatySwift app to switch remote
-Coaty JS Light UIs.
+Control UI and see how the CoatySwift Light UI reacts accordingly.
 
-> **Note**: The broker IP address of the CoatySwift app is preconfigured to
-> localhost, i.e. `127.0.0.1` (see class `SwitchLightViewController`). This is
-> okay for testing the app in the Xcode simulator in combination with a local
-> broker. However, if you deploy and run your app on a device, you need to
-> adjust the variable `brokerIp` accordingly.
+You can also press the "Switch Lights (random color)" button in the CoatySwift
+app to switch local and remote Light UIs with a fixed context filter predefined
+in the configuration options.
+
+> **Note**: The broker host of the CoatySwift app is preconfigured to localhost,
+> i.e. `127.0.0.1` (see class `AppDelegate`). This is okay for testing the app
+> in the Xcode simulator in combination with a local broker. However, if you
+> deploy and run your app on a device, you need to adjust the variable
+> `brokerHost` accordingly.
 >
-> **Note**: The current version of CoatySwift does not support context-based
-> filtering of Call-Return events. This means that context filter settings for
-> lights in a Light Control UI agent are ignored by the CoatySwift Light UI app.
+> To run the app with the Remote Operations example deployed on [Github
+> Pages](https://coatyio.github.io/coaty-examples/remote-operations/) use the
+> public broker host `test.mosquitto.org`.

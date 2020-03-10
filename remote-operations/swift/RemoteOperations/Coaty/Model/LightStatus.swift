@@ -1,8 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  LightStatus.swift
-//  CoatySwift_Example
-//
+//  RemoteOperations
 //
 
 import Foundation
@@ -13,6 +12,14 @@ import CoatySwift
 /// property refers to the associated `Light` object.
 final class LightStatus: CoatyObject {
     
+    // MARK: - Class registration.
+
+    override class var objectType: String {
+        return register(objectType: "coaty.examples.remoteops.LightStatus", with: self)
+    }
+    
+    // MARK: - Properties.
+    
     /// Determines whether the light is currently switched on or off.
     var on: Bool;
     
@@ -22,12 +29,14 @@ final class LightStatus: CoatyObject {
     /// The current color of the light as an rgba tuple.
     var color: ColorRGBA;
     
+    // MARK: - Initializers.
+    
     init(on: Bool, luminosity: Double, color: ColorRGBA) {
         self.on = on
         self.luminosity = luminosity
         self.color = color
         super.init(coreType: .CoatyObject,
-                   objectType: SwitchLightObjectFamily.lightStatus.rawValue,
+                   objectType: LightStatus.objectType,
                    objectId: .init(),
                    name: "LightStatus")
     }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,7 @@
 		2A61B4BA2355DD880012B3A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A61B4B82355DD880012B3A9 /* LaunchScreen.storyboard */; };
 		2A61B4CE2355DE000012B3A9 /* LightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C32355DE000012B3A9 /* LightController.swift */; };
 		2A61B4CF2355DE000012B3A9 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C42355DE000012B3A9 /* Util.swift */; };
-		2A61B4D02355DE000012B3A9 /* SwitchLightObjectFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C62355DE000012B3A9 /* SwitchLightObjectFamily.swift */; };
+		2A61B4D02355DE000012B3A9 /* SwitchLightOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C62355DE000012B3A9 /* SwitchLightOperations.swift */; };
 		2A61B4D12355DE000012B3A9 /* LightContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C72355DE000012B3A9 /* LightContext.swift */; };
 		2A61B4D22355DE000012B3A9 /* ColorRGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C82355DE000012B3A9 /* ColorRGBA.swift */; };
 		2A61B4D32355DE000012B3A9 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61B4C92355DE000012B3A9 /* Light.swift */; };
@@ -35,7 +35,7 @@
 		2A61B4BB2355DD880012B3A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A61B4C32355DE000012B3A9 /* LightController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightController.swift; sourceTree = "<group>"; };
 		2A61B4C42355DE000012B3A9 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		2A61B4C62355DE000012B3A9 /* SwitchLightObjectFamily.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchLightObjectFamily.swift; sourceTree = "<group>"; };
+		2A61B4C62355DE000012B3A9 /* SwitchLightOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchLightOperations.swift; sourceTree = "<group>"; };
 		2A61B4C72355DE000012B3A9 /* LightContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightContext.swift; sourceTree = "<group>"; };
 		2A61B4C82355DE000012B3A9 /* ColorRGBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorRGBA.swift; sourceTree = "<group>"; };
 		2A61B4C92355DE000012B3A9 /* Light.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
@@ -107,7 +107,7 @@
 		2A61B4C52355DE000012B3A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2A61B4C62355DE000012B3A9 /* SwitchLightObjectFamily.swift */,
+				2A61B4C62355DE000012B3A9 /* SwitchLightOperations.swift */,
 				2A61B4C72355DE000012B3A9 /* LightContext.swift */,
 				2A61B4C82355DE000012B3A9 /* ColorRGBA.swift */,
 				2A61B4C92355DE000012B3A9 /* Light.swift */,
@@ -260,7 +260,7 @@
 				2A61B4AE2355DD870012B3A9 /* AppDelegate.swift in Sources */,
 				2A61B4D22355DE000012B3A9 /* ColorRGBA.swift in Sources */,
 				2A61B4B02355DD870012B3A9 /* SceneDelegate.swift in Sources */,
-				2A61B4D02355DE000012B3A9 /* SwitchLightObjectFamily.swift in Sources */,
+				2A61B4D02355DE000012B3A9 /* SwitchLightOperations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

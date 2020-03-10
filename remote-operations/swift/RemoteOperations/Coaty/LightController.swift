@@ -1,8 +1,7 @@
 //  Copyright (c) 2019 Siemens AG. Licensed under the MIT License.
 //
 //  LightController.swift
-//  CoatySwift_Example
-//
+//  RemoteOperations
 //
 
 import Foundation
@@ -18,33 +17,45 @@ protocol LightControlDelegate {
 ///
 /// For communicating light status changes to the associated light, the controller provides the
 /// `LightControlDelegate`.
-class LightController<Family: ObjectFamily>: Controller<Family> {
+class LightController: Controller {
     
     /// MARK: Public attributes.
     
     public var delegate: LightControlDelegate?
+    public var lightContext: LightContext!
+    public var light: Light!
     
     // MARK: Private attributes.
     
     /// This is a DispatchQueue for this particular controller that handles
     /// asynchronous workloads, such as when we wait for the delay of the `switchTime`
-    private var lightControllerQueue = DispatchQueue(label: "com.mycompany.lightSwitch.lightControllerQueue")
-    private var light: Light!
+    private var lightControllerQueue = DispatchQueue(label: "coaty.examples.remoteops.lightControllerQueue")
     private var lightStatus: LightStatus!
-    private var lightContext: LightContext!
     
     // MARK: Lifecycle methods.
     
     override func onInit() {
         super.onInit()
         
-        let initialColor = ColorRGBA(r: 255, g: 255, b: 0, a: 1.0)
+        // Set up light status from configuration options.
+        let optionColor = self.options?.extra["lightColor"] as! (Int, Int, Int, Double)
+        let initialColor = ColorRGBA(
+            r: optionColor.0,
+            g: optionColor.1,
+            b: optionColor.2,
+            a: optionColor.3)
         self.light = Light(isDefect: false)
-        self.lightStatus = LightStatus(on: false, luminosity: 0, color: initialColor)
+        self.lightStatus = LightStatus(
+            on: self.options?.extra["lightOn"] as! Bool,
+            luminosity: self.options?.extra["lightLuminosity"] as! Double,
+            color: initialColor)
         self.lightStatus.parentObjectId = self.light.parentObjectId
         
-        // The context is currently hardcoded to the default values.
-        self.lightContext = LightContext(building: 33, floor: 4, room: 62)
+        // Set up context from configuration options.
+        self.lightContext = LightContext(
+            building: self.options?.extra["building"] as! Int,
+            floor: self.options?.extra["floor"] as! Int,
+            room: self.options?.extra["room"] as! Int)
     }
     
     override func onCommunicationManagerStarting() {
@@ -59,23 +70,26 @@ class LightController<Family: ObjectFamily>: Controller<Family> {
     private func observeCallEvents() {
         let lightSwitchOperation = SwitchLightOperations.lightControlOperation.rawValue
         try? self.communicationManager.observeCall(operationId: lightSwitchOperation)
+            .filter { callEvent in
+                // Implement manual context matching of the light context with an
+                // object filter passed in the Call event.
+                // (generic ObjectMatcher is not yet implemented by CoatySwift)
+                self.matchesContextFilter(context: self.lightContext, filter: callEvent.data.filter)
+            }
             .subscribe(onNext: { callEvent in
                 
-                // TODO: Add real context matching. Currently, the example accepts all contexts and
-                // reacts accordingly (ObjectMatcher not yet implemented).
-                guard let _ = callEvent.data.filter else {
-                    print("ContextFilter not found.")
-                    return
-                }
+                let params = callEvent.data.parameterDictionary
+                logConsole(source: self.registeredName,
+                           message: "lightSwitchOperation received with params \(PayloadCoder.encode(params))",
+                           eventName: "Call",
+                           eventDirection: .In)
                 
-                logConsole(message: "lightSwitchOperation()", eventName: "Call", eventDirection: .In)
-                
-                // Parse the received parameters.
-                let on = callEvent.data.getParameterByName(name: "on") as! Bool
-                let color = callEvent.data.getParameterByName(name: "color") as! [Any]
+                // Try to cast the received parameters to the expected value types.
+                let on = callEvent.data.getParameterByName(name: "on") as? Bool
+                let color = callEvent.data.getParameterByName(name: "color")
                 let colorRGBA = self.createColorRGBA(color)
-                let luminosity = self.toDouble(callEvent.data.getParameterByName(name: "luminosity")!)
-                let switchTime = callEvent.data.getParameterByName(name: "switchTime") as! Int
+                let luminosity = self.toDouble(callEvent.data.getParameterByName(name: "luminosity"))
+                let switchTime = callEvent.data.getParameterByName(name: "switchTime") as? Int
                 
                 // Perform parameter validation.
                 if !self.validateSwitchOpParams(on, colorRGBA, luminosity, switchTime) {
@@ -83,9 +97,9 @@ class LightController<Family: ObjectFamily>: Controller<Family> {
                     let error = ReturnError(code: .invalidParameters, message: .invalidParameters)
                     let executionInfo: ExecutionInfo = ["lightId": self.light.objectId,
                                                         "triggerTime": CoatyTimestamp.nowMillis()]
-                    let event = self.eventFactory.ReturnEvent.with(error: error, executionInfo: executionInfo)
+                    let event = ReturnEvent.with(error: error, executionInfo: executionInfo)
                     
-                    logConsole(message: "Invalid parameters.", eventName: "Return", eventDirection: .Out)
+                    logConsole(source: self.registeredName, message: "Invalid parameters.", eventName: "Return", eventDirection: .Out)
                     callEvent.returned(returnEvent: event)
                     return
                 }
@@ -95,29 +109,29 @@ class LightController<Family: ObjectFamily>: Controller<Family> {
                     let error = ReturnError(code: 1, message: "Light is defect")
                     let executionInfo: ExecutionInfo = ["lightId": self.light.objectId,
                                                         "triggerTime": CoatyTimestamp.nowMillis()]
-                    let event = self.eventFactory.ReturnEvent.with(error: error, executionInfo: executionInfo)
+                    let event = ReturnEvent.with(error: error, executionInfo: executionInfo)
                     callEvent.returned(returnEvent: event)
-                    logConsole(message: "Light is defect.", eventName: "Return", eventDirection: .Out)
+                    logConsole(source: self.registeredName, message: "Light is defect", eventName: "Return", eventDirection: .Out)
                     return
                 }
                 
                 // Everything went alright, update the light status and call the delegate.
-                self.lightControllerQueue.asyncAfter(deadline: .now() + .milliseconds(switchTime)) {
-                    self.updateLightStatus(on, colorRGBA, luminosity)
+                self.lightControllerQueue.asyncAfter(deadline: .now() + .milliseconds(switchTime!)) {
+                    self.updateLightStatus(on!, colorRGBA!, luminosity!)
                     
                     // Make sure to run UI code on the main thread.
                     DispatchQueue.main.async {
-                        self.delegate?.switchLight(on, colorRGBA, luminosity)
+                        self.delegate?.switchLight(on!, colorRGBA!, luminosity!)
                     }
                     
                     // Return successful result to the caller.
                     let result: ReturnResult = .init(self.lightStatus!.on)
                     let executionInfo: ExecutionInfo = ["lightId": self.light.objectId,
                                                         "triggerTime": CoatyTimestamp.nowMillis()]
-                    let event = self.eventFactory.ReturnEvent.with(result: result,
-                                                                   executionInfo: executionInfo)
+                    let event = ReturnEvent.with(result: result,
+                                                 executionInfo: executionInfo)
                     
-                    logConsole(message: "Successful switch.", eventName: "Return", eventDirection: .Out)
+                    logConsole(source: self.registeredName, message: "Switched successfully", eventName: "Return", eventDirection: .Out)
                     callEvent.returned(returnEvent: event)
                 }
             }).disposed(by: disposeBag)
@@ -125,16 +139,65 @@ class LightController<Family: ObjectFamily>: Controller<Family> {
     
     // MARK: Utility methods.
     
-    private func createColorRGBA(_ color: [Any]) -> ColorRGBA {
-        let red = color[0] as? Int ?? 0
-        let green = color[1] as? Int ?? 0
-        let blue = color[2] as? Int ?? 0
-        let alpha = toDouble(color[3])
-        let color = ColorRGBA(r: red, g: green, b: blue, a: alpha)
-        return color
+    private func matchesContextFilter(context: CoatyObject?, filter: ContextFilter?) -> Bool {
+        if filter == nil && context != nil {
+            return false
+        }
+        if filter != nil && context != nil {
+            // This implementation realizes specific matching for the expected context filter only!
+            // Generic matching is yet to to defined in CoatySwift.
+            //
+            // {"filter":
+            //   {"conditions":
+            //     {"and":
+            //        [
+            //          ["building",[13,[33]]],
+            //          ["floor",[13,[4]]],
+            //          ["room",[13,[62]]]
+            //        ]
+            //      }
+            //    }
+            // }
+            
+            return filter!.conditions?.and?.allSatisfy { (cond) -> Bool in
+                if cond.property.objectFilterProperty == "building",
+                    cond.expression.filterOperator == .In,
+                    (cond.expression.firstOperand?.value as? [Int])?.contains(lightContext.building) ?? false {
+                    return true
+                }
+                if cond.property.objectFilterProperty == "floor",
+                    cond.expression.filterOperator == .In,
+                    (cond.expression.firstOperand?.value as? [Int])?.contains(lightContext.floor) ?? false {
+                    return true
+                }
+                if cond.property.objectFilterProperty == "room",
+                    cond.expression.filterOperator == .In,
+                    (cond.expression.firstOperand?.value as? [Int])?.contains(lightContext.room) ?? false {
+                    return true
+                }
+                return false
+            } ?? false
+        }
+        return true
     }
     
-    private func toDouble(_ any: Any) -> Double {
+    private func createColorRGBA(_ color: Any?) -> ColorRGBA? {
+        guard color != nil, let color = color! as? [Any] else {
+            return nil
+        }
+        
+        let red = color[0] as? Int
+        let green = color[1] as? Int
+        let blue = color[2] as? Int
+        let alpha = toDouble(color[3])
+        
+        guard red != nil, green != nil, blue != nil, alpha != nil else {
+            return nil
+        }
+        return ColorRGBA(r: red!, g: green!, b: blue!, a: alpha!)
+    }
+    
+    private func toDouble(_ any: Any?) -> Double? {
         if let double = any as? Double {
             return double
         }
@@ -143,24 +206,24 @@ class LightController<Family: ObjectFamily>: Controller<Family> {
             return Double(int)
         }
         
-        // Should never occur. For production use, throw an error here.
-        return Double.nan
+        return nil
     }
     
-    private func validateSwitchOpParams(_ on: Bool,
-                                        _ colorRGBA: ColorRGBA,
-                                        _ luminosity: Double,
-                                        _ switchTime: Int) -> Bool {
-        
-        if luminosity < 0 || luminosity > 1 {
-            return false
-        }
-        
-        // NOTE: Here more advanced validation logic should occur in order to make sure that
-        // valid parameters were received.
-        
-        // For testing purposes, yield an error if color is black.
-        if colorRGBA.r == 0 && colorRGBA.g == 0 && colorRGBA.b == 0 {
+    private func validateSwitchOpParams(_ on: Bool?,
+                                        _ colorRGBA: ColorRGBA?,
+                                        _ luminosity: Double?,
+                                        _ switchTime: Int?) -> Bool {
+        guard
+            on != nil,
+            colorRGBA != nil,
+            // For testing purposes, yield an error if color is black.
+            !(colorRGBA!.r == 0 && colorRGBA!.g == 0 && colorRGBA!.b == 0),
+            luminosity != nil,
+            luminosity! >= 0,
+            luminosity! <= 1,
+            switchTime != nil,
+            switchTime! >= 0
+            else {
             return false
         }
         
