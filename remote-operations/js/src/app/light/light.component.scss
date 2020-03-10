@@ -12,7 +12,7 @@
 }
 
 .light-card-header-avatar {
-    background-image: url("/assets/images/light-bulb-avatar.jpg");
+    background-image: url("~/assets/images/light-bulb-avatar.jpg");
     background-size: cover;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .light-card-image-mask {
-    background-image: url("/assets/images/light-bulb.jpg");
+    background-image: url("~/assets/images/light-bulb.jpg");
     background-size: cover;
     background-color: transparent;
     background-blend-mode: overlay;

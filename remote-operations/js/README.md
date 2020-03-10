@@ -106,7 +106,7 @@ Perform these steps in separate console windows:
 
 1. `npm run broker` - to start the Coaty broker,
 2. `npm run start` - to open a browser with the light control UI on
-   `http://localhost:4200/`.
+   `http://localhost:4200/coaty-examples/remote-operations`.
 
 > **Tip**: For debugging and introspection, you can start the Coaty broker in
 > verbose mode (`npm run broker:verbose`), so that all message subscriptions and

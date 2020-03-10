@@ -16,8 +16,8 @@ export const agentInfo: AgentInfo = {
         version: "2.0.0",
     },
     buildInfo: {
-        buildDate: "2020-03-09T18:44:18+01:00",
-        buildMode: "docker",
+        buildDate: "2020-03-10T10:57:40+01:00",
+        buildMode: "production",
     },
     configInfo: {
         serviceHost: "",
