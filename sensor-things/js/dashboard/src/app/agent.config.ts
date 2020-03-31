@@ -21,8 +21,9 @@ export const configuration: Configuration = {
         agentIdentity: { name: "Dashboard" },
     },
     communication: {
-        shouldAutoStart: false,
         // Retrieve broker url from active Angular environment configuration.
         brokerUrl: environment.brokerUrl,
+        namespace: "coaty.examples.sensorthings",
+        shouldAutoStart: false,
     }
 };

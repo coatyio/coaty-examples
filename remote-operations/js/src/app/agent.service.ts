@@ -41,9 +41,10 @@ export class AgentService {
                 },
             },
             communication: {
-                shouldAutoStart: true,
                 // Retrieve broker url from active Angular environment configuration.
                 brokerUrl: environment.brokerUrl,
+                namespace: "coaty.examples.remoteops",
+                shouldAutoStart: true,
             },
         };
 

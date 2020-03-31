@@ -120,7 +120,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let mqttClientOptions = MQTTClientOptions(host: brokerHost,
                                                       port: UInt16(brokerPort),
                                                       keepAlive: 10)
-            config.communication = CommunicationOptions(mqttClientOptions: mqttClientOptions,
+            config.communication = CommunicationOptions(namespace: "coaty.examples.remoteops",
+                                                        mqttClientOptions: mqttClientOptions,
                                                         shouldAutoStart: true)
         }
     }

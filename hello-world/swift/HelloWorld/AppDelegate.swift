@@ -104,7 +104,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // indicated by `shouldAutoStart: true`.
             let mqttClientOptions = MQTTClientOptions(host: brokerHost,
                                                       port: UInt16(brokerPort))
-            config.communication = CommunicationOptions(mqttClientOptions: mqttClientOptions,
+            config.communication = CommunicationOptions(namespace: "com.helloworld",
+                                                        mqttClientOptions: mqttClientOptions,
                                                         shouldAutoStart: true)
         }
     }

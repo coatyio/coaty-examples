@@ -26,6 +26,7 @@ export function serviceConfig(agentInfo: AgentInfo, agentName: string): Configur
         },
         communication: {
             brokerUrl: process.env.BROKER_URL,
+            namespace: "com.helloworld",
             shouldAutoStart: true,
         },
         databases: {
@@ -54,6 +55,7 @@ export function clientConfig(agentInfo: AgentInfo): Configuration {
         },
         communication: {
             brokerUrl: process.env.BROKER_URL,
+            namespace: "com.helloworld",
             shouldAutoStart: true,
         },
     };

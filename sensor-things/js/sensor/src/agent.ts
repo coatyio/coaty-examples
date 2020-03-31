@@ -61,6 +61,7 @@ prompts([
         },
         communication: {
             brokerUrl: process.env.BROKER_URL,
+            namespace: "coaty.examples.sensorthings",
             shouldAutoStart: true,
         },
         controllers: {

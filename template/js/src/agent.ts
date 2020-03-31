@@ -26,6 +26,8 @@ const configuration: Configuration = {
     },
     communication: {
         brokerUrl: process.env.BROKER_URL,
+        // Define a unique communication namepace for your application.
+        namespace: "com.template",
         shouldAutoStart: true,
     },
     controllers: {
