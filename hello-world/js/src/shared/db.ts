@@ -23,6 +23,7 @@ export class Db {
 
     public static getAdminConnectionString() {
         // Connect as admin user (postgres) with password (postgres) to admin database (postgres).
+        // Format: "postgres://<superusername>:<password>@localhost/postgres"
         return `postgres://postgres:postgres@localhost/postgres`;
     }
 
