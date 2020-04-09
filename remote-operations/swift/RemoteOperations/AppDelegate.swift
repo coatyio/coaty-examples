@@ -82,7 +82,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // helpful if you want to test or debug applications (default is .error).
             config.common?.logLevel = .info
             
-            // Configure an expressive `name` of the container's identity here.
+            // Configure `name` of the container's identity here.
+            // Do not change the given name, it is used by Coaty JS light
+            // controller to track all active light and control agents.
             config.common?.agentIdentity = ["name": "LightAgent & LightControlAgent"]
             
             // Here, we define initial values for specific options of

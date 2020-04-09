@@ -65,20 +65,29 @@ export class ControlController extends ObjectLifecycleController {
 
     onCommunicationManagerStarting() {
         // Keep track of all light agents and light control agents in the system
-        // (including my own light control agent).
+        // (including my own light control agent). Note that the Coaty Swift app
+        // integrates both a light agent and a control agent.
         this.observeObjectLifecycleInfoByCoreType(
             "Identity",
-            comp => comp.name === "LightAgent" || comp.name === "LightControlAgent")
+            comp => comp.name === "LightAgent" ||
+                comp.name === "LightControlAgent" ||
+                comp.name === "LightAgent & LightControlAgent")
             .subscribe(info => {
                 if (info.added !== undefined) {
-                    info.added.forEach(comp => this._updateActiveAgentsInfo(comp.name === "LightAgent", true));
+                    info.added.forEach(comp => this._updateActiveAgentsInfo(
+                        comp.name.startsWith("LightAgent"),
+                        comp.name.endsWith("LightControlAgent"),
+                        true));
                 }
                 if (info.changed !== undefined) {
                     // Ignore agents with changed properties, since active agent
                     // count won't change.
                 }
                 if (info.removed !== undefined) {
-                    info.removed.forEach(comp => this._updateActiveAgentsInfo(comp.name === "LightAgent", false));
+                    info.removed.forEach(comp => this._updateActiveAgentsInfo(
+                        comp.name.startsWith("LightAgent"),
+                        comp.name.endsWith("LightControlAgent"),
+                        false));
                 }
             });
     }
@@ -124,17 +133,19 @@ export class ControlController extends ObjectLifecycleController {
             });
     }
 
-    private _updateActiveAgentsInfo(isLightAgent: boolean, isActive: boolean) {
+    private _updateActiveAgentsInfo(isLightAgent: boolean, isControlAgent: boolean, isActive: boolean) {
         if (isActive) {
             if (isLightAgent) {
                 this._activeAgentsInfo.activeLights++;
-            } else {
+            }
+            if (isControlAgent) {
                 this._activeAgentsInfo.activeControls++;
             }
         } else {
             if (isLightAgent) {
                 this._activeAgentsInfo.activeLights--;
-            } else {
+            }
+            if (isControlAgent) {
                 this._activeAgentsInfo.activeControls--;
             }
         }
