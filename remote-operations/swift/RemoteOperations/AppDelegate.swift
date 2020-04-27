@@ -53,10 +53,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// This method sets up the Coaty container necessary to run our application.
     private func launchContainer() {
         
-        // Register controllers.
+        // Register controllers and custom object types.
         let components = Components(controllers: [
             "ControlController": ControlController.self,
             "LightController": LightController.self
+        ],
+                                    objectTypes: [
+            LightContext.self,
+            Light.self,
+            LightStatus.self
         ])
         
         // Create a configuration.

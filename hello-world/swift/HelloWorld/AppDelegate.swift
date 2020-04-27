@@ -46,9 +46,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /// This method sets up the Coaty container necessary to run our application.
     private func launchContainer() {
+    
+#if DYNAMIC
+        // In the dynamic scheme no Swift classes are defined for custom Coaty object types.
+        let customObjectTypes: [CoatyObject.Type] = []
+#else
+        // In the non-dynamic normal scheme Swift classes are defined for custom Coaty object types.
+        let customObjectTypes = [HelloWorldTask.self]
+#endif
         
-        // Register controllers.
-        let components = Components(controllers: ["TaskController": TaskController.self])
+        // Register controllers and custom object types.
+        let components = Components(controllers: ["TaskController": TaskController.self],
+                                    objectTypes: customObjectTypes)
 
         // Create a configuration.
         guard let configuration = createHelloWorldConfiguration() else {

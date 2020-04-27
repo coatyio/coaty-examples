@@ -1,8 +1,8 @@
 PODS:
-  - CoatySwift (2.0.0):
+  - CoatySwift (2.0.1):
     - CocoaMQTT (~> 1.2.5)
-    - RxCocoa (~> 5)
-    - RxSwift (~> 5)
+    - RxCocoa (~> 5.1.1)
+    - RxSwift (~> 5.1.1)
     - XCGLogger (~> 7.0.1)
   - CocoaAsyncSocket (7.6.4)
   - CocoaMQTT (1.2.5):
@@ -10,19 +10,19 @@ PODS:
   - ObjcExceptionBridging (1.0.1):
     - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
   - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
-  - RxCocoa (5.1.0):
+  - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
-  - RxRelay (5.1.0):
+  - RxRelay (5.1.1):
     - RxSwift (~> 5)
-  - RxSwift (5.1.0)
+  - RxSwift (5.1.1)
   - XCGLogger (7.0.1):
     - XCGLogger/Core (= 7.0.1)
   - XCGLogger/Core (7.0.1):
     - ObjcExceptionBridging
 
 DEPENDENCIES:
-  - CoatySwift (~> 2.0)
+  - CoatySwift (~> 2.0.1)
 
 SPEC REPOS:
   trunk:
@@ -36,15 +36,15 @@ SPEC REPOS:
     - XCGLogger
 
 SPEC CHECKSUMS:
-  CoatySwift: 1dc143253946c9a5b2d7447492830e08bcceedd8
+  CoatySwift: 761fbae9b0507b9fff88f4a2859706562f48d4f2
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
-  RxCocoa: 13d2a4d7546a34b8ececae8c281e4ea1dbb94f2b
-  RxRelay: a168bd6caf712d00c676ac344e9295afc93b418e
-  RxSwift: ad5874f24bb0dbffd1e9bb8443604e3578796c7a
+  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   XCGLogger: 1943831ef907df55108b0b18657953f868de973b
 
-PODFILE CHECKSUM: 5ad71aa95b5de1491130604f9edf73099c91ef88
+PODFILE CHECKSUM: c819f68094746bdffacc64fdae97126304a12766
 
 COCOAPODS: 1.8.4
