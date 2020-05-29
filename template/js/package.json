@@ -17,18 +17,18 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@coaty/core": "^2.0.1",
+        "@coaty/core": "^2.1.1",
         "dotenv": "^8.2.0",
-        "rxjs": "^6.5.4"
+        "rxjs": "^6.5.5"
     },
     "devDependencies": {
-        "@types/node": "^13.7.0",
-        "fs-extra": "^8.1.0",
+        "@types/node": "^14.0.5",
+        "fs-extra": "^9.0.0",
         "gulp": "^4.0.2",
         "gulp-sourcemaps": "^2.6.5",
         "gulp-tslint": "^8.1.4",
         "gulp-typescript": "^5.0.1",
         "tslint": "^5.20.1",
-        "typescript": "^3.7.5"
+        "typescript": "^3.9.3"
     }
 }
