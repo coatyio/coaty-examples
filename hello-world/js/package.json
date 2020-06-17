@@ -22,7 +22,7 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@coaty/core": "^2.2.0",
+        "@coaty/core": "^2.2.1",
         "dotenv": "^8.2.0",
         "pg": "^8.2.1",
         "rxjs": "^6.5.5"
