@@ -69,13 +69,7 @@ class LightController: Controller {
     /// offered by this controller.
     private func observeCallEvents() {
         let lightSwitchOperation = SwitchLightOperations.lightControlOperation.rawValue
-        try? self.communicationManager.observeCall(operationId: lightSwitchOperation)
-            .filter { callEvent in
-                // Implement manual context matching of the light context with an
-                // object filter passed in the Call event.
-                // (generic ObjectMatcher is not yet implemented by CoatySwift)
-                self.matchesContextFilter(context: self.lightContext, filter: callEvent.data.filter)
-            }
+        try? self.communicationManager.observeCall(operationId: lightSwitchOperation, context: self.lightContext)
             .subscribe(onNext: { callEvent in
                 
                 let params = callEvent.data.parameterDictionary
@@ -138,49 +132,6 @@ class LightController: Controller {
     }
     
     // MARK: Utility methods.
-    
-    private func matchesContextFilter(context: CoatyObject?, filter: ContextFilter?) -> Bool {
-        if filter == nil && context != nil {
-            return false
-        }
-        if filter != nil && context != nil {
-            // This implementation realizes specific matching for the expected context filter only!
-            // Generic matching is yet to to defined in CoatySwift.
-            //
-            // {"filter":
-            //   {"conditions":
-            //     {"and":
-            //        [
-            //          ["building",[13,[33]]],
-            //          ["floor",[13,[4]]],
-            //          ["room",[13,[62]]]
-            //        ]
-            //      }
-            //    }
-            // }
-            
-            return filter!.conditions?.and?.allSatisfy { (cond) -> Bool in
-                if cond.property.objectFilterProperty == "building",
-                    cond.expression.filterOperator == .In,
-                    (cond.expression.firstOperand?.value as? [Int])?.contains(lightContext.building) ?? false {
-                    return true
-                }
-                if cond.property.objectFilterProperty == "floor",
-                    cond.expression.filterOperator == .In,
-                    (cond.expression.firstOperand?.value as? [Int])?.contains(lightContext.floor) ?? false {
-                    return true
-                }
-                if cond.property.objectFilterProperty == "room",
-                    cond.expression.filterOperator == .In,
-                    (cond.expression.firstOperand?.value as? [Int])?.contains(lightContext.room) ?? false {
-                    return true
-                }
-                return false
-            } ?? false
-        }
-        return true
-    }
-    
     private func createColorRGBA(_ color: Any?) -> ColorRGBA? {
         guard color != nil, let color = color! as? [Any] else {
             return nil
