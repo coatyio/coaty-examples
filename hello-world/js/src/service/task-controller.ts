@@ -2,7 +2,7 @@
 
 import { map } from "rxjs/operators";
 
-import { AdvertiseEvent, CompleteEvent, Controller, TaskStatus } from "@coaty/core";
+import { AdvertiseEvent, CompleteEvent, Controller, TaskStatus, UpdateEvent } from "@coaty/core";
 import { DbContext } from "@coaty/core/db";
 import { NodeUtils } from "@coaty/core/runtime-node";
 
@@ -25,9 +25,13 @@ export class TaskController extends Controller {
 
     private _dbCtx: DbContext;
     private _taskSnapshotController: TaskSnapshotController;
+    private _updateRequestsQueue: UpdateEvent[];
+    private _isHandlingUpdateRequest: boolean;
 
     onInit() {
         super.onInit();
+        this._updateRequestsQueue = [];
+        this._isHandlingUpdateRequest = false;
         this._taskSnapshotController = this.container.getController("TaskSnapshotController");
         this._dbCtx = new DbContext(this.runtime.databaseOptions["db"]);
     }
@@ -82,59 +86,81 @@ export class TaskController extends Controller {
         this.communicationManager
             .observeUpdateWithObjectType(modelTypes.OBJECT_TYPE_HELLO_WORLD_TASK)
             .subscribe(event => {
-                // Use a database transaction to ensure integrity of stored data (see _observeAdvertiseTasks)
-                this._dbCtx.transaction(txCtx => {
-                    return txCtx.findObjectById<HelloWorldTask>(Db.COLLECTION_TASK, event.data.object.objectId)
-                        .then(task => {
-                            if (task === undefined) {
-                                // Do not reply to an Update event which doesn't target a known task.
-                                return;
-                            }
+                // As Update requests are handled asynchronously, we must
+                // process them sequentially in the order they are received.
+                this._updateRequestsQueue.push(event);
+                this._processUpdateRequests();
+            });
+    }
 
-                            NodeUtils.logEvent(`Task offer received: ${task.name}`, "UPDATE", "In");
+    private _processUpdateRequests() {
+        if (this._isHandlingUpdateRequest || this._updateRequestsQueue.length === 0) {
+            return;
+        }
+        this._isHandlingUpdateRequest = true;
+        this._handleUpdateRequest(this._updateRequestsQueue.shift())
+            .then(() => {
+                this._isHandlingUpdateRequest = false;
+                this._processUpdateRequests();
+            });
+    }
 
-                            if (task.status !== TaskStatus.Request) {
-                                // This is an outdated offer for an already assigned task.
-                                NodeUtils.logEvent(`Task offer rejected - already assigned: ${task.name}`, "COMPLETE", "Out");
+    private _handleUpdateRequest(event: UpdateEvent) {
+        // Use a database transaction to ensure integrity of stored data (see _observeAdvertiseTasks).
+        return this._dbCtx.transaction(txCtx => {
+            return txCtx.findObjectById<HelloWorldTask>(Db.COLLECTION_TASK, event.data.object.objectId)
+                .then(task => {
+                    if (task === undefined) {
+                        // Do not reply to an Update event which doesn't target a known task.
+                        return;
+                    }
 
-                                // Reply to the Update requester with the already assigned task.
-                                event.complete(CompleteEvent.withObject(task));
-                                return;
-                            }
+                    const offeringClientId = (event.data.object as HelloWorldTask).assigneeObjectId;
 
-                            // Assign task to the offering client and change task status to pending.
-                            task.assigneeObjectId = (event.data.object as HelloWorldTask).assigneeObjectId;
-                            task.dueTimestamp = (event.data.object as HelloWorldTask).dueTimestamp;
-                            task.status = TaskStatus.Pending;
-                            task.lastModificationTimestamp = Date.now();
+                    NodeUtils.logEvent(`Task offer received: ${task.name}, Client User ID: ${offeringClientId}`,
+                        "UPDATE", "In");
+
+                    if (task.status !== TaskStatus.Request) {
+                        // This is an outdated offer for an already assigned task.
+                        NodeUtils.logEvent(`Task offer rejected - already assigned: ${task.name}`, "COMPLETE", "Out");
+
+                        // Reply to the Update requester with the already assigned task.
+                        event.complete(CompleteEvent.withObject(task));
+                        return;
+                    }
+
+                    // Assign task to the offering client and change task status to pending.
+                    task.assigneeObjectId = offeringClientId;
+                    task.dueTimestamp = (event.data.object as HelloWorldTask).dueTimestamp;
+                    task.status = TaskStatus.Pending;
+                    task.lastModificationTimestamp = Date.now();
+
+                    NodeUtils.logEvent(
+                        `Task offer accepted: ${task.name}, Client User ID: ${task.assigneeObjectId}`,
+                        "COMPLETE",
+                        "Out");
+
+                    return txCtx.updateObjects(Db.COLLECTION_TASK, task)
+                        .then(() => {
+                            // Reply to the Update requester with the updated task.
+                            event.complete(CompleteEvent.withObject(task));
 
                             NodeUtils.logEvent(
-                                `Task offer accepted: ${task.name}, Client User ID: ${task.assigneeObjectId}`,
-                                "COMPLETE",
+                                `Task assigned: ${task.name}, Client User ID: ${task.assigneeObjectId}`,
+                                "ADVERTISE",
                                 "Out");
 
-                            return txCtx.updateObjects(Db.COLLECTION_TASK, task)
-                                .then(() => {
-                                    // Reply to the Update requester with the updated task.
-                                    event.complete(CompleteEvent.withObject(task));
+                            // Notify other components that task is pending.
+                            this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(task));
 
-                                    NodeUtils.logEvent(
-                                        `Task assigned: ${task.name}, Client User ID: ${task.assigneeObjectId}`,
-                                        "ADVERTISE",
-                                        "Out");
-
-                                    // Notify other components that task is pending.
-                                    this.communicationManager.publishAdvertise(AdvertiseEvent.withObject(task));
-
-                                    // Generate a snapshot object of the changed
-                                    // task and process it according to the
-                                    // controller config.
-                                    this._taskSnapshotController.generateSnapshot(task);
-                                    NodeUtils.logInfo(`Snapshot created: ${task.name}`);
-                                });
+                            // Generate a snapshot object of the changed
+                            // task and process it according to the
+                            // controller config.
+                            this._taskSnapshotController.generateSnapshot(task);
+                            NodeUtils.logInfo(`Snapshot created: ${task.name}`);
                         });
-                }).catch(error => this.logError(error, "Failed to assign task", LogTags.LOG_TAG_DB, LogTags.LOG_TAG_SERVICE));
-            });
+                });
+        }).catch(error => this.logError(error, "Failed to assign task", LogTags.LOG_TAG_DB, LogTags.LOG_TAG_SERVICE));
     }
 
     /** 
