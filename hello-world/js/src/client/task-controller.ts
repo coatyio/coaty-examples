@@ -23,7 +23,7 @@ export class TaskController extends Controller {
         super.onCommunicationManagerStarting();
         this._observeAdvertiseRequests();
 
-        console.log(`# Client User ID: ${this.runtime.commonOptions.extra.clientUser.objectId}`);
+        NodeUtils.logInfo(`Client User ID: ${this.runtime.commonOptions.extra.clientUser.objectId}`);
     }
 
     private _observeAdvertiseRequests() {
