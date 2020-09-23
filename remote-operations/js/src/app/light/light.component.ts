@@ -1,6 +1,6 @@
 /*! Copyright (c) 2019 Siemens AG. Licensed under the MIT License. */
 
-import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation } from "@angular/core";
 import { Location } from "@angular/common";
 import { Observable } from "rxjs";
 import { map, skip } from "rxjs/operators";
@@ -22,6 +22,11 @@ import { LightController } from './light.controller';
     templateUrl: "light.component.html",
     styleUrls: ["light.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
+
+    // Required for angularx-qrcode component styling (see css class .light-map-card-image-qrcode-div).
+    // The inner div is not accessible with default view encapsulation as this div's CSS is not scoped
+    // with an Angular generated CSS attribute. 
+    encapsulation: ViewEncapsulation.None,
 })
 export class LightComponent implements OnDestroy {
 

@@ -6,5 +6,5 @@ export const environment = {
 
     // The broker URL of your production broker must be configured BEFORE
     // building the app with "npm run build:prod". 
-    brokerUrl: "mqtt://localhost:9883",
+    brokerUrl: "ws://localhost:9883",
 };

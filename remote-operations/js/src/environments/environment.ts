@@ -6,7 +6,7 @@
 
 export const environment = {
     production: false,
-    brokerUrl: "mqtt://localhost:9883",
+    brokerUrl: "ws://localhost:9883",
 };
 
 /*

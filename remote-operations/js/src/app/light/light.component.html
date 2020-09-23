@@ -33,7 +33,8 @@
             (click)="onQrCodeClick($event)" #qrCodeTooltip="matTooltip"
             matTooltip="Click or scan or drag QR Code onto context filter to switch this light"
             matTooltipPosition="above" [title]="''" class="light-map-card-image-qrcode"
-            [qrdata]="qrCodeUrl" [usesvg]="true" [level]="'M'">
+            [qrdata]="qrCodeUrl" [elementType]="'svg'" [errorCorrectionLevel]="'M'" [width]="'100%'"
+            [margin]="0" [cssClass]="'light-map-card-image-qrcode-div'">
         </qrcode>
         <h4 class="app-heading-no-top-margin">CONTEXT</h4>
         <div class="light-card-context">

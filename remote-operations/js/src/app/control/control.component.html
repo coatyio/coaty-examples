@@ -56,8 +56,8 @@
             <qrcode class="control-context-qrcode" (dragover)="onQrCodeDragOver($event)"
                 (drop)="onQrCodeDrop($event)" [style.opacity]="selectedLightId ? 1 : 0.3"
                 [matTooltip]="selectedLightId ? selectedLightUrl : 'Drop QR Code of a light here to switch this light only'"
-                [title]="''" [qrdata]="selectedLightUrl || 'coaty.io'" [usesvg]="true"
-                [level]="'M'">
+                [title]="''" [qrdata]="selectedLightUrl || 'coaty.io'" [elementType]="'svg'"
+                [errorCorrectionLevel]="'M'" [width]="80" [margin]="0">
             </qrcode>
             <a *ngIf="selectedLightId" (click)="onQrCodeClear($event)"
                 class="control-context-qrcode-button" matTooltip="Remove light from context filter"

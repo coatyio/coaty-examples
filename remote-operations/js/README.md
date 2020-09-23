@@ -125,10 +125,10 @@ Then, open a browser with the light control UI on `http://<dockerhost>:8080`.
 If you want to open the example web app not only on your local Docker machine,
 you have to configure the broker URL. Since the broker is also running inside a
 Docker container, set the environment variable `BROKER_URL` to
-`mqtt://<dockerhost>:9883` before running `npm run docker:up`.
+`ws://<dockerhost>:9883` before running `npm run docker:up`.
 
 If you want to use the dockerized example with a public broker, set the
-environment variable accordingly, e.g. to `mqtts://test.mosquitto.org:8081`.
+environment variable accordingly, e.g. to `wss://test.mosquitto.org:8081`.
 
 ## Deploy example on Github Pages
 
