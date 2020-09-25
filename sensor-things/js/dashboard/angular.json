@@ -10,7 +10,7 @@
             "prefix": "app",
             "schematics": {
                 "@schematics/angular:component": {
-                    "styleext": "scss",
+                    "style": "scss",
                     "skipTests": true
                 },
                 "@schematics/angular:class": {
@@ -52,8 +52,7 @@
                         "styles": [
                             "src/styles.scss"
                         ],
-                        "scripts": [],
-                        "es5BrowserSupport": true
+                        "scripts": []
                     },
                     "configurations": {
                         "production": {

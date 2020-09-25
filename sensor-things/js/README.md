@@ -135,7 +135,7 @@ only important files are displayed:
 
 Each component of the example is designed to build and run independently. If you
 want to use a non-default MQTT broker IP/port configuration, adjust
-`sensor/.env` and `dashboard/environments/*.ts` files accordingly.
+`sensor/.env` and `dashboard/src/environments/*.ts` files accordingly.
 
 ## Components
 
