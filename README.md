@@ -21,8 +21,8 @@ This repository also includes a ready-to-use
 for a Coaty agent running in Node.js and programmed in TypeScript. Copy and use
 it as a blueprint for your own Coaty agent projects.
 
-A template for a Coaty Swift agent can be found in the `Example` folder of the
-[CoatySwift](https://github.com/coatyio/coaty-swift) repo.
+A template for a Coaty Swift agent can be found in the `CoatySwiftExample`
+folder of the [CoatySwift](https://github.com/coatyio/coaty-swift) repo.
 
 ## Contributing
 
