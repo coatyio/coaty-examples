@@ -87,6 +87,8 @@ export class SensorThingsController extends SensorSourceController {
         this._thing = {
             name: "Thing " + answers.deviceName,
             objectId: this.runtime.newUuid(),
+            // Enables lifecycle management of affected things and sensors.
+            parentObjectId: this.container.identity.objectId,
             objectType: SensorThingsTypes.OBJECT_TYPE_THING,
             coreType: "CoatyObject",
             description: "A device you can monitor (os.name: " + hostname() + ")",
