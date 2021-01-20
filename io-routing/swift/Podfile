@@ -6,7 +6,7 @@ target 'SourcesAgent' do
   use_frameworks!
   inherit! :search_paths
   
-  pod 'CoatySwift', '~> 2.2.0'
+  pod 'CoatySwift', '~> 2.3.0'
 end
 
 target 'NormalStateActorAgent' do
@@ -14,7 +14,7 @@ target 'NormalStateActorAgent' do
   use_frameworks!
   inherit! :search_paths
   
-  pod 'CoatySwift', '~> 2.2.0'
+  pod 'CoatySwift', '~> 2.3.0'
 end
 
 target 'EmergencyStateActorAgent' do
@@ -22,5 +22,5 @@ target 'EmergencyStateActorAgent' do
   use_frameworks!
   inherit! :search_paths
   
-  pod 'CoatySwift', '~> 2.2.0'
+  pod 'CoatySwift', '~> 2.3.0'
 end
