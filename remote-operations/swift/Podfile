@@ -5,6 +5,6 @@ target 'RemoteOperations' do
   use_frameworks!
 
   # Pods for RemoteOperations
-  pod 'CoatySwift', '~> 2.2.0'
+  pod 'CoatySwift', '~> 2.3.0'
 
 end
