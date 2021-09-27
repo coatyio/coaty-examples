@@ -20,15 +20,43 @@ gulp.task("clean", () => {
 gulp.task("agentinfo", infoAgentScript.gulpBuildAgentInfo("./src/", "agent.info.ts"));
 
 /**
-* Build the application
-*/
-gulp.task("transpile", () => {
+ * Transpile TS into JS code, using TS compiler in local typescript npm package.
+ * Remove all comments except copyright header comments, and do not generate
+ * corresponding .d.ts files (see task "transpile:dts").
+ */
+gulp.task("transpile:ts", () => {
     const tscConfig = require("./tsconfig.json");
     return gulp
         .src(["src/typings/**/*.d.ts", "src/**/*.ts"])
+
+        // Comment out next line if source maps should not be generated.
         .pipe(sourcemaps.init())
-        .pipe(tsc(tscConfig.compilerOptions))
+
+        .pipe(tsc(Object.assign(tscConfig.compilerOptions, {
+            removeComments: true,
+            declaration: false,
+        })))
+
+        // Comment out next line if source maps should not be generated.
         .pipe(sourcemaps.write("."))
+
+        .pipe(gulp.dest("dist"));
+});
+
+/**
+ * Only emit TS declaration files, using TS compiler in local typescript npm
+ * package. The generated declaration files include all comments so that IDEs
+ * can provide this information to developers.
+ */
+gulp.task("transpile:dts", () => {
+    const tscConfig = require("./tsconfig.json");
+    return gulp
+        .src(["src/typings/**/*.d.ts", "src/**/*.ts"])
+        .pipe(tsc(Object.assign(tscConfig.compilerOptions, {
+            removeComments: false,
+            declaration: true,
+        })))
+        .dts
         .pipe(gulp.dest("dist"));
 });
 
@@ -63,6 +91,6 @@ gulp.task("lint:fix", () => {
         }));
 });;
 
-gulp.task("build", gulp.series("clean", "agentinfo", "transpile", "lint"));
+gulp.task("build", gulp.series("clean", "agentinfo", "transpile:ts", "transpile:dts", "lint"));
 
 gulp.task("default", gulp.series("build"));

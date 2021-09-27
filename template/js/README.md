@@ -86,14 +86,21 @@ npm run start
 
 ## Start up with Docker
 
+Ensure that the environment variables provided in the project's `.env` file (or
+overwritten on the command line) are adjusted to your Docker environment,
+especially set `BROKER_URL=mqtt://broker:1883`.
+
 The project can be run with Docker:
 
 ```sh
 npm run docker:up
 ```
 
-Ensure that the environment variables provided in the project's `.env` file are
-adjusted to your environment.
+To stop the project:
+
+```sh
+npm run docker:down
+```
 
 To rebuild the Docker images:
 
