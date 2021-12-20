@@ -9,4 +9,7 @@ export const environment = {
     // "docker-compose up" using the default value specified in
     // docker-compose.yml or the overridden value from BROKER_URL env variable.
     brokerUrl: "@BROKER_URL_PLACEHOLDER@",
+
+    // DO NOT CHANGE THIS SETTING IN PRODUCTION MODE.
+    acceptUnauthorizedServerCertificate: false,
 };

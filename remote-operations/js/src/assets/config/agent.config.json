@@ -44,19 +44,19 @@
             "initialOpParamPrimaryColor": [255, 140, 0, 1],
             "initialSwitchTime": 0,
             "customColors": [
-                { 
+                {
                     "name": "white",
                     "rgba": [255, 255, 255, 1]
                 },
-                { 
-                    "name": "Invalid color! Switching a light with this color returns an error.", 
+                {
+                    "name": "Invalid color! Switching a light with this color returns an error.",
                     "rgba": [0, 0, 0, 1]
                 },
-                {  
+                {
                     "name": "Coaty Orange",
                     "rgba": [255, 140, 0, 1]
                 },
-                {  
+                {
                     "name": "Tangerine Sky",
                     "rgba": [64, 169, 255, 1]
                 }

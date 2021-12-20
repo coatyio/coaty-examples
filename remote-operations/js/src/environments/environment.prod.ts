@@ -5,6 +5,9 @@ export const environment = {
     production: true,
 
     // The broker URL of your production broker must be configured BEFORE
-    // building the app with "npm run build:prod". 
+    // building the app with "npm run build:prod".
     brokerUrl: "ws://localhost:9883",
+
+    // DO NOT CHANGE THIS SETTING IN PRODUCTION MODE.
+    acceptUnauthorizedServerCertificate: false,
 };

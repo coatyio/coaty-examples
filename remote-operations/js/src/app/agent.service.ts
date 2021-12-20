@@ -56,8 +56,11 @@ export class AgentService {
                     console.error("Could not retrieve agent.config.json from host: ", error);
                     throw new Error(error.toString());
                 }),
-                map(config => {
-                    const configuration = mergeConfigurations(config as Configuration, defaultConfiguration);
+                map((config: Configuration) => {
+                    if (environment.acceptUnauthorizedServerCertificate) {
+                        config.communication.mqttClientOptions.rejectUnauthorized = false;
+                    }
+                    const configuration = mergeConfigurations(config, defaultConfiguration);
                     return Container.resolve(components, configuration);
                 })
             ).toPromise();
@@ -65,7 +68,7 @@ export class AgentService {
 
     /**
      * Retrieves the agent container configuration from the hosting server.
-     * 
+     *
      * @returns an observable that emits the configuration as a JSON object.
      */
     private getAgentConfig() {

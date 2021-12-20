@@ -7,6 +7,9 @@
 export const environment = {
     production: false,
     brokerUrl: "ws://localhost:9883",
+
+    // DO NOT CHANGE THIS SETTING IN PRODUCTION MODE.
+    acceptUnauthorizedServerCertificate: false,
 };
 
 /*
