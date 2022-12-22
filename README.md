@@ -44,11 +44,12 @@ Documentation is licensed under a
 
 ## Credits
 
-Last but certainly not least, a big *Thank You!* to the following folks that
-helped to realize and improve Coaty examples:
+Last but certainly not least, a big *Thank You!* to the folks that helped to
+realize and improve Coaty examples:
 
 * Markus Sauer [@markussauer](https://github.com/markussauer)
 * Antoine Beyet
 * [@gms1](https://github.com/gms1)
 * Sandra Grujovic [@melloskitten](https://github.com/melloskitten)
 * Johannes Rohwer [@johannesrohwer](https://github.com/johannesrohwer)
+* Lukasz Zalewski [@lukasz-zet](https://github.com/lukasz-zet)
